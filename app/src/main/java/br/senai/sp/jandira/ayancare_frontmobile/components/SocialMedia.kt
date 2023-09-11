@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
-fun SocialMediaScreen(
+fun SocialMedia(
     onClick: () -> Unit
 ) {
 
@@ -50,5 +50,5 @@ fun SocialMediaScreen(
 @Preview(showBackground = true)
 @Composable
 fun SocialMediaPreview() {
-    SocialMediaScreen(onClick = {})
+    SocialMedia(onClick = {})
 }
