@@ -128,11 +128,7 @@ fun FinalizarCadastroScreen(){
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    DefaultTextField(valor = "", label = "Nome") {}
-
-                    Spacer(modifier = Modifier.height(25.dp))
-
-                    DefaultTextField(valor = "", label = "Sobrenome") {}
+                    DefaultTextField(valor = "", label = "Nome Completo") {}
 
                     Spacer(modifier = Modifier.height(25.dp))
 
