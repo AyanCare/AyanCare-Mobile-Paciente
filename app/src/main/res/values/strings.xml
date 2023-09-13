@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">AyanCare-FrontMobile</string>
     <string name="nome_remedio">Qual o nome do medicamento?</string>
+    <string name="Next">Proximo</string>
 </resources>
