@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,16 +21,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
+import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 
 
 @Composable
-fun TelaAdicionarRemedio(){
+fun TelaAdicionarRemedio() {
 
     var textRemedio by remember {
 
@@ -39,85 +43,103 @@ fun TelaAdicionarRemedio(){
 
 
     Surface(
-        modifier = Modifier.fillMaxSize()
+        color = Color(248, 240, 236)
     ) {
+
         Column(
-            modifier = Modifier.fillMaxSize(),
-
-            ) {
-
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
+                .fillMaxSize()
+        ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .padding(5.dp),
-                verticalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxSize(),
 
-            ) {
-                Row {
+                ) {
 
-                    IconButton(
-                        onClick = { /*TODO*/ },
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .padding(5.dp),
+                    verticalArrangement = Arrangement.Center
+
+                ) {
+                    Row {
+
+                        IconButton(
+                            onClick = { /*TODO*/ },
 
 
-                        ) {
+                            ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.baseline_arrow_back_ios_new_24),
+                                contentDescription = ""
+                            )
+
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
                         Image(
-                            painter = painterResource(id = R.drawable.baseline_arrow_back_ios_new_24),
-                            contentDescription = ""
+                            painter = painterResource(id = R.drawable.remedios),
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(width = 200.dp, height = 200.dp)
+                                .fillMaxWidth()
                         )
 
                     }
                 }
+                Spacer(modifier = Modifier.height(30.dp))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                Column(
+                    modifier = Modifier
+                        .height(400.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.remedios) ,
-                        contentDescription ="",
-                        modifier = Modifier
-                            .size(width = 200.dp, height = 200.dp)
-                            .fillMaxWidth()
+
+                    Text(
+                        text = stringResource(id = R.string.nome_remedio)
                     )
 
-                }
-            }
-            Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.height(20.dp))
 
-            Column(
-                modifier = Modifier
-                    .height(100.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment =Alignment.CenterHorizontally
+                    DefaultTextField(
+                        label = "Nome do Medicamento",
+                        valor = textRemedio,
+                        aoMudar = {
+                            textRemedio
+                        }
 
-            ) {
+                    )
 
-                Text(
-                    text = stringResource(id = R.string.nome_remedio)
-                )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
 
-                Spacer(modifier = Modifier.height(20.dp))
+                        DefaultButton(text = stringResource(id = R.string.Next)) {
 
-                DefaultTextField(
-                    label = "Nome do Medicamento",
-                    valor = textRemedio,
-                    aoMudar = {
-                        textRemedio
+                        }
                     }
 
-                )
+                }
+
 
             }
-
 
 
         }
 
-
     }
-
 }
+
 @Preview
 @Composable
 fun ScreenAdicionarRemedioPreview(){
