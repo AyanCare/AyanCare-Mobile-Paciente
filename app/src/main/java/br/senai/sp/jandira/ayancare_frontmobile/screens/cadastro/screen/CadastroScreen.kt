@@ -1,14 +1,22 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.screen
 
+import android.util.Log
+import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AlternateEmail
+import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.PermIdentity
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -16,46 +24,164 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.components.CustomOutlinedTextField
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components.ProgressBar
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
-import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
-import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldPassword
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.CadastroRepository
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.service.UserService
+import kotlinx.coroutines.launch
 
 @Composable
-fun CadastroScreen() {
+fun CadastroScreen(navController: NavController, lifecycleScope: LifecycleCoroutineScope) {
+
+    lateinit var apiService: UserService
 
     var checked by remember {
         mutableStateOf(false)
     }
 
-    Surface (
+    var nameState by remember {
+        mutableStateOf("")
+    }
+
+    var emailState by remember {
+        mutableStateOf("")
+    }
+
+    var passwordState by remember {
+        mutableStateOf("")
+    }
+
+    apiService = RetrofitFactory.getInstance().create(UserService::class.java)
+
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+    val scrollState = rememberScrollState()
+
+    var repeatPasswordState by remember {
+        mutableStateOf("")
+    }
+
+    var validateName by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var validateEmail by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var validatePassword by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var validateConfirmPassword by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var validateArePasswordEqual by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    var isPasswordVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var isConfirmPasswordVisible by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val validateNameError = "Nome não pode ficar em branco"
+    val validateEmailError = "O formato do e-mail não é válido"
+    val validatePasswordError =
+        "Deve misturar letras maiúsculas e minúsculas, pelo menos um número, caracter especial e mínimo de 8 caracteres"
+    val validateEqualPasswordError = "As senhas devem ser iguais"
+
+    fun validateData(
+        name: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ): Boolean {
+        val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#\$%^&+=!]).{8,}\$".toRegex()
+
+        validateName = name.isNotBlank()
+        validateEmail = Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        validatePassword = passwordRegex.matches(password)
+        validateConfirmPassword = passwordRegex.matches(confirmPassword)
+        validateArePasswordEqual = password == confirmPassword
+
+        return validateName && validateEmail && validatePassword && validateConfirmPassword && validateArePasswordEqual
+    }
+
+    fun register(
+        name: String,
+        email: String,
+        password: String,
+        confirmPassword: String
+    ) {
+        if(validateData(name, email, password, confirmPassword)){
+            val userRepository = CadastroRepository()
+            lifecycleScope.launch {
+
+                val response = userRepository.registerUser(name, email, password)
+
+                if (response.isSuccessful) {
+
+                    Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
+
+                    navController.navigate("confirmarEmail_screen")
+
+                } else {
+
+                    val errorBody = response.errorBody()?.string()
+                    Log.e(MainActivity::class.java.simpleName, "Erro durante o registro: $errorBody")
+                    Toast.makeText(context, "Erro durante o registro", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+        } else {
+            Toast.makeText(context, "Por favor, reolhe suas caixas de texto", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    Surface(
         color = Color(248, 240, 236)
     ) {
         Wave()
-        Column (
+        Column(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
                 .fillMaxSize()
-        ){
-            Column (
+        ) {
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(
                     text = "Criar Conta",
                     fontSize = 40.sp,
@@ -73,26 +199,97 @@ fun CadastroScreen() {
                 )
             }
 
-            Column (
+            Column(
                 modifier = Modifier
                     .padding(start = 20.dp, end = 20.dp)
-            ){
-                DefaultTextField(valor = "", label = "Email") {}
+            ) {
+                CustomOutlinedTextField(
+                    value = nameState,
+                    onValueChange = { nameState = it },
+                    label = "Digite um nome de usuário",
+                    showError = !validateName,
+                    errorMessage = validateNameError,
+                    leadingIconImageVector = Icons.Default.PermIdentity,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    borderColor = Color.Black
+                )
 
-                Spacer(modifier = Modifier.height(25.dp))
+                CustomOutlinedTextField(
+                    value = emailState,
+                    onValueChange = { emailState = it },
+                    label = "E-mail",
+                    showError = !validateEmail,
+                    errorMessage = validateEmailError,
+                    leadingIconImageVector = Icons.Default.AlternateEmail,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    borderColor = Color.Black
+                )
 
-                TextFieldPassword(label = "Senha", valor = "Senha", aoMudar = {})
+                CustomOutlinedTextField(
+                    value = passwordState,
+                    onValueChange = { passwordState = it },
+                    label = "Senha",
+                    showError = !validatePassword,
+                    errorMessage = validatePasswordError,
+                    isPasswordField = true,
+                    isPasswordVisible = isPasswordVisible,
+                    onVisibilityChange = { isPasswordVisible = it },
+                    leadingIconImageVector = Icons.Default.Password,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    borderColor = Color.Black
+                )
 
-                Spacer(modifier = Modifier.height(25.dp))
+                CustomOutlinedTextField(
+                    value = repeatPasswordState,
+                    onValueChange = { repeatPasswordState = it },
+                    label = "Repita a senha",
+                    showError = !validateConfirmPassword || !validateArePasswordEqual,
+                    errorMessage = if (!validateConfirmPassword) validatePasswordError else validateEqualPasswordError,
+                    isPasswordField = true,
+                    isPasswordVisible = isConfirmPasswordVisible,
+                    onVisibilityChange = { isConfirmPasswordVisible = it },
+                    leadingIconImageVector = Icons.Default.Password,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() }
+                    ),
+                    borderColor = Color.Black
+                )
+                //DefaultTextField(valor = "", label = "Email") {}
 
-                TextFieldPassword(label = "Confirmar Senha", valor = "Senha", aoMudar = {})
+                //Spacer(modifier = Modifier.height(25.dp))
 
-                Spacer(modifier = Modifier.height(30.dp))
+                //TextFieldPassword(label = "Senha", valor = "Senha", aoMudar = {})
 
-                Row (
+                //Spacer(modifier = Modifier.height(25.dp))
+
+                //TextFieldPassword(label = "Confirmar Senha", valor = "Senha", aoMudar = {})
+
+                Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
-                ){
+                ) {
                     Checkbox(
                         checked = checked,
                         onCheckedChange = {
@@ -117,10 +314,20 @@ fun CadastroScreen() {
                 }
 
             }
-            Column (
+            Column(
                 modifier = Modifier.width(190.dp)
             ) {
-                DefaultButton(text = "Proximo") {}
+                DefaultButton(
+                    text = "Proximo",
+                    onClick = {
+                        register(
+                            name = nameState,
+                            email = emailState,
+                            password = passwordState,
+                            confirmPassword = repeatPasswordState
+                        )
+                    }
+                )
             }
             ProgressBar(text = "1 / 3", valor = 110)
 
@@ -129,8 +336,8 @@ fun CadastroScreen() {
 
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun CadastroPreview() {
-    CadastroScreen()
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun CadastroPreview() {
+//    CadastroScreen()
+//}

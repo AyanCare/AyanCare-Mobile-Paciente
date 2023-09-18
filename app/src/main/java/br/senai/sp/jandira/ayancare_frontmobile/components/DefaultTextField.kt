@@ -16,12 +16,13 @@ import androidx.compose.ui.unit.dp
 fun DefaultTextField(
     valor: String,
     label: String,
-    aoMudar:() -> Unit
+    onValueChange: (String) -> Unit,
+    aoMudar:(String) -> Unit
 ){
 
     OutlinedTextField(
         value = valor,
-        onValueChange = { aoMudar() },
+        onValueChange = { aoMudar(it) },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(4.dp),
         label = {
@@ -32,8 +33,8 @@ fun DefaultTextField(
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultTextFieldPreview(){
-    DefaultTextField(valor = "", label = "") {}
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun DefaultTextFieldPreview(){
+//    DefaultTextField(valor = "", label = "") {}
+//}

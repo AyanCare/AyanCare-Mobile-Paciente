@@ -1,9 +1,9 @@
-package br.senai.sp.jandira.ayancare_frontmobile.screens.confirmacaoEmail.screen
+package br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.codigoRecuperacao.screen
 
-
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,17 +21,17 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
-import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components.ProgressBar
+import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 
 @Composable
-fun ConfirmacaoEmailScreen(navController: NavController) {
-    Surface (
+fun CodigoRecuperacaoScreen(navController: NavController) {
+    Surface(
         color = Color(248, 240, 236)
     ) {
         Wave()
+
         Column (
-            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
@@ -41,31 +41,43 @@ fun ConfirmacaoEmailScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Text(
-                    text = "Confirmando E-mail",
-                    fontSize = 30.sp,
+                    text = "Recuperação de Senha",
+                    fontSize = 28.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(600),
                     color = Color(0xFF000000),
-                )
+
+                    )
                 Text(
-                    text = "Mandaremos um link em sua conta de e-mail para confirmar que é realmente você. ",
+                    text = "Preencha os dados para realizar a recuperacao de senha",
                     fontSize = 16.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(400),
-                    color = Color(0xFF9E8BC1),
+                    color = Color(0xFF9A9A9A),
                     textAlign = TextAlign.Center,
                 )
-                DefaultButton(onClick = { navController.navigate("finalizar_cadastro_screen") }, text = "segue")
+            }
+            Spacer(modifier = Modifier.height(100.dp))
+
+            Column (
+                modifier = Modifier
+                    .padding(start = 15.dp, end = 15.dp)
+            ){
+                DefaultTextField(valor = "", label = "Código" , onValueChange = {}) {}
             }
 
-            ProgressBar(text = "2 / 3", valor = 220)
+            Spacer(modifier = Modifier.height(200.dp))
 
+
+            DefaultButton(text = "Enviar", onClick = {
+                navController.navigate("redefinir_senha_screen")
+            })
         }
     }
 }
 
-//@Preview(showBackground = true, showSystemUi = true)
+//@Preview
 //@Composable
-//fun ConfirmacaoEmailPreview() {
-//    ConfirmacaoEmailScreen()
+//fun CodigoRecuperacaoPreview() {
+//    CodigoRecuperacaoScreen()
 //}

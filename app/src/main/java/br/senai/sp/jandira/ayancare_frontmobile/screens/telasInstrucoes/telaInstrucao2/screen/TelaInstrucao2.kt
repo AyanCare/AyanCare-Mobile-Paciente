@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.ayancare_frontmobile.screens.telaInstrucao2.screen
+package br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInstrucao2.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,15 +25,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Header
 
 @Composable
-fun TelaHome2Screen() {
+fun TelaInstrucao2Screen(navController: NavController) {
 
     Column (
         modifier = Modifier
@@ -112,7 +112,7 @@ fun TelaHome2Screen() {
             ){}
 
         }
-        DefaultButton(text = "Proximo") {}
+        DefaultButton(text = "Proximo", onClick = {navController.navigate("tela_instrucao3_screen")})
         Text(
             text = "Pular",
             fontSize = 14.sp,
@@ -127,8 +127,8 @@ fun TelaHome2Screen() {
 
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun TelaHome2Preview() {
-    TelaHome2Screen()
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun TelaHome2Preview() {
+//    TelaHome2Screen()
+//}

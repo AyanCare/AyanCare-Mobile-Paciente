@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.ayancare_frontmobile.screens.telaInstrucao3.screen
+package br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInstrucao3.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,15 +22,15 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Header
 
 @Composable
-fun TelaHome3Screen() {
+fun TelaInstrucao3Screen(navController: NavController) {
 
     Column (
         modifier = Modifier
@@ -109,7 +109,7 @@ fun TelaHome3Screen() {
             ){}
 
         }
-        DefaultButton(text = "Ir para o app") {}
+        DefaultButton(text = "Ir para o app", onClick = {navController.navigate("main_screen")})
         Text(
             text = "Pular",
             fontSize = 14.sp,
@@ -119,8 +119,8 @@ fun TelaHome3Screen() {
 
 }
 
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun TelaHome3Preview() {
-    TelaHome3Screen()
-}
+//@Preview(showBackground = true, showSystemUi = true)
+//@Composable
+//fun TelaHome3Preview() {
+//    TelaHome3Screen()
+//}

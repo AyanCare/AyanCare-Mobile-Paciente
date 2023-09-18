@@ -2,7 +2,6 @@ package br.senai.sp.jandira.ayancare_frontmobile.screens.telaPrincipal.screen
 
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,15 +22,16 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 
 
 @Composable
-fun TelaPrincipalScreen() {
+fun TelaPrincipalScreen(navController: NavController) {
+
     Surface (
         color = Color(0xFF35225F)
     ){
@@ -93,11 +93,11 @@ fun TelaPrincipalScreen() {
                     )
                 Spacer(modifier = Modifier.height(54.dp))
 
-                DefaultButton(text = "Entrar"){}
+                DefaultButton(text = "Entrar", onClick = { navController.navigate("login_screen")})
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                DefaultButton(text = "Cadastrar"){}
+                DefaultButton(text = "Cadastrar", onClick = {navController.navigate("cadastro_screen")})
             }
 
         }
@@ -108,8 +108,8 @@ fun TelaPrincipalScreen() {
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun TelaPrincipalPreview() {
-    TelaPrincipalScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TelaPrincipalPreview() {
+//    TelaPrincipalScreen()
+//}

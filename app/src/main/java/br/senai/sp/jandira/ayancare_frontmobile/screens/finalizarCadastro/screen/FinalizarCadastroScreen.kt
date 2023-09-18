@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
@@ -45,7 +46,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldPassword
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components.ProgressBar
 
 @Composable
-fun FinalizarCadastroScreen(){
+fun FinalizarCadastroScreen(navController: NavController){
 
     Surface (
         color = Color(248, 240, 236)
@@ -128,15 +129,15 @@ fun FinalizarCadastroScreen(){
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    DefaultTextField(valor = "", label = "Nome Completo") {}
+                    DefaultTextField(valor = "", label = "Nome Completo", onValueChange = {}) {}
 
                     Spacer(modifier = Modifier.height(25.dp))
 
-                    DefaultTextField(valor = "", label = "Data de Nascimento") {}
+                    DefaultTextField(valor = "", label = "Data de Nascimento", onValueChange = {}) {}
 
                     Spacer(modifier = Modifier.height(25.dp))
 
-                    DefaultTextField(valor = "", label = "Genêro") {}
+                    DefaultTextField(valor = "", label = "Genêro", onValueChange = {}) {}
 
                 }
             }
@@ -145,7 +146,7 @@ fun FinalizarCadastroScreen(){
             Column (
                 modifier = Modifier.width(190.dp)
             ) {
-                DefaultButton(text = "Finalizar") {}
+                DefaultButton(text = "Finalizar", onClick = {navController.navigate("tela_instrucao1_screen")})
             }
             ProgressBar(text = "3 / 3", valor = 330)
 
@@ -154,8 +155,8 @@ fun FinalizarCadastroScreen(){
 
 }
 
-@Preview
-@Composable
-fun FinalizarCadastroPreview() {
-    FinalizarCadastroScreen()
-}
+//@Preview
+//@Composable
+//fun FinalizarCadastroPreview() {
+//    FinalizarCadastroScreen()
+//}

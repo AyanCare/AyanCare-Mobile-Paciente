@@ -4,14 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import br.senai.sp.jandira.ayancare_frontmobile.components.showDatePicker
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar.MainScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.telaPrincipal.screen.TelaPrincipalScreen
 import br.senai.sp.jandira.ayancare_frontmobile.ui.theme.AyanCareFrontMobileTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,32 +20,15 @@ class MainActivity : ComponentActivity() {
             AyanCareFrontMobileTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
 
-                    //contexto atual
-                    val context = LocalContext.current
+                    val navController = rememberNavController()
+                    var context = LocalContext.current
 
-                    showDatePicker(context = context)
+                    TelaPrincipalScreen(navController = navController)
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AyanCareFrontMobileTheme {
-        Greeting("Android")
     }
 }
