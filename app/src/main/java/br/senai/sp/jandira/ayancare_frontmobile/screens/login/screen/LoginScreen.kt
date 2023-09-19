@@ -231,7 +231,7 @@ fun LoginScreen(navController: NavController, lifecycleScope: LifecycleCoroutine
                     onClick = {
                         login(emailState, passwordState)
 
-                        //navController.navigate("main_screen")
+                        navController.navigate("main_screen")
                     })
             }
 

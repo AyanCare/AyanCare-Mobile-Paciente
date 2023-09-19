@@ -2,6 +2,7 @@ package br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaIns
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -122,6 +123,7 @@ fun TelaInstrucao1Screen(navController: NavController) {
             color = Color(0xFF35225F),
             textAlign = TextAlign.Center,
             textDecoration = TextDecoration.Underline,
+            modifier = Modifier.clickable { navController.navigate("main_screen") }
         )
 
     }

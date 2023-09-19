@@ -326,6 +326,8 @@ fun CadastroScreen(navController: NavController, lifecycleScope: LifecycleCorout
                             password = passwordState,
                             confirmPassword = repeatPasswordState
                         )
+
+                        navController.navigate("confirmarEmail_screen")
                     }
                 )
             }
