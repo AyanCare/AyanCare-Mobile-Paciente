@@ -12,6 +12,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.screen.HomeScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen.LoginScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.ProfileScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.SettingsScreen
 
 @Composable
 fun ButtonNavGraph(
@@ -25,7 +26,7 @@ fun ButtonNavGraph(
             EstoqueScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Cadendary.route){
-
+            SettingsScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Home.route){
             HomeScreen(navController = navController)

@@ -86,4 +86,28 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
 
+    // implementação de data no textfield
+    implementation("androidx.compose.material3:material3:1.2.0-alpha02")
+    implementation("com.google.android.material:material:1.6.0-alpha01")
+
+    //Dependência para a biblioteca do Jetpack Compose
+    implementation("androidx.compose.ui:ui:1.1.0")
+
+    //Dependência para componentes de IU do Jetpack Compose
+    implementation("androidx.compose.foundation:foundation:1.1.0")
+    implementation("androidx.compose.runtime:runtime:1.1.0")
+
+    //Dependência para componentes de IU do Material Design no Jetpack Compose
+    implementation("androidx.compose.material:material:1.1.0")
+
+    //Dependência para componentes de IU do Jetpack Navigation Compose
+    implementation("androidx.navigation:navigation-compose:2.4.0")
+
+    //Dependência para ViewModel no Jetpack Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
+
+    //Dependência para Hilt (para injeção de dependência no Jetpack Compose)
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
+
+
 }

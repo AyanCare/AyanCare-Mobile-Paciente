@@ -39,7 +39,7 @@ fun HomeScreen(navController: NavController) {
                 .padding(top = 30.dp, start = 15.dp, end = 15.dp, bottom = 80.dp)
                 .fillMaxSize()
         ) {
-            HeaderHome()
+            HeaderHome(navController)
 
             Spacer(modifier = Modifier.height(5.dp))
 

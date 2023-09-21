@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AssignmentInd
@@ -19,9 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 
 @Composable
-fun HeaderHome() {
+fun HeaderHome(navController: NavController) {
     Row (
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -34,18 +36,25 @@ fun HeaderHome() {
             modifier = Modifier
                 .size(35.dp)
         )
-       Icon(
-            imageVector = Icons.Default.Settings,
-            contentDescription = "leadingIconDescription",
-            tint = Color(0xFF35225F),
-            modifier = Modifier
-                .size(35.dp)
-        )
+        IconButton(
+            onClick = {
+                //navController.navigate("tela_settings_screen")
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Settings,
+                contentDescription = "leadingIconDescription",
+                tint = Color(0xFF35225F),
+                modifier = Modifier
+                    .size(35.dp)
+            )
+        }
+
     }
 }
 
-@Preview
-@Composable
-fun HeaderHomePreview() {
-    HeaderHome()
-}
+//@Preview
+//@Composable
+//fun HeaderHomePreview() {
+//    HeaderHome()
+//}
