@@ -72,7 +72,7 @@ fun DateTextField() {
             }
             .background(Color.White),
         label = {
-            Text("Date")
+            Text("Data de Aniversário")
         },
         readOnly = true
     )
