@@ -8,6 +8,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarResp
 import br.senai.sp.jandira.ayancare_frontmobile.screens.estoque.verEstoque.screen.EstoqueScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.screen.HomeScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.ProfileScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen.HumorTestScreen
 
 @Composable
 fun ButtonNavGraph(
@@ -22,7 +23,8 @@ fun ButtonNavGraph(
         }
         composable(route = BottomBarScreen.Cadendary.route){
             //SettingsScreen(navController = navController)
-            AddResponsibleScreen(navController = navController)
+            //AddResponsibleScreen(navController = navController)
+            HumorTestScreen()
         }
         composable(route = BottomBarScreen.Home.route){
             HomeScreen(navController = navController)
