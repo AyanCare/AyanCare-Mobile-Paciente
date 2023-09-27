@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.CardMoodToday
@@ -41,7 +42,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Ex
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Symptoms
 
 @Composable
-fun HumorTestScreen() {
+fun HumorTestScreen(navController: NavController) {
 
     val text = rememberSaveable { mutableStateOf("") }
 
@@ -191,8 +192,8 @@ fun HumorTestScreen() {
     }
 }
 
-@Preview
-@Composable
-fun HumorTestScreenPreview() {
-    HumorTestScreen()
-}
+//@Preview
+//@Composable
+//fun HumorTestScreenPreview() {
+//    HumorTestScreen()
+//}

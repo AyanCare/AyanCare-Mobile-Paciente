@@ -38,7 +38,7 @@ fun HeaderHome(navController: NavController) {
         )
         IconButton(
             onClick = {
-                //navController.navigate("tela_settings_screen")
+                navController.navigate("setting_screen")
             }
         ) {
             Icon(
