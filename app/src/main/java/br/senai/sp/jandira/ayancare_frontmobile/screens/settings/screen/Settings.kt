@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,19 +9,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.DesktopMac
 import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.filled.PersonOutline
-import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material.icons.filled.StarOutline
 import androidx.compose.material.icons.filled.SupervisedUserCircle
 import androidx.compose.material.icons.filled.ThumbUpOffAlt
+import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,15 +31,18 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.components.CardSettings
+import kotlin.math.log
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(
+    navController: NavController,
+    navRotasController: NavController
+) {
     Surface(
         color = Color(248, 240, 236)
     ) {
@@ -52,18 +55,19 @@ fun SettingsScreen(navController: NavController) {
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround,
+                horizontalArrangement = Arrangement.Start,
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
                 IconButton(
-                    onClick = { /*TODO*/ }
+                    onClick = { navController.navigate("main_screen") }
                 ) {
                     Icon(
                         imageVector = Icons.Default.ArrowBackIosNew,
                         contentDescription = ""
                     )
                 }
+                Spacer(modifier = Modifier.width(80.dp))
                 Text(
                     text = "Configurações",
                     fontSize = 18.sp,
@@ -88,10 +92,13 @@ fun SettingsScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(30.dp))
 
+
             CardSettings(
                 imageVector = Icons.Default.SupervisedUserCircle,
                 text = "Responsável",
-                onClick = {}
+                onClick = {
+                    navRotasController.navigate("responsible_screen")
+                }
             )
             CardSettings(
                 imageVector = Icons.Default.PersonOutline,
@@ -125,14 +132,12 @@ fun SettingsScreen(navController: NavController) {
 
             CardSettings(
                 imageVector = Icons.Default.StarOutline,
-                text = "Desvincular conta",
-                onClick = {}
-            )
+                text = "Desvincular conta"
+            ) {}
             CardSettings(
                 imageVector = Icons.Default.ThumbUpOffAlt,
-                text = "Sugestões",
-                onClick = {}
-            )
+                text = "Sugestões"
+            ) {}
 
 
             Row (

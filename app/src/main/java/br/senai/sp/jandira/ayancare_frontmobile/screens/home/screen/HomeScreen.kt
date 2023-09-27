@@ -1,6 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.home.screen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -28,7 +26,10 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.home.components.CardHome
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.components.HeaderHome
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    navRotasController: NavController
+) {
     Surface(
         color = Color(248, 240, 236)
     ) {
@@ -39,7 +40,7 @@ fun HomeScreen(navController: NavController) {
                 .padding(top = 30.dp, start = 15.dp, end = 15.dp, bottom = 80.dp)
                 .fillMaxSize()
         ) {
-            HeaderHome(navController)
+            HeaderHome(navController, navRotasController)
 
             Spacer(modifier = Modifier.height(5.dp))
 
@@ -78,13 +79,16 @@ fun HomeScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(start = 15.dp, end = 15.dp)
             ) {
-                items(10) {
+                items(1) {
                     CardHome(
                         text = "Verificação de humor",
                         icon = Icons.Default.AddReaction,
                         color = Color.Magenta,
                         color_icon = Color.White,
-                        color_text = Color.White
+                        color_text = Color.White,
+                        onClick = {
+                            navRotasController.navigate("humor_test_screen")
+                        }
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                 }

@@ -31,12 +31,15 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar.components.IconD
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(navRotasController: NavController) {
     val navController = rememberNavController()
     Scaffold(
         bottomBar = { BottomBar(navController = navController)}
     ) {
-        BottomNavGraph(navController = navController)
+        BottomNavGraph(
+            navController = navController,
+            navRotasController = navRotasController
+        )
     }
 }
 

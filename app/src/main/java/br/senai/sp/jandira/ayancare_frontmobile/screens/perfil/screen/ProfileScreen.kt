@@ -37,7 +37,9 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.Circle
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavController
+) {
 
     val scrollState = rememberScrollState()
 

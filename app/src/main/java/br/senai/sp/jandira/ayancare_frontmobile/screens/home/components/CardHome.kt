@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.home.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,7 +34,8 @@ fun CardHome(
     icon: ImageVector,
     color: Color,
     color_text: Color,
-    color_icon: Color
+    color_icon: Color,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -43,7 +45,8 @@ fun CardHome(
                 ambientColor = Color(0x40000000)
             )
             .fillMaxWidth()
-            .height(105.dp),
+            .height(105.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(size = 15.dp),
         colors = CardDefaults.cardColors(
            color
@@ -80,6 +83,7 @@ fun CardHomePreview() {
         icon = Icons.Default.AddReaction,
         color = Color.Magenta,
         color_icon = Color.White,
-        color_text = Color.White
+        color_text = Color.White,
+        onClick = {}
     )
 }

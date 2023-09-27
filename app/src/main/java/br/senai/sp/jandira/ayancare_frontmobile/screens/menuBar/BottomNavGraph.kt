@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,7 +13,8 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen.HumorT
 
 @Composable
 fun BottomNavGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    navRotasController: NavController
 ) {
     NavHost(
         navController = navController,
@@ -26,18 +28,10 @@ fun BottomNavGraph(
             //AddResponsibleScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Home.route){
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, navRotasController)
         }
         composable(route = BottomBarScreen.Profile.route){
             ProfileScreen(navController = navController)
-        }
-
-        composable("setting_screen"){
-            SettingsScreen(navController = navController)
-        }
-
-        composable("humor_test_screen"){
-            HumorTestScreen(navController = navController)
         }
     }
 }

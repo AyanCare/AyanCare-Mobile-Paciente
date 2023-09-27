@@ -23,7 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
 @Composable
-fun HeaderHome(navController: NavController) {
+fun HeaderHome(
+    navController: NavController,
+    navRotasController: NavController
+) {
     Row (
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -38,7 +41,7 @@ fun HeaderHome(navController: NavController) {
         )
         IconButton(
             onClick = {
-                navController.navigate("setting_screen")
+                navRotasController.navigate("setting_screen")
             }
         ) {
             Icon(
