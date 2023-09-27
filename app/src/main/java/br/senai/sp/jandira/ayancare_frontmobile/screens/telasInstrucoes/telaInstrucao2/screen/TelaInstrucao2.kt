@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.material.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -85,31 +85,22 @@ fun TelaInstrucao2Screen(navController: NavController) {
             Card (
                 Modifier
                     .width(10.dp)
-                    .height(10.dp)
-                    .background(
-                        color = Color(0xFF35225F),
-                        shape = RoundedCornerShape(size = 10.dp)
-                    )
+                    .height(10.dp),
+                backgroundColor = Color(0xFFBEA5F5)
             ){}
             Spacer(modifier = Modifier.width(8.dp))
             Card (
                 Modifier
                     .width(10.dp)
-                    .height(10.dp)
-                    .background(
-                        color = Color(0xFF35225F),
-                        shape = RoundedCornerShape(size = 10.dp)
-                    )
+                    .height(10.dp),
+                backgroundColor = Color(0xFF35225F)
             ){}
             Spacer(modifier = Modifier.width(8.dp))
             Card (
                 Modifier
                     .width(10.dp)
-                    .height(10.dp)
-                    .background(
-                        color = Color(0xFF35225F),
-                        shape = RoundedCornerShape(size = 10.dp)
-                    )
+                    .height(10.dp),
+                backgroundColor = Color(0xFFBEA5F5)
             ){}
 
         }
