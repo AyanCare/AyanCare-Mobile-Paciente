@@ -22,7 +22,7 @@ fun DefaultTextField(
 
     OutlinedTextField(
         value = valor,
-        onValueChange = { aoMudar(it) },
+        onValueChange = { onValueChange(it) },
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(4.dp),
         label = {

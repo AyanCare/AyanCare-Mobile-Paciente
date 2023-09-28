@@ -20,9 +20,14 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ContactList
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.CardResponsible
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
 
@@ -41,7 +48,31 @@ fun ResponsibleScreen(
     navRotasController: NavController
 ) {
 
+    val context = LocalContext.current
+
     val scrollState = rememberScrollState()
+
+    var listContacts by remember {
+        mutableStateOf(listOf<ContactList>())
+    }
+
+    //Cria uma chamada para o endpoint
+
+//    val call = RetrofitFactory().getCoursesService().getCourses() ???
+//
+//    call.enqueue(object : Callback<ContactList>{
+//        override fun onResponse(
+//        call: Call<ContactList>,
+//        response: Response<ContactList>
+//        ) {
+//            listContact = response.body()!!
+//        }
+//
+//        override fun onFailure(call: Call<CoursesList>, t: Throwable) {
+//            Log.i("teste", "onFailure: ${t.message} ")
+//            Log.e("Isso ta nulo", "${listContact}")
+//        }
+//    })
 
     Surface(
         color = Color(248, 240, 236)
