@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,9 +39,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ContactList
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.Contacts
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ResponsibleService
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.CardResponsible
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun ResponsibleScreen(
@@ -52,25 +57,24 @@ fun ResponsibleScreen(
 
     val scrollState = rememberScrollState()
 
-    var listContacts by remember {
-        mutableStateOf(listOf<ContactList>())
+    var listContact by remember {
+        mutableStateOf(listOf<Contacts>())
     }
 
     //Cria uma chamada para o endpoint
 
-//    val call = RetrofitFactory().getCoursesService().getCourses() ???
+    //val call = RetrofitFactory.getInstance().create(ResponsibleService::class.java).getResponsibleByPatientId(2)
+
+//    call.enqueue(object : Callback<List<Contacts>> {
 //
-//    call.enqueue(object : Callback<ContactList>{
-//        override fun onResponse(
-//        call: Call<ContactList>,
-//        response: Response<ContactList>
-//        ) {
+//        override fun onResponse(call: Call<List<Contacts>>, response: Response<List<Contacts>>) {
+//            TODO("Not yet implemented")
+//
 //            listContact = response.body()!!
 //        }
 //
-//        override fun onFailure(call: Call<CoursesList>, t: Throwable) {
-//            Log.i("teste", "onFailure: ${t.message} ")
-//            Log.e("Isso ta nulo", "${listContact}")
+//        override fun onFailure(call: Call<List<Contacts>>, t: Throwable) {
+//            TODO("Not yet implemented")
 //        }
 //    })
 

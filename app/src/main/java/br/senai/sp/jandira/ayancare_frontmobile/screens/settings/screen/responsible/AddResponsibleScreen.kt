@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 fun AddResponsibleScreen(
     navController: NavController,
     navRotasController: NavController,
-    lifecycleScope: LifecycleCoroutineScope
+    //lifecycleScope: LifecycleCoroutineScope
 ) {
 
     val context = LocalContext.current

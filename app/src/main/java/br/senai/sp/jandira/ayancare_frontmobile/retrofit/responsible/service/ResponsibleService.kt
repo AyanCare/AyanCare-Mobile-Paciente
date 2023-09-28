@@ -17,7 +17,7 @@ interface ResponsibleService {
     //pegar os contatos daquele paciente
     @Headers("Content-Type: application/json")
     @GET("/contato")
-    suspend fun getResponsibleByPatientId(@Path("id") id: Long): Call<ContactList>
+    fun getResponsibleByPatientId(@Path("id") id: Long): Call<Contacts>
 
     //inserir um contato
     @Headers("Content-Type: application/json")

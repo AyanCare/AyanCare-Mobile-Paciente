@@ -9,5 +9,4 @@ data class ResponsibleResponse(
     @SerializedName("local") var local: String = "",
     @SerializedName("id_paciente") var id_paciente:Int? = 0,
     @SerializedName("id_status_contato") var id_status_contato:Int? = 0,
-
 )

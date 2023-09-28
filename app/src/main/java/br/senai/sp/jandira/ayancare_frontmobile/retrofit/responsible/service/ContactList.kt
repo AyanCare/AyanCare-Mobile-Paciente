@@ -2,6 +2,6 @@ package br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service
 
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsibleResponse
 
-interface ContactList {
+data class Contacts (
     val contatos: List<ResponsibleResponse>
-}
+)
