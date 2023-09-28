@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarResponsavel.components
+package br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.text.BasicTextField

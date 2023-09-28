@@ -21,6 +21,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen.LoginScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar.MainScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.SettingsScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.AddResponsibleScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.ResponsibleScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.telaPrincipal.screen.TelaPrincipalScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInstrucao1.screen.TelaInstrucao1Screen
@@ -99,6 +100,10 @@ class SplashActivity : ComponentActivity() {
 
                         composable("responsible_screen"){
                             ResponsibleScreen(navController = navController, navRotasController = navController)
+                        }
+
+                        composable("add_responsible_screen"){
+                            AddResponsibleScreen(navController = navController, navRotasController = navController)
                         }
 
                         composable("humor_test_screen"){

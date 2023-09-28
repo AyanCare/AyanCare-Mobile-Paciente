@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.CardResponsible
+import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
 
 @Composable
 fun ResponsibleScreen(
@@ -104,6 +105,7 @@ fun ResponsibleScreen(
                 CardResponsible()
             }
         }
+        FloatingActionButtonResponsible(navController)
     }
 }
 
