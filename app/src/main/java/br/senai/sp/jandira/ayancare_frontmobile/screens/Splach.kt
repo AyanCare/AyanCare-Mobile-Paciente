@@ -20,6 +20,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.redefinirS
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.FinalizarCadastroScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen.LoginScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar.MainScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.screen.EditProfileScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.SettingsScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.AddResponsibleScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.ResponsibleScreen
@@ -104,6 +105,10 @@ class SplashActivity : ComponentActivity() {
 
                         composable("add_responsible_screen"){
                             AddResponsibleScreen(navController = navController, navRotasController = navController)
+                        }
+
+                        composable("edit_profile_screen"){
+                            EditProfileScreen(navController = navController, navRotasController = navController)
                         }
 
                         composable("humor_test_screen"){

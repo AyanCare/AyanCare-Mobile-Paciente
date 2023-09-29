@@ -38,7 +38,8 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.Proces
 
 @Composable
 fun ProfileScreen(
-    navController: NavController
+    navController: NavController,
+    navRotasController: NavController
 ) {
 
     val scrollState = rememberScrollState()
@@ -62,7 +63,7 @@ fun ProfileScreen(
             ){
                 Button(
                     onClick = {
-                        navController.navigate("humor_test_screen")
+                        navRotasController.navigate("edit_profile_screen")
                     },
                     modifier = Modifier
                         .width(105.dp)

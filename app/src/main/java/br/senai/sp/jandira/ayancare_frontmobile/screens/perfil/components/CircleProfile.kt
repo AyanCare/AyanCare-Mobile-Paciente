@@ -25,7 +25,7 @@ fun CircleProfile(
         painter = painter,
         contentDescription = "",
         modifier = Modifier
-            .size(90.dp)
+            .size(100.dp)
             .border(
                 BorderStroke(4.dp, Color.White),
                 CircleShape
