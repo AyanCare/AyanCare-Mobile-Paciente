@@ -33,19 +33,14 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 
 @Composable
-fun ModalAddChronicDiseases(
-    isDialogVisibleChronicDiseases: Boolean,
+fun ModalAddComorbidity(
+    isDialogVisibleComorbidity: Boolean,
     navController: NavController
 ) {
 
     var nomeState by remember {
         mutableStateOf("")
     }
-
-    var grauState by remember {
-        mutableStateOf("")
-    }
-
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -54,7 +49,7 @@ fun ModalAddChronicDiseases(
     ) {
         Dialog(
             onDismissRequest = {
-                isDialogVisibleChronicDiseases
+                isDialogVisibleComorbidity
             }
         ) {
             Surface(
@@ -67,7 +62,7 @@ fun ModalAddChronicDiseases(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Adicionar \n Doenças Crônicas",
+                        text = "Adicionar \n Comorbidade",
                         fontSize = 24.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(600),
@@ -81,15 +76,6 @@ fun ModalAddChronicDiseases(
                         valor = nomeState,
                         label = "Nome",
                         onValueChange = { nomeState = it },
-                        aoMudar = {}
-                    )
-
-                    Spacer(modifier = Modifier.height(14.dp))
-
-                    DefaultTextField(
-                        valor = grauState,
-                        label = "Grau",
-                        onValueChange = { grauState = it },
                         aoMudar = {}
                     )
 
