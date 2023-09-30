@@ -103,12 +103,16 @@ fun SettingsScreen(
             CardSettings(
                 imageVector = Icons.Default.PersonOutline,
                 text = "Contas Vinculadas",
-                onClick = {}
+                onClick = {
+
+                }
             )
             CardSettings(
                 imageVector = Icons.Default.Lock,
                 text = "Código do Paciente",
-                onClick = {}
+                onClick = {
+                    navRotasController.navigate("codigo_paciente_screen")
+                }
             )
             CardSettings(
                 imageVector = Icons.Default.NotificationsNone,
@@ -132,12 +136,16 @@ fun SettingsScreen(
 
             CardSettings(
                 imageVector = Icons.Default.StarOutline,
-                text = "Desvincular conta"
-            ) {}
+                text = "Desvincular conta",
+                onClick = {}
+            )
             CardSettings(
                 imageVector = Icons.Default.ThumbUpOffAlt,
-                text = "Sugestões"
-            ) {}
+                text = "Sugestões",
+                onClick = {
+                    navRotasController.navigate("sugestoes_screen")
+                }
+            )
 
 
             Row (

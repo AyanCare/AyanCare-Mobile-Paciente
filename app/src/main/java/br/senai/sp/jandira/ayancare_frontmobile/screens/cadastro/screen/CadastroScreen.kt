@@ -276,15 +276,6 @@ fun CadastroScreen(navController: NavController, lifecycleScope: LifecycleCorout
                     ),
                     borderColor = Color.Black
                 )
-                //DefaultTextField(valor = "", label = "Email") {}
-
-                //Spacer(modifier = Modifier.height(25.dp))
-
-                //TextFieldPassword(label = "Senha", valor = "Senha", aoMudar = {})
-
-                //Spacer(modifier = Modifier.height(25.dp))
-
-                //TextFieldPassword(label = "Confirmar Senha", valor = "Senha", aoMudar = {})
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -327,7 +318,7 @@ fun CadastroScreen(navController: NavController, lifecycleScope: LifecycleCorout
                             confirmPassword = repeatPasswordState
                         )
 
-                        navController.navigate("confirmarEmail_screen")
+                        navController.navigate("finalizar_cadastro_screen")
                     }
                 )
             }
@@ -337,9 +328,3 @@ fun CadastroScreen(navController: NavController, lifecycleScope: LifecycleCorout
     }
 
 }
-
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun CadastroPreview() {
-//    CadastroScreen()
-//}
