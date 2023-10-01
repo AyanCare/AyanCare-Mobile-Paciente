@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.components.CardHome
@@ -33,7 +34,7 @@ fun HomeScreen(
     navController: NavController,
     navRotasController: NavController
 ) {
-    Log.e("View", "HomeScreen: $viewModel", )
+    Log.e("View", "HomeScreen: ${viewModel.id}" )
 
     var nome = viewModel.nome
     var genero = viewModel.genero

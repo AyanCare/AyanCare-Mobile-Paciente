@@ -45,10 +45,9 @@ fun ProfileScreen(
     viewModel: CreateAccountView
 ) {
 
-    Log.e("View", "ProfileScreen: $viewModel")
+    Log.e("View", "ProfileScreen: ${viewModel.id}")
 
     val id = viewModel.id
-
 
     val scrollState = rememberScrollState()
 

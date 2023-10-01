@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen
 
 import android.content.Context
+import android.content.Intent
 import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import android.util.Patterns
@@ -50,6 +51,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.CustomOutlinedTextFie
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.LoginRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.home.screen.HomeScreen
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -275,17 +277,11 @@ fun LoginScreen(
                             passwordState,
                             viewModel
                         )
-//                        loginView(
-//                            id = 1,
-//                            nome = "Duda",
-//                            dataNascimento = "2002-08-08",
-//                            email = emailState,
-//                            senha = passwordState,
-//                            id_genero = 2,
-//                            viewModal = viewModel,
-//                            context = context,
-//                            navController = navController
-//                        )
+
+//                        var openCategoryRestaurant = Intent(context, MainActivity()::class.java)
+//                        openCategoryRestaurant.putExtra("name_category", viewModel.id)
+//                        Log.i("TAG", "LoginScreen: $openCategoryRestaurant")
+//                        context.startActivity(openCategoryRestaurant)
 
                         //navController.navigate("main_screen")
                     })
@@ -329,48 +325,3 @@ fun LoginScreen(
 
     }
 }
-
-//fun loginView(
-//    id: Int,
-//    nome: String,
-//    dataNascimento: String,
-//    email: String,
-//    senha: String,
-//    id_genero: Int,
-//    viewModal: CreateAccountView,
-//    context: Context,
-//    navController: NavController
-//){
-//    if (
-//        email == null || email == "" ||
-//        senha == null || senha == ""
-//    ){
-//        Log.e("LOGIN - ERROR", "LOGIN_V1: REQUIRE FIELDS")
-//        Toast.makeText(context, "NÃO FOI PREENCHIDO TODOS OS CAMPOS", Toast.LENGTH_SHORT).show()
-//    }else {
-//
-//        viewModal.id = id
-//        viewModal.nome = nome
-//        viewModal.email = email
-//        viewModal.senha = senha
-//        viewModal.dataNascimento = dataNascimento
-//        viewModal.id_genero = id_genero
-//
-//        Log.e(
-//            "LOGIN - ERROR",
-//            "LOGIN_V1: REQUIRE FIELDS" +
-//                    "${viewModal.id}" +
-//                    "${viewModal.nome}" +
-//                    "${viewModal.email}" +
-//                    "${viewModal.senha}" +
-//                    "${viewModal.dataNascimento}" +
-//                    "${viewModal.id_genero}"
-//        )
-//
-//        navController.navigate("main_screen")
-//
-//    }
-//
-//
-//
-//}

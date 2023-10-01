@@ -59,7 +59,6 @@ class SplashActivity : ComponentActivity() {
 
                         composable("login_screen") {
                             LoginScreen(navController = navController, lifecycleScope = lifecycleScope, viewModel = viewModelCreateAccount)
-                            Log.e("View", "HomeScreenSplachB: ${viewModelCreateAccount.id}", )
                         }
 
                         composable("cadastro_screen") {

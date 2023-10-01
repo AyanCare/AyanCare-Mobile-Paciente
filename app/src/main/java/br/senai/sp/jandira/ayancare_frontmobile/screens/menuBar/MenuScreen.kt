@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -27,6 +29,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar.components.IconDefault
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,6 +58,12 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentdestination = navBackStackEntry?.destination
 
+    var viewModel = viewModel<CreateAccountView>()
+
+    Log.e("View", "MenuScreenA: ${viewModel.id}")
+
+
+
     BottomNavigation(
         modifier =  Modifier
             .height(80.dp),
@@ -62,9 +71,10 @@ fun BottomBar(navController: NavHostController) {
     ){
         screen.forEach{screen ->
             AddItem(screen = screen, currentDestination = currentdestination, navController = navController)
-
+            Log.e("View", "MenuScreenB: ${viewModel.id}")
         }
     }
+    Log.e("View", "MenuScreenC ${viewModel.id}")
 
 }
 

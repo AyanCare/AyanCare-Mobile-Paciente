@@ -40,7 +40,7 @@ fun BottomNavGraph(
 
         }
         composable(route = BottomBarScreen.Profile.route){
-            ProfileScreen(navController = navController, navRotasController)
+            ProfileScreen(navController = navController, navRotasController, viewModel)
         }
     }
 }
