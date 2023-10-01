@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.home.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,12 +25,22 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.components.CardHome
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.components.HeaderHome
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 
 @Composable
 fun HomeScreen(
+    viewModel: CreateAccountView,
     navController: NavController,
     navRotasController: NavController
 ) {
+    Log.e("View", "HomeScreen: $viewModel", )
+
+    var nome = viewModel.nome
+    var genero = viewModel.genero
+    val id = viewModel.id
+
+    Log.i("AG", "HomeScreen: $nome + $genero + $id")
+
     Surface(
         color = Color(248, 240, 236)
     ) {
@@ -46,14 +57,15 @@ fun HomeScreen(
 
             Column {
                 Text(
-                    text = "Bem vinda,",
+                    text =
+                    if (genero == "Feminino"){ "Bem Vinda," } else { "Bem Vindo," },
                     fontSize = 45.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight.Light,
                     color = Color(0xFF35225F)
                 )
                 Text(
-                    text = "Daniela!",
+                    text = "$nome!",
                     fontSize = 25.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight.SemiBold,

@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,12 +36,19 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxPro
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CardMedicine
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CircleProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    navRotasController: NavController
+    navRotasController: NavController,
+    viewModel: CreateAccountView
 ) {
+
+    Log.e("View", "ProfileScreen: $viewModel")
+
+    val id = viewModel.id
+
 
     val scrollState = rememberScrollState()
 

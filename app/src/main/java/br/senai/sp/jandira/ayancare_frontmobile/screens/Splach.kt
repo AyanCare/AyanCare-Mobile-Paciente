@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +33,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInst
 import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInstrucao3.screen.TelaInstrucao3Screen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen.HumorTestScreen
 import br.senai.sp.jandira.ayancare_frontmobile.ui.theme.AyanCareFrontMobileTheme
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 
 class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +47,8 @@ class SplashActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
+                    var viewModelCreateAccount = viewModel<CreateAccountView>()
+
                     NavHost(
                         navController = navController,
                         startDestination = "tela_principal_screen"
@@ -53,7 +58,8 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("login_screen") {
-                            LoginScreen(navController = navController, lifecycleScope = lifecycleScope)
+                            LoginScreen(navController = navController, lifecycleScope = lifecycleScope, viewModel = viewModelCreateAccount)
+                            Log.e("View", "HomeScreenSplachB: ${viewModelCreateAccount.id}", )
                         }
 
                         composable("cadastro_screen") {
@@ -113,7 +119,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("codigo_paciente_screen"){
-                            PatientCodeScreen(navController = navController, navRotasController = navController)
+                            PatientCodeScreen(navController = navController, navRotasController = navController, viewModel = viewModelCreateAccount)
                         }
 
                         composable("sugestoes_screen"){

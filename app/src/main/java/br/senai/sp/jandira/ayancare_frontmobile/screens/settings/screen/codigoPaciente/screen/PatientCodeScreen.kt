@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.codigoPaciente.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -41,12 +42,17 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 
 @Composable
 fun PatientCodeScreen(
     navController: NavController,
-    navRotasController: NavController
+    navRotasController: NavController,
+    viewModel: CreateAccountView
 ) {
+
+    val id = viewModel.id
+
     Surface(
         color = Color(248, 240, 236)
     ) {
@@ -93,7 +99,7 @@ fun PatientCodeScreen(
                 Spacer(modifier = Modifier.height(100.dp))
 
                 TextField(
-                    value = "85961",
+                    value = "$id",
                     onValueChange = {},
                     modifier = Modifier
                         .border(

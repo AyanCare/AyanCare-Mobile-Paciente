@@ -1,5 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen
 
+import android.content.Context
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -48,11 +50,17 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.CustomOutlinedTextFie
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.LoginRepository
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 
 @Composable
-fun LoginScreen(navController: NavController, lifecycleScope: LifecycleCoroutineScope) {
+fun LoginScreen(
+    navController: NavController,
+    lifecycleScope: LifecycleCoroutineScope,
+    viewModel: CreateAccountView
+) {
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -92,12 +100,17 @@ fun LoginScreen(navController: NavController, lifecycleScope: LifecycleCoroutine
 
     fun login (
         email: String,
-        password: String
+        password: String,
+        viewModel: CreateAccountView
     ) {
         if(validateData(email, password)){
             val loginRepository = LoginRepository()
             lifecycleScope.launch {
+                Log.e("TA", "login: $email e $password", )
+
                 val response = loginRepository.loginUser(email, password)
+
+                Log.e("TAG", "login: ${response.body()}", )
 
                 if(response.isSuccessful){
                     Log.e(MainActivity::class.java.simpleName, "Login bem-sucedido" )
@@ -106,6 +119,34 @@ fun LoginScreen(navController: NavController, lifecycleScope: LifecycleCoroutine
                     if (checagem.toString() == "404") {
                         Toast.makeText(context, "Email ou senha inválido", Toast.LENGTH_LONG).show()
                     } else {
+
+                        val jsonString = response.body().toString()
+                        val jsonObject = JSONObject(jsonString)
+                        val pacienteObject = jsonObject.getJSONObject("paciente")
+
+                        val id = pacienteObject.getInt("id")
+                        val nome = pacienteObject.getString("nome")
+                        val dataNascimento = pacienteObject.getString("data_nascimento")
+                        val genero = pacienteObject.getString("genero")
+
+                        viewModel.id = id
+                        viewModel.nome = nome
+                        viewModel.email = email
+                        viewModel.senha = password
+                        viewModel.dataNascimento = dataNascimento
+                        viewModel.genero = genero
+
+                        Log.e(
+                            "LOGIN - ERROR",
+                            "LOGIN_V1: REQUIRE FIELDS" +
+                                    "${viewModel.id}" +
+                                    "${viewModel.nome}" +
+                                    "${viewModel.email}" +
+                                    "${viewModel.senha}" +
+                                    "${viewModel.dataNascimento}" +
+                                    "${viewModel.genero}"
+                        )
+
                         Toast.makeText(context, "Seja bem-vindo", Toast.LENGTH_SHORT).show()
                         navController.navigate("main_screen")
                     }
@@ -229,9 +270,24 @@ fun LoginScreen(navController: NavController, lifecycleScope: LifecycleCoroutine
                 DefaultButton(
                     text = "Entrar",
                     onClick = {
-                        login(emailState, passwordState)
+                        login(
+                            emailState,
+                            passwordState,
+                            viewModel
+                        )
+//                        loginView(
+//                            id = 1,
+//                            nome = "Duda",
+//                            dataNascimento = "2002-08-08",
+//                            email = emailState,
+//                            senha = passwordState,
+//                            id_genero = 2,
+//                            viewModal = viewModel,
+//                            context = context,
+//                            navController = navController
+//                        )
 
-                        navController.navigate("main_screen")
+                        //navController.navigate("main_screen")
                     })
             }
 
@@ -274,8 +330,47 @@ fun LoginScreen(navController: NavController, lifecycleScope: LifecycleCoroutine
     }
 }
 
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun LoginPreview() {
-//    LoginScreen()
+//fun loginView(
+//    id: Int,
+//    nome: String,
+//    dataNascimento: String,
+//    email: String,
+//    senha: String,
+//    id_genero: Int,
+//    viewModal: CreateAccountView,
+//    context: Context,
+//    navController: NavController
+//){
+//    if (
+//        email == null || email == "" ||
+//        senha == null || senha == ""
+//    ){
+//        Log.e("LOGIN - ERROR", "LOGIN_V1: REQUIRE FIELDS")
+//        Toast.makeText(context, "NÃO FOI PREENCHIDO TODOS OS CAMPOS", Toast.LENGTH_SHORT).show()
+//    }else {
+//
+//        viewModal.id = id
+//        viewModal.nome = nome
+//        viewModal.email = email
+//        viewModal.senha = senha
+//        viewModal.dataNascimento = dataNascimento
+//        viewModal.id_genero = id_genero
+//
+//        Log.e(
+//            "LOGIN - ERROR",
+//            "LOGIN_V1: REQUIRE FIELDS" +
+//                    "${viewModal.id}" +
+//                    "${viewModal.nome}" +
+//                    "${viewModal.email}" +
+//                    "${viewModal.senha}" +
+//                    "${viewModal.dataNascimento}" +
+//                    "${viewModal.id_genero}"
+//        )
+//
+//        navController.navigate("main_screen")
+//
+//    }
+//
+//
+//
 //}
