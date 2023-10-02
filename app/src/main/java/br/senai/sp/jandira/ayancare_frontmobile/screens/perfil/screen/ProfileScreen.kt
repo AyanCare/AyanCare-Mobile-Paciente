@@ -34,11 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.Paciente
+import br.senai.sp.jandira.ayancare_frontmobile.PacienteList
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PatientResponse
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Patient
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.PatientService
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CardMedicine
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CircleProfile
@@ -47,7 +46,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.log
 
 @Composable
 fun ProfileScreen(
@@ -56,16 +54,10 @@ fun ProfileScreen(
     viewModel: CreateAccountView
 ) {
 
-    Log.e("View", "ProfileScreen: ${viewModel.id}")
-
-    val id = viewModel.id
-
-    val scrollState = rememberScrollState()
-
     // Mantenha uma lista de  patients no estado da tela
-    var patients by remember {
+    var listPaciente by remember {
         mutableStateOf(
-            Patient(
+            Paciente(
                 0, "", "", "", "", "", "", "",
                 emptyList(),
                 emptyList()
@@ -73,48 +65,36 @@ fun ProfileScreen(
         )
     }
 
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjUsImlhdCI6MTY5NjE5OTI3MiwiZXhwIjoxNjk4NTA3MjcyfQ.IcWG3lmmgr5ppKDYhxWmLdrXyQTy7LKP8Qxbz1xTyHc"
+    var callTeste = RetrofitFactory
+        .getPatient()
+        .getPatient("5")
 
-    // Obtém uma instância do Retrofit
-    val retrofit = RetrofitFactory.getInstance()
+    callTeste.enqueue(object : Callback<PacienteList> {
+        override fun onResponse(
+            call: Call<PacienteList>,
+            response: Response<PacienteList>
+        ) {
 
-    // Cria uma instância do serviço com a interface definida
-    val patientService = retrofit.create(PatientService::class.java)
+            listPaciente = response.body()!!.paciente
 
-    // Faz a chamada à API usando a instância do serviço
-    val call = patientService.getPatientById(token, 5)
-
-
-
-    call.enqueue(object : Callback<PatientResponse> {
-        override fun onResponse(call: Call<PatientResponse>, response: Response<PatientResponse>) {
-            if (response.isSuccessful) {
-                val patientResponse = response.body()
-                if (patientResponse != null) {
-                    val status = patientResponse.status
-                    val patients = patientResponse.paciente
-                    Log.d("Status", "Status: $status")
-                    Log.d("Patient", "Patient: $patients")
-
-                    // Agora você pode acessar os dados do paciente aqui
-                    val nome = patients.nome
-                    val email = patients.email
-                    // E assim por diante...
-                } else {
-                    Log.e("API Response", "Resposta vazia")
-                }
-            } else {
-                Log.e("API Response", "Erro na resposta da API: ${response.code()}")
-            }
         }
 
-        override fun onFailure(call: Call<PatientResponse>, t: Throwable) {
-            // Lida com o erro na chamada da API aqui, se necessário
-            Log.e("perfil", "Erro na chamada da API: ${t.message}")
+        override fun onFailure(
+            call: Call<PacienteList>,
+            t: Throwable
+        ) {
+
+            Log.i("ds3t", "onFailure: ${t.message}")
+
         }
+
     })
 
-    Log.i("TAG", "ProfileScreenssss: ${patients}")
+    Log.e("View", "ProfileScreen: ${viewModel.id}")
+
+    val id = viewModel.id
+
+    val scrollState = rememberScrollState()
 
     Surface(
         color = Color(248, 240, 236)
@@ -163,8 +143,9 @@ fun ProfileScreen(
                 CircleProfile(
                     painter = painterResource(id = R.drawable.instrucao3)
                 )
+
                 Text(
-                    text = "patients.nome",
+                    text = listPaciente.nome,
                     fontSize = 24.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(500),
@@ -192,7 +173,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 LazyRow() {
-                    items(patients.doencas_cronicas) {
+                    items(listPaciente.doencas_cronicas) {
                         ProcessingProfile(text = it.nome)
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -211,7 +192,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 LazyRow() {
-                    items(patients.comorbidades) {
+                    items(listPaciente.comorbidades) {
                         ProcessingProfile(text = it.nome)
                         Spacer(modifier = Modifier.width(10.dp))
                     }
