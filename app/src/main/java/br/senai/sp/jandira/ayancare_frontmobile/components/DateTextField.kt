@@ -61,7 +61,6 @@ fun DateTextField() {
         value = selectedDate,
         onValueChange = {},
         modifier = Modifier
-            .padding(8.dp)
             .fillMaxWidth()
             .onFocusEvent {
                 if (it.isFocused) {

@@ -48,7 +48,9 @@ fun Dropdown() {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
                 },
                 colors = ExposedDropdownMenuDefaults.textFieldColors(),
-                modifier = Modifier.menuAnchor()
+                modifier = Modifier
+                    .menuAnchor()
+                    .fillMaxWidth()
 
             )
 

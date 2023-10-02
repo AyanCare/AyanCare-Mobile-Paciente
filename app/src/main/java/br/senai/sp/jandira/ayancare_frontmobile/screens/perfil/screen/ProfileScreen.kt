@@ -164,7 +164,7 @@ fun ProfileScreen(
                     painter = painterResource(id = R.drawable.instrucao3)
                 )
                 Text(
-                    text = patients.nome,
+                    text = "patients.nome",
                     fontSize = 24.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(500),
@@ -182,27 +182,31 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = "Tratamentos",
+                    text = "Doenças Crônicas",
                     fontSize = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(500),
                     color = Color(0xFF35225F)
                 )
 
-//            LazyVerticalGrid(
-//                columns = GridCells.Adaptive(minSize = 50.dp),
-//            ) {
-//                items(6) {
-//                    Spacer(modifier = Modifier.height(10.dp))
-//                    Card(
-//                        modifier = Modifier
-//                            .padding(bottom = 10.dp, end = 10.dp),
-//                        shape = RoundedCornerShape(size = 16.dp)
-//                    ) {
-//                        ProcessingProfile()
-//                    }
-//                }
-//            }
+                Spacer(modifier = Modifier.height(5.dp))
+
+                LazyRow() {
+                    items(patients.doencas_cronicas) {
+                        ProcessingProfile(text = it.nome)
+                        Spacer(modifier = Modifier.width(10.dp))
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = "Comorbidade",
+                    fontSize = 20.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins)),
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFF35225F)
+                )
 
                 Spacer(modifier = Modifier.height(5.dp))
 
@@ -249,9 +253,3 @@ fun ProfileScreen(
 
     }
 }
-
-//@Preview
-//@Composable
-//fun ProfileScreenPreview() {
-//    ProfileScreen()
-//}

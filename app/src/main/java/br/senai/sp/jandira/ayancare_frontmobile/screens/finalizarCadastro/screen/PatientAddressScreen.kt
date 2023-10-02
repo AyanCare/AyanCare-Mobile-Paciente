@@ -95,11 +95,35 @@ fun PatientAddressScreen(
 
                     Spacer(modifier = Modifier.height(25.dp))
 
-                    AutoComplete()
+                    DefaultTextField(
+                        valor = "",
+                        label = "Estado",
+                        onValueChange = {}
+                    ) {}
 
                     Spacer(modifier = Modifier.height(25.dp))
 
-                    AutoComplete()
+                    DefaultTextField(
+                        valor = "",
+                        label = "Cidade",
+                        onValueChange = {}
+                    ) {}
+
+                    Spacer(modifier = Modifier.height(25.dp))
+
+                    DefaultTextField(
+                        valor = "",
+                        label = "Bairro",
+                        onValueChange = {}
+                    ) {}
+
+                    Spacer(modifier = Modifier.height(25.dp))
+
+                    DefaultTextField(
+                        valor = "",
+                        label = "Logradouro",
+                        onValueChange = {}
+                    ) {}
 
                 }
             }

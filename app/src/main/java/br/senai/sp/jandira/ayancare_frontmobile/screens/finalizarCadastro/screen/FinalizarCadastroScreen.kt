@@ -152,8 +152,8 @@ fun FinalizarCadastroScreen(navController: NavController){
                     Spacer(modifier = Modifier.height(25.dp))
 
                     Dropdown()
-
                 }
+
             }
 
             Column (

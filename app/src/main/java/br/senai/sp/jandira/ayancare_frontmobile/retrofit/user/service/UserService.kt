@@ -11,7 +11,7 @@ interface UserService {
     //https://ayancare-api.cyclic.cloud
 
     @Headers("Content-Type: application/json")
-    @POST("/usuario/cadastro")
+    @POST("/v1/ayan/usuario/cadastro")
     suspend fun createUser(@Body body: JsonObject): Response<JsonObject>
 
     @Headers("Content-Type: application/json")
@@ -19,6 +19,6 @@ interface UserService {
     suspend fun postUser(@Body body: JsonObject): Response<JsonObject>
 
     @Headers("Content-Type: application/json")
-    @POST("/usuario/esqueceu_a_senha")
+    @POST("/v1/ayan/usuario/esqueciasenha")
     suspend fun requestPasswordReset(@Body requestBody: JsonObject): Response<JsonObject>
 }
