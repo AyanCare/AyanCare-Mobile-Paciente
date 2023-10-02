@@ -66,7 +66,7 @@ fun HomeScreen(
                     color = Color(0xFF35225F)
                 )
                 Text(
-                    text = "$nome!",
+                    text = "Lohannes!",
                     fontSize = 25.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight.SemiBold,

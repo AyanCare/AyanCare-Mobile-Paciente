@@ -55,7 +55,11 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.service.UserServic
 import kotlinx.coroutines.launch
 
 @Composable
-fun CadastroScreen(navController: NavController, lifecycleScope: LifecycleCoroutineScope) {
+fun CadastroScreen(
+    navController: NavController,
+    navRotasController: NavController,
+    lifecycleScope: LifecycleCoroutineScope
+) {
 
     lateinit var apiService: UserService
 
@@ -152,7 +156,7 @@ fun CadastroScreen(navController: NavController, lifecycleScope: LifecycleCorout
 
                     Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
 
-                    navController.navigate("confirmarEmail_screen")
+                    navController.navigate("finalizar_cadastro_screen")
 
                 } else {
 
@@ -318,7 +322,7 @@ fun CadastroScreen(navController: NavController, lifecycleScope: LifecycleCorout
                             confirmPassword = repeatPasswordState
                         )
 
-                        navController.navigate("finalizar_cadastro_screen")
+                        //navController.navigate("finalizar_cadastro_screen")
                     }
                 )
             }

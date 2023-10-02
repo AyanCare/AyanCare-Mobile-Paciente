@@ -11,7 +11,7 @@ interface UserService {
     //https://ayancare-api.cyclic.cloud
 
     @Headers("Content-Type: application/json")
-    @POST("/v1/ayan/usuario/cadastro")
+    @POST("/v1/ayan/paciente")
     suspend fun createUser(@Body body: JsonObject): Response<JsonObject>
 
     @Headers("Content-Type: application/json")

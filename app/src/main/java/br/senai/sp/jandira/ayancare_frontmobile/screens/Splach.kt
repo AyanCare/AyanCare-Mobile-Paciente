@@ -51,7 +51,7 @@ class SplashActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = "main_screen"
+                        startDestination = "tela_principal_screen"
                     ) {
                         composable("tela_principal_screen") {
                             TelaPrincipalScreen(navController = navController)
@@ -62,7 +62,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("cadastro_screen") {
-                            CadastroScreen(navController = navController, lifecycleScope = lifecycleScope)
+                            CadastroScreen(navController = navController, lifecycleScope = lifecycleScope, navRotasController = navController)
                         }
 
                         composable("finalizar_cadastro_screen"){
