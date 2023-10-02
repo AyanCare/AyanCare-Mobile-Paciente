@@ -5,7 +5,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Patient
 import com.google.gson.JsonObject
 import retrofit2.Response
 
-class PatientRepository{
+class PatientRepository {
 
     private val apiService = RetrofitFactory.getInstance().create(PatientService::class.java)
 

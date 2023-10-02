@@ -24,7 +24,9 @@ import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
-fun ProcessingProfile() {
+fun ProcessingProfile(
+    text: String
+) {
 
         Card (
             modifier = Modifier
@@ -41,7 +43,7 @@ fun ProcessingProfile() {
             )
             {
                 Text(
-                    text = "Diabetes",
+                    text = text,
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
@@ -56,8 +58,8 @@ fun ProcessingProfile() {
 
 }
 
-@Preview
-@Composable
-fun ProcessingProfilePreview() {
-    ProcessingProfile()
-}
+//@Preview
+//@Composable
+//fun ProcessingProfilePreview() {
+//    ProcessingProfile()
+//}

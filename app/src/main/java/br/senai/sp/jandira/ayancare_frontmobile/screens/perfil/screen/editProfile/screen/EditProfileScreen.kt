@@ -204,7 +204,7 @@ fun EditProfileScreen(
                 }
                 LazyRow() {
                     items(4) {
-                        ProcessingProfile()
+                        ProcessingProfile(text = "Diabete")
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
@@ -248,7 +248,7 @@ fun EditProfileScreen(
 
                 LazyRow() {
                     items(4) {
-                        ProcessingProfile()
+                        ProcessingProfile(text = "Diabete")
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }

@@ -51,7 +51,7 @@ class SplashActivity : ComponentActivity() {
 
                     NavHost(
                         navController = navController,
-                        startDestination = "tela_principal_screen"
+                        startDestination = "main_screen"
                     ) {
                         composable("tela_principal_screen") {
                             TelaPrincipalScreen(navController = navController)
