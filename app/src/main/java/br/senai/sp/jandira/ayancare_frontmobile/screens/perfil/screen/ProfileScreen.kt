@@ -204,7 +204,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 LazyRow() {
-                    items(listPaciente.doencas_cronicas) {
+                    items(listPaciente.doencas_cronicas.reversed()) {
                         ProcessingProfile(text = it.nome)
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -223,7 +223,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 LazyRow() {
-                    items(listPaciente.comorbidades) {
+                    items(listPaciente.comorbidades.reversed()) {
                         ProcessingProfile(text = it.nome)
                         Spacer(modifier = Modifier.width(10.dp))
                     }
