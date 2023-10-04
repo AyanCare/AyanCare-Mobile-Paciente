@@ -114,7 +114,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("add_responsible_screen"){
-                            AddResponsibleScreen(navController = navController, navRotasController = navController)
+                            AddResponsibleScreen(navController = navController, lifecycleScope = lifecycleScope)
                         }
 
                         composable("edit_profile_screen"){

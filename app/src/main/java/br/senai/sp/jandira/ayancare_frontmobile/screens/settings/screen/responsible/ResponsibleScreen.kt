@@ -70,7 +70,7 @@ fun ResponsibleScreen(
 
     //Cria uma chamada para o endpoint
 
-    var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(2)
+    var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(5)
     //var call = RetrofitFactory.getResponsible().getTodosResponsaveis()
 
     Log.e("TAG", "ResponsibleScreen: $call ", )

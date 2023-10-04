@@ -50,13 +50,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddResponsibleScreen(
     navController: NavController,
-    navRotasController: NavController,
     lifecycleScope: LifecycleCoroutineScope
 ) {
 
     val context = LocalContext.current
-
-    val localState = rememberSaveable { mutableStateOf("") }
 
     var nomeState by remember {
         mutableStateOf("")
@@ -66,6 +63,9 @@ fun AddResponsibleScreen(
         mutableStateOf("")
     }
 
+    var localState by remember {
+        mutableStateOf("")
+    }
 
     fun responsible(
         nome: String,
@@ -90,11 +90,14 @@ fun AddResponsibleScreen(
                 Log.e(MainActivity::class.java.simpleName, "responsible bem-sucedido")
                 Log.e("responsible", "responsible: ${response.body()}")
                 val checagem = response.body()?.get("status")
+
+                Log.e("responsible", "responsible: ${checagem}")
+
                 if (checagem.toString() == "404") {
                     Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(context, "Seja bem-vindo", Toast.LENGTH_SHORT).show()
-                    navController.navigate("main_screen")
+                    Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+                    navController.navigate("responsible_screen")
                 }
             } else {
                 val errorBody = response.errorBody()?.string()
@@ -161,8 +164,8 @@ fun AddResponsibleScreen(
                     color = Color(0xFF191D23)
                 )
                 TextField(
-                    value = localState.value,
-                    onValueChange = { localState.value = it },
+                    value = localState,
+                    onValueChange = { localState = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(140.dp)
@@ -176,7 +179,6 @@ fun AddResponsibleScreen(
                     )
                 )
             }
-
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -184,7 +186,15 @@ fun AddResponsibleScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 DefaultButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        responsible(
+                            nome = nomeState,
+                            numero = telefoneState,
+                            local = localState,
+                            id_paciente = 5,
+                            id_status_contato = 1
+                        )
+                    },
                     text = "Adicionar"
                 )
                 Spacer(modifier = Modifier.height(25.dp))
@@ -202,15 +212,6 @@ fun AddResponsibleScreen(
                         }
                 )
             }
-
-
         }
     }
-
 }
-
-//@Preview
-//@Composable
-//fun AddResponsibleScreenPreview() {
-//    AddResponsibleScreen()
-//}

@@ -1,12 +1,13 @@
 package br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository
 
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ResponsavelService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.service.UserService
 import com.google.gson.JsonObject
 import retrofit2.Response
 
 class ResponsibleRepository {
-    private val apiService = RetrofitFactory.getInstance().create(UserService::class.java)
+    private val apiService = RetrofitFactory.getInstance().create(ResponsavelService::class.java)
 
     suspend fun registerResponsible(
         nome: String,
@@ -23,6 +24,6 @@ class ResponsibleRepository {
             addProperty("id_status_contato", id_status_contato)
         }
 
-        return apiService.createUser(requestBody)
+        return apiService.createResponsible(requestBody)
     }
 }
