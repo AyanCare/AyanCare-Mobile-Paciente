@@ -118,7 +118,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("edit_profile_screen"){
-                            EditProfileScreen(navController = navController,navRotasController = navController, viewModelPaciente)
+                            EditProfileScreen(navController = navController, navRotasController = navController, viewModelPaciente = viewModelPaciente, lifecycleScope = lifecycleScope)
                         }
 
                         composable("codigo_paciente_screen"){

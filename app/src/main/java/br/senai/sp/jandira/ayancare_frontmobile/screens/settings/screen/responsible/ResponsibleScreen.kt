@@ -73,8 +73,6 @@ fun ResponsibleScreen(
     var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(5)
     //var call = RetrofitFactory.getResponsible().getTodosResponsaveis()
 
-    Log.e("TAG", "ResponsibleScreen: $call ", )
-
     call.enqueue(object : Callback<ResponsavelResponse> {
         override fun onResponse(
             call: Call<ResponsavelResponse>,

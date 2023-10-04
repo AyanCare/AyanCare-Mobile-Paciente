@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DateTextField
@@ -60,7 +61,8 @@ import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
 fun EditProfileScreen(
     navController: NavController,
     navRotasController: NavController,
-    viewModelPaciente: PacienteView
+    viewModelPaciente: PacienteView,
+    lifecycleScope: LifecycleCoroutineScope
 ) {
     var isDialogVisibleChronicDiseases by remember { mutableStateOf(false) }
 
@@ -208,7 +210,8 @@ fun EditProfileScreen(
                 if (isDialogVisibleChronicDiseases) {
                     ModalAddChronicDiseases(
                         isDialogVisibleChronicDiseases = false,
-                        navController = navController
+                        navController = navController,
+                        lifecycleScope = lifecycleScope
                     )
                 }
                 LazyRow() {
@@ -249,7 +252,8 @@ fun EditProfileScreen(
                 if (isDialogVisibleComorbidity) {
                     ModalAddComorbidity(
                         isDialogVisibleComorbidity = false,
-                        navController = navController
+                        navController = navController,
+                        lifecycleScope= lifecycleScope
                     )
                 }
 

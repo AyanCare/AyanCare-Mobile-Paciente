@@ -17,4 +17,12 @@ interface PacienteService {
     @POST("/paciente")
     suspend fun createPatient(@Body body: JsonObject): Response<JsonObject>
 
+    @Headers("Content-Type: application/json")
+    @POST("/v1/ayan/doenca")
+    suspend fun createChronicDiseases(@Body body: JsonObject): Response<JsonObject>
+
+    @Headers("Content-Type: application/json")
+    @POST("/v1/ayan/comorbidade")
+    suspend fun createComorbidity(@Body body: JsonObject): Response<JsonObject>
+
 }

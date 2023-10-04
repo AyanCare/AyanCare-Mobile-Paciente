@@ -35,11 +35,3 @@ class PatientRepository {
     }
 
 }
-
-//    "nome": "Lohannes",
-//    "data_nascimento": "2005-01-21",
-//    "email": "lohannes.s26@gmail.com",
-//    "senha": "EkkoDeZa1@",
-//    "cpf": "98765498721",
-//    "id_endereco_paciente": 1,
-//    "id_genero": 3
