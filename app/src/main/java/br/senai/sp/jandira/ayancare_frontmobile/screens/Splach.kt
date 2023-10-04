@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -34,6 +35,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInst
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen.HumorTestScreen
 import br.senai.sp.jandira.ayancare_frontmobile.ui.theme.AyanCareFrontMobileTheme
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
 
 class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +51,11 @@ class SplashActivity : ComponentActivity() {
 
                     var viewModelCreateAccount = viewModel<CreateAccountView>()
 
+                    var viewModelPaciente = viewModel<PacienteView>()
+
                     NavHost(
                         navController = navController,
-                        startDestination = "tela_principal_screen"
+                        startDestination = "main_screen"
                     ) {
                         composable("tela_principal_screen") {
                             TelaPrincipalScreen(navController = navController)
@@ -114,7 +118,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("edit_profile_screen"){
-                            EditProfileScreen(navController = navController, navRotasController = navController)
+                            EditProfileScreen(navController = navController,navRotasController = navController, viewModelPaciente)
                         }
 
                         composable("codigo_paciente_screen"){

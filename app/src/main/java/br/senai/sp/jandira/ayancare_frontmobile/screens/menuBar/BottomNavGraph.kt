@@ -7,20 +7,20 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.screen.AddContactScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.estoque.verEstoque.screen.EstoqueScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.screen.HomeScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.ProfileScreen
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
 
 @Composable
 fun BottomNavGraph(
     navController: NavHostController,
     navRotasController: NavController
 ) {
-    var viewModel = viewModel<CreateAccountView>()
+    var viewModelCreateAccount = viewModel<CreateAccountView>()
 
-    Log.e("View", "HomeScreenC: ${viewModel.id}", )
+    //Log.e("BottomNavGraph", "HomeScreenC: ${viewModelPaciente.id}", )
 
     NavHost(
         navController = navController,
@@ -34,13 +34,13 @@ fun BottomNavGraph(
             //AddContactScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Home.route){
-            Log.e("View", "HomeScreenA: ${viewModel.id}", )
-            HomeScreen(viewModel, navController, navRotasController)
-            Log.e("View", "HomeScreenB: ${viewModel.id}", )
+            //Log.e("View", "HomeScreenA: ${viewModelCreateAccount.id}", )
+            HomeScreen(viewModelCreateAccount, navController, navRotasController)
+            //Log.e("View", "HomeScreenB: ${viewModelCreateAccount.id}", )
 
         }
         composable(route = BottomBarScreen.Profile.route){
-            ProfileScreen(navController = navController, navRotasController, viewModel)
+            ProfileScreen(navController = navController, navRotasController)
         }
     }
 }

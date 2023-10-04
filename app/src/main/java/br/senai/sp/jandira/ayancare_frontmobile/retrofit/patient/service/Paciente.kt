@@ -1,7 +1,9 @@
 package br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service
 
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.ComorbidadesList
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.DoencasCronicasList
 
-data class Patient(
+data class Paciente(
     val id: Int,
     val nome: String,
     val data_nascimento: String,

@@ -25,7 +25,11 @@ import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
-fun CardResponsible() {
+fun CardResponsible(
+    nome: String,
+    numero: String,
+    local: String
+) {
 
     Card(
         modifier = Modifier
@@ -41,7 +45,7 @@ fun CardResponsible() {
                     .padding(12.dp)
             ) {
                 Text(
-                    text = "Nome: Dona Maria",
+                    text = "Nome: $nome",
                     fontSize = 16.sp,
                     lineHeight = 18.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
@@ -50,7 +54,7 @@ fun CardResponsible() {
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Telefone: 4858-9658",
+                    text = "Telefone: $numero",
                     fontSize = 16.sp,
                     lineHeight = 18.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
@@ -60,7 +64,7 @@ fun CardResponsible() {
                 )
 
                 Text(
-                    text = "Local: Rua Odilon Corea Pires 133",
+                    text = "Local: $local",
                     fontSize = 14.sp,
                     lineHeight = 18.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
@@ -83,8 +87,8 @@ fun CardResponsible() {
 
 }
 
-@Preview
-@Composable
-fun CardResponsiblePreview() {
-    CardResponsible()
-}
+//@Preview
+//@Composable
+//fun CardResponsiblePreview() {
+//    CardResponsible()
+//}

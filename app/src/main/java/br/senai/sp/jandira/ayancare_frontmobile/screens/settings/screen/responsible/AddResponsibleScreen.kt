@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 fun AddResponsibleScreen(
     navController: NavController,
     navRotasController: NavController,
-    //lifecycleScope: LifecycleCoroutineScope
+    lifecycleScope: LifecycleCoroutineScope
 ) {
 
     val context = LocalContext.current
@@ -67,38 +67,43 @@ fun AddResponsibleScreen(
     }
 
 
-    fun responsible (
+    fun responsible(
         nome: String,
         numero: String,
         local: String,
         id_paciente: Int,
         id_status_contato: Int
     ) {
-//        if(validateData(nome, numero, local, id_paciente, id_status_contato)){
-//            val responsibleRepository = ResponsibleRepository()
-//            lifecycleScope.launch {
-//                val response = responsibleRepository.registerResponsible(nome, numero, local, id_paciente, id_status_contato)
-//
-//                if(response.isSuccessful){
-//                    Log.e(MainActivity::class.java.simpleName, "responsible bem-sucedido" )
-//                    Log.e("responsible", "responsible: ${response.body()}", )
-//                    val checagem = response.body()?.get("status")
-//                    if (checagem.toString() == "404") {
-//                        Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
-//                    } else {
-//                        Toast.makeText(context, "Seja bem-vindo", Toast.LENGTH_SHORT).show()
-//                        navController.navigate("main_screen")
-//                    }
-//                }else{
-//                    val errorBody = response.errorBody()?.string()
-//
-//                    Log.e(MainActivity::class.java.simpleName, "Erro durante o responsible: $errorBody")
-//                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        } else {
-//            Toast.makeText(context, "Por favor, reolhe suas caixas de texto", Toast.LENGTH_SHORT).show()
-//        }
+
+        val responsibleRepository = ResponsibleRepository()
+        lifecycleScope.launch {
+
+            val response = responsibleRepository.registerResponsible(
+                nome,
+                numero,
+                local,
+                id_paciente,
+                id_status_contato
+            )
+
+            if (response.isSuccessful) {
+                Log.e(MainActivity::class.java.simpleName, "responsible bem-sucedido")
+                Log.e("responsible", "responsible: ${response.body()}")
+                val checagem = response.body()?.get("status")
+                if (checagem.toString() == "404") {
+                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context, "Seja bem-vindo", Toast.LENGTH_SHORT).show()
+                    navController.navigate("main_screen")
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o responsible: $errorBody")
+                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     }
 
 

@@ -34,13 +34,13 @@ fun HomeScreen(
     navController: NavController,
     navRotasController: NavController
 ) {
-    Log.e("View", "HomeScreen: ${viewModel.id}" )
+    //Log.e("View", "HomeScreen: ${viewModel.id}" )
 
     var nome = viewModel.nome
     var genero = viewModel.genero
     val id = viewModel.id
 
-    Log.i("AG", "HomeScreen: $nome + $genero + $id")
+    //Log.i("AG", "HomeScreen: $nome + $genero + $id")
 
     Surface(
         color = Color(248, 240, 236)

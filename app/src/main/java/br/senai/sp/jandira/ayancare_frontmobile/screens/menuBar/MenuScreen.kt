@@ -60,7 +60,7 @@ fun BottomBar(navController: NavHostController) {
 
     var viewModel = viewModel<CreateAccountView>()
 
-    Log.e("View", "MenuScreenA: ${viewModel.id}")
+    //Log.e("View", "MenuScreenA: ${viewModel.id}")
 
 
 
@@ -71,10 +71,10 @@ fun BottomBar(navController: NavHostController) {
     ){
         screen.forEach{screen ->
             AddItem(screen = screen, currentDestination = currentdestination, navController = navController)
-            Log.e("View", "MenuScreenB: ${viewModel.id}")
+            //Log.e("View", "MenuScreenB: ${viewModel.id}")
         }
     }
-    Log.e("View", "MenuScreenC ${viewModel.id}")
+    //Log.e("View", "MenuScreenC ${viewModel.id}")
 
 }
 

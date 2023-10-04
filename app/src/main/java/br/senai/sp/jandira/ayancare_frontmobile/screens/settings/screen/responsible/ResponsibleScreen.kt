@@ -10,14 +10,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,14 +32,13 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.Contacts
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ResponsibleService
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.Responsavel
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.CardResponsible
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
 import retrofit2.Call
@@ -57,26 +55,40 @@ fun ResponsibleScreen(
 
     val scrollState = rememberScrollState()
 
-    var listContact by remember {
-        mutableStateOf(listOf<Contacts>())
+//    var listResponsavel by remember {
+//        mutableStateOf(listOf<Responsavel>())
+//    }
+
+    // Mantenha uma lista de responsáveis no estado da tela
+    var listResponsavel by remember {
+        mutableStateOf(
+            listOf(
+                Responsavel(0, "", "", "", 0, 0)
+            )
+        )
     }
 
     //Cria uma chamada para o endpoint
 
-    //val call = RetrofitFactory.getInstance().create(ResponsibleService::class.java).getResponsibleByPatientId(2)
+    var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(2)
+    //var call = RetrofitFactory.getResponsible().getTodosResponsaveis()
 
-//    call.enqueue(object : Callback<List<Contacts>> {
-//
-//        override fun onResponse(call: Call<List<Contacts>>, response: Response<List<Contacts>>) {
-//            TODO("Not yet implemented")
-//
-//            listContact = response.body()!!
-//        }
-//
-//        override fun onFailure(call: Call<List<Contacts>>, t: Throwable) {
-//            TODO("Not yet implemented")
-//        }
-//    })
+    Log.e("TAG", "ResponsibleScreen: $call ", )
+
+    call.enqueue(object : Callback<ResponsavelResponse> {
+        override fun onResponse(
+            call: Call<ResponsavelResponse>,
+            response: Response<ResponsavelResponse>
+        ) {
+            listResponsavel = response.body()!!.contatos
+
+            Log.e("TAG", "onResponse: $listResponsavel", )
+        }
+        override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
 
     Surface(
         color = Color(248, 240, 236)
@@ -116,28 +128,12 @@ fun ResponsibleScreen(
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
-            Column (
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-            ){
-                CardResponsible()
-                Spacer(modifier = Modifier.height(15.dp))
-                CardResponsible()
-                Spacer(modifier = Modifier.height(15.dp))
-                CardResponsible()
-                Spacer(modifier = Modifier.height(15.dp))
-                CardResponsible()
-                Spacer(modifier = Modifier.height(15.dp))
-                CardResponsible()
-                Spacer(modifier = Modifier.height(15.dp))
-                CardResponsible()
-                Spacer(modifier = Modifier.height(15.dp))
-                CardResponsible()
-                Spacer(modifier = Modifier.height(15.dp))
-                CardResponsible()
-                Spacer(modifier = Modifier.height(15.dp))
-                CardResponsible()
+
+            LazyColumn(){
+                items(listResponsavel){
+                    CardResponsible(nome = it.nome, numero = it.numero, local = it.local)
+                    Spacer(modifier = Modifier.height(15.dp))
+                }
             }
         }
         FloatingActionButtonResponsible(navController)

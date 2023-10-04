@@ -33,16 +33,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import br.senai.sp.jandira.ayancare_frontmobile.Paciente
-import br.senai.sp.jandira.ayancare_frontmobile.PacienteList
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CardMedicine
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CircleProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
-import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,8 +53,10 @@ import retrofit2.Response
 fun ProfileScreen(
     navController: NavController,
     navRotasController: NavController,
-    viewModel: CreateAccountView
+    //viewModel: PacienteView
 ) {
+
+    var viewModel = viewModel<PacienteView>()
 
     // Mantenha uma lista de  patients no estado da tela
     var listPaciente by remember {
@@ -65,34 +69,61 @@ fun ProfileScreen(
         )
     }
 
-    var callTeste = RetrofitFactory
-        .getPatient()
-        .getPatient("5")
+    var call = RetrofitFactory.getPatient().getPatientById("5")
 
-    callTeste.enqueue(object : Callback<PacienteList> {
+    call.enqueue(object : Callback<PacienteResponse> {
         override fun onResponse(
-            call: Call<PacienteList>,
-            response: Response<PacienteList>
+            call: Call<PacienteResponse>,
+            response: Response<PacienteResponse>
         ) {
-
             listPaciente = response.body()!!.paciente
 
+            if (listPaciente != null){
+
+                val paciente = listPaciente
+
+                val id = paciente.id
+                val nome = paciente.nome
+                val email = paciente.email
+                val cpf = paciente.cpf
+                val dataNascimento = paciente.data_nascimento
+                val foto = paciente.foto
+
+                // Agora, você também pode acessar doencas_cronicas e comorbidades
+                val doencasCronicas = paciente.doencas_cronicas
+                val comorbidades = paciente.comorbidades
+
+                Log.e("ViewPaciente", "EditProfileScreen: $viewModel", )
+
+                viewModel.id = id
+                viewModel.nome = nome
+                viewModel.email = email
+                viewModel.cpf = cpf
+                viewModel.data_nascimento = dataNascimento
+                viewModel.comorbidades = comorbidades.toMutableList()
+                viewModel.doencas_cronicas = doencasCronicas.toMutableList()
+
+
+                // Aqui você pode fazer algo com essas informações adicionais
+
+                Log.i("Deu certo no perfil",
+                    "ID: $id, " +
+                            "Nome: $nome," +
+                            " Email: $email," +
+                            " CPF: $cpf, " +
+                            "data de nascimento: $dataNascimento, " +
+                            "comorbidade: $comorbidades, " +
+                            "doencas cronicas:$doencasCronicas"
+                )
+
+            }
+
         }
-
-        override fun onFailure(
-            call: Call<PacienteList>,
-            t: Throwable
-        ) {
-
+        override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
-
         }
 
     })
-
-    Log.e("View", "ProfileScreen: ${viewModel.id}")
-
-    val id = viewModel.id
 
     val scrollState = rememberScrollState()
 

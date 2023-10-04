@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.screen
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -53,11 +54,13 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.Proces
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.MedicalHistory
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddComorbidity
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
 
 @Composable
 fun EditProfileScreen(
     navController: NavController,
-    navRotasController: NavController
+    navRotasController: NavController,
+    viewModelPaciente: PacienteView
 ) {
     var isDialogVisibleChronicDiseases by remember { mutableStateOf(false) }
 
@@ -71,6 +74,12 @@ fun EditProfileScreen(
         mutableStateOf("")
     }
 
+    Log.e("ViewEdit", "EditProfileScreen: $viewModelPaciente", )
+
+    val cpf = viewModelPaciente.cpf
+    val id = viewModelPaciente.id
+
+    Log.e("Dado vindo da ViewModel", "EditProfileScreen: $cpf, $id")
 
     val scrollState = rememberScrollState()
 
