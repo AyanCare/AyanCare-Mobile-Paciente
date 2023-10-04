@@ -1,8 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen
 
-import android.content.Context
-import android.content.Intent
-import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -51,7 +48,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.CustomOutlinedTextFie
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.LoginRepository
-import br.senai.sp.jandira.ayancare_frontmobile.screens.home.screen.HomeScreen
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -122,31 +119,65 @@ fun LoginScreen(
                         Toast.makeText(context, "Email ou senha inválido", Toast.LENGTH_LONG).show()
                     } else {
 
+                        val token = response.body()?.get("token")?.asString
+
                         val jsonString = response.body().toString()
                         val jsonObject = JSONObject(jsonString)
                         val pacienteObject = jsonObject.getJSONObject("paciente")
 
                         val id = pacienteObject.getInt("id")
                         val nome = pacienteObject.getString("nome")
+                        val email = pacienteObject.getString("email")
+                        val cep = pacienteObject.getString("cep")
+                        val idEndereco = pacienteObject.getInt("idEndereco")
+                        val foto = pacienteObject.getString("foto")
                         val dataNascimento = pacienteObject.getString("data_nascimento")
+                        val logradouro = pacienteObject.getString("logradouro")
+                        val bairro = pacienteObject.getString("bairro")
+                        val cidade = pacienteObject.getString("cidade")
+                        val estado = pacienteObject.getString("estado")
+                        val senha = pacienteObject.getString("senha")
+                        val cpf = pacienteObject.getString("cpf")
+                        val numero = pacienteObject.getString("numero")
                         val genero = pacienteObject.getString("genero")
 
-                        viewModel.id = id
-                        viewModel.nome = nome
-                        viewModel.email = email
-                        viewModel.senha = password
-                        viewModel.dataNascimento = dataNascimento
-                        viewModel.genero = genero
 
-                        Log.e(
-                            "LOGIN - ERROR",
-                            "LOGIN_V1: REQUIRE FIELDS" +
-                                    "${viewModel.id}" +
-                                    "${viewModel.nome}" +
-                                    "${viewModel.email}" +
-                                    "${viewModel.senha}" +
-                                    "${viewModel.dataNascimento}" +
-                                    "${viewModel.genero}"
+//                        viewModel.id = id
+//                        viewModel.nome = nome
+//                        viewModel.email = email
+//                        viewModel.senha = password
+//                        viewModel.dataNascimento = dataNascimento
+//                        viewModel.genero = genero
+//
+//                        Log.e(
+//                            "LOGIN - ERROR",
+//                            "LOGIN_V1: REQUIRE FIELDS" +
+//                                    "${viewModel.id}" +
+//                                    "${viewModel.nome}" +
+//                                    "${viewModel.email}" +
+//                                    "${viewModel.senha}" +
+//                                    "${viewModel.dataNascimento}" +
+//                                    "${viewModel.genero}"
+//                        )
+
+                        saveLogin(
+                            context = context,
+                            id = id.toLong(),
+                            nome = nome,
+                            token = token!!,
+                            email = email,
+                            senha = senha
+//                            cep = cep,
+//                            idEndereco = idEndereco,
+//                            foto = foto,
+//                            dataNascimento = dataNascimento,
+//                            logradouro = logradouro,
+//                            bairro = bairro,
+//                            cidade = cidade,
+//                            estado = estado,
+//                            cpf = cpf,
+//                            numero = numero,
+//                            genero = genero
                         )
 
                         Toast.makeText(context, "Seja bem-vindo", Toast.LENGTH_SHORT).show()

@@ -1,6 +1,9 @@
+import com.google.devtools.ksp.gradle.KspTaskJvm
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -47,6 +50,13 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    kotlin{
+        jvmToolchain(18)
+    }
+}
+
+tasks.withType(type = KspTaskJvm::class) {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8.toString()
 }
 
 dependencies {
@@ -111,5 +121,13 @@ dependencies {
 
     //Modal
     implementation ("androidx.compose.material3:material3:1.0.0-alpha01")
+
+    //CORE
+    implementation ("androidx.core:core-ktx:1.7.0")
+
+    /// ROOM DEPENDENCIES (SQLite)
+    implementation ("androidx.room:room-runtime:2.5.2")
+    annotationProcessor ("androidx.room:room-compiler:2.5.2")
+    ksp("androidx.room:room-compiler:2.5.2")
 
 }

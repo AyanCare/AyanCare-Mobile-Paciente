@@ -125,6 +125,14 @@ fun PatientAddressScreen(
                         onValueChange = {}
                     ) {}
 
+                    Spacer(modifier = Modifier.height(25.dp))
+
+                    DefaultTextField(
+                        valor = "",
+                        label = "Número",
+                        onValueChange = {}
+                    ) {}
+
                 }
             }
 
