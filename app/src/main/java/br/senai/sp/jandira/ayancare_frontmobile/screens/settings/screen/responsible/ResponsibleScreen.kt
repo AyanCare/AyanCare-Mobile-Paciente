@@ -41,6 +41,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.Responsavel
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.Responsavel
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.CardResponsible
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,11 +54,10 @@ fun ResponsibleScreen(
 
     val context = LocalContext.current
 
-    val scrollState = rememberScrollState()
+    val array = PacienteRepository(context = context).findUsers()
 
-//    var listResponsavel by remember {
-//        mutableStateOf(listOf<Responsavel>())
-//    }
+    val paciente = array[0]
+    var id = paciente.id.toLong()
 
     // Mantenha uma lista de responsáveis no estado da tela
     var listResponsavel by remember {
@@ -69,8 +69,7 @@ fun ResponsibleScreen(
     }
 
     //Cria uma chamada para o endpoint
-
-    var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(5)
+    var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(idContatoPaciente = id)
     //var call = RetrofitFactory.getResponsible().getTodosResponsaveis()
 
     call.enqueue(object : Callback<ResponsavelResponse> {
@@ -128,7 +127,7 @@ fun ResponsibleScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             LazyColumn(){
-                items(listResponsavel){
+                items(listResponsavel.reversed()){
                     CardResponsible(nome = it.nome, numero = it.numero, local = it.local)
                     Spacer(modifier = Modifier.height(15.dp))
                 }
@@ -137,9 +136,3 @@ fun ResponsibleScreen(
         FloatingActionButtonResponsible(navController)
     }
 }
-
-//@Preview
-//@Composable
-//fun ResponsibleScreenPreview() {
-//    ResponsibleScreen()
-//}

@@ -18,9 +18,6 @@ fun BottomNavGraph(
     navController: NavHostController,
     navRotasController: NavController
 ) {
-    var viewModelCreateAccount = viewModel<CreateAccountView>()
-
-    //Log.e("BottomNavGraph", "HomeScreenC: ${viewModelPaciente.id}", )
 
     NavHost(
         navController = navController,
@@ -34,10 +31,7 @@ fun BottomNavGraph(
             //AddContactScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Home.route){
-            //Log.e("View", "HomeScreenA: ${viewModelCreateAccount.id}", )
-            HomeScreen(viewModelCreateAccount, navController, navRotasController)
-            //Log.e("View", "HomeScreenB: ${viewModelCreateAccount.id}", )
-
+            HomeScreen(navController, navRotasController)
         }
         composable(route = BottomBarScreen.Profile.route){
             ProfileScreen(navController = navController, navRotasController)

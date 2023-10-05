@@ -16,4 +16,11 @@ class PacienteRepository(context: Context) {
         return db.pacienteDao().update(paciente).toLong()
     }
 
+    fun findUsers(): List<Paciente> {
+        return db.pacienteDao().findUsers()
+    }
+
+    fun deleteUser(): Int{
+        return  db.pacienteDao().deleteAll()
+    }
 }

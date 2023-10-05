@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -45,6 +46,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.LoginRepository
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
 
 @Composable
@@ -54,6 +56,10 @@ fun AddResponsibleScreen(
 ) {
 
     val context = LocalContext.current
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+    var id = paciente.id.toLong()
 
     var nomeState by remember {
         mutableStateOf("")
@@ -191,7 +197,7 @@ fun AddResponsibleScreen(
                             nome = nomeState,
                             numero = telefoneState,
                             local = localState,
-                            id_paciente = 5,
+                            id_paciente = id.toInt(),
                             id_status_contato = 1
                         )
                     },

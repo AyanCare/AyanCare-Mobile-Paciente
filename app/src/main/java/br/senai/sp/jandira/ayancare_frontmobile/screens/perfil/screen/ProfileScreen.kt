@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -43,6 +44,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxPro
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CardMedicine
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CircleProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
 import org.json.JSONObject
 import retrofit2.Call
@@ -52,11 +54,17 @@ import retrofit2.Response
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    navRotasController: NavController,
-    //viewModel: PacienteView
+    navRotasController: NavController
 ) {
 
-    var viewModel = viewModel<PacienteView>()
+    val context = LocalContext.current
+
+    val scrollState = rememberScrollState()
+
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+    var id = paciente.id.toLong()
 
     // Mantenha uma lista de  patients no estado da tela
     var listPaciente by remember {
@@ -69,7 +77,7 @@ fun ProfileScreen(
         )
     }
 
-    var call = RetrofitFactory.getPatient().getPatientById("5")
+    var call = RetrofitFactory.getPatient().getPatientById(id = id.toString())
 
     call.enqueue(object : Callback<PacienteResponse> {
         override fun onResponse(
@@ -78,45 +86,6 @@ fun ProfileScreen(
         ) {
             listPaciente = response.body()!!.paciente
 
-            if (listPaciente != null){
-
-                val paciente = listPaciente
-
-                val id = paciente.id
-                val nome = paciente.nome
-                val email = paciente.email
-                val cpf = paciente.cpf
-                val dataNascimento = paciente.data_nascimento
-                val foto = paciente.foto
-
-                // Agora, você também pode acessar doencas_cronicas e comorbidades
-                val doencasCronicas = paciente.doencas_cronicas
-                val comorbidades = paciente.comorbidades
-
-                Log.e("ViewPaciente", "EditProfileScreen: $viewModel", )
-
-                viewModel.id = id
-                viewModel.nome = nome
-                viewModel.email = email
-                viewModel.cpf = cpf
-                viewModel.data_nascimento = dataNascimento
-                viewModel.comorbidades = comorbidades.toMutableList()
-                viewModel.doencas_cronicas = doencasCronicas.toMutableList()
-
-
-                // Aqui você pode fazer algo com essas informações adicionais
-
-                Log.i("Deu certo no perfil",
-                    "ID: $id, " +
-                            "Nome: $nome," +
-                            " Email: $email," +
-                            " CPF: $cpf, " +
-                            "data de nascimento: $dataNascimento, " +
-                            "comorbidade: $comorbidades, " +
-                            "doencas cronicas:$doencasCronicas"
-                )
-
-            }
 
         }
         override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
@@ -124,8 +93,6 @@ fun ProfileScreen(
         }
 
     })
-
-    val scrollState = rememberScrollState()
 
     Surface(
         color = Color(248, 240, 236)

@@ -1,10 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.codigoPaciente.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,10 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Surface
@@ -25,33 +20,60 @@ import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
-import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PatientCodeScreen(
     navController: NavController,
-    navRotasController: NavController,
-    viewModel: CreateAccountView
+    navRotasController: NavController
 ) {
 
-    val id = viewModel.id
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+
+    val clipboardManager = LocalClipboardManager.current
+    //val clipboardManager = LocalContext.current.getSystemService(ClipboardManager::class.java)
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    // Crie uma variável para armazenar o status de cópia
+    var copiadoComSucesso by remember { mutableStateOf(false) }
+
+
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+    var id = paciente.id.toLong()
+
 
     Surface(
         color = Color(248, 240, 236)
@@ -99,7 +121,7 @@ fun PatientCodeScreen(
                 Spacer(modifier = Modifier.height(100.dp))
 
                 TextField(
-                    value = "$id",
+                    value = id.toString(),
                     onValueChange = {},
                     modifier = Modifier
                         .border(
@@ -126,11 +148,20 @@ fun PatientCodeScreen(
                         )
 
                     },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide() // Esconde o teclado ao pressionar "Done"
+                        }
+                    ),
                     textStyle = TextStyle(
                         fontSize = 14.sp,
                         textAlign = TextAlign.Center
-                    )
+                    ),
+                    enabled = false
                 )
 
                 Spacer(modifier = Modifier.height(100.dp))
@@ -142,17 +173,33 @@ fun PatientCodeScreen(
                         .padding(start = 60.dp, end = 60.dp)
                 ) {
                     DefaultButton(
-                        onClick = { /*TODO*/ },
-                        text = "Copiar"
+                        onClick = {
+                            // Copiar o valor do TextField para a área de transferência
+                            clipboardManager.setText(AnnotatedString("${id.toString()}"))
+                            copiadoComSucesso = true
+                        },
+                        text = copiadoComSucesso.toString()
                     )
+                    // Exiba uma mensagem de sucesso se o texto foi copiado
+                    if (copiadoComSucesso == true) {
+                        Text(
+                            text = "Copiado com sucesso!",
+                            color = Color.Green, // Cor da mensagem de sucesso (você pode personalizar)
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+
+                    }else {
+                        Text(
+                            text = "Copiar",
+                            color = Color.Green, // Cor da mensagem de sucesso (você pode personalizar)
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
     }
 }
 
-//@Preview
-//@Composable
-//fun PatientCodePreview() {
-//    PatientCodeScreen()
-//}

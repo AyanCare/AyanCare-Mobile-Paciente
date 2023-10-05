@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +17,11 @@
         android:theme="@style/Theme.AyanCareFrontMobile"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".sqlite.criacaoTabela.AviculturaSilSan"
+            android:exported="false"
+            android:label="@string/title_activity_avicultura_sil_san"
+            android:theme="@style/Theme.AyanCareFrontMobile" />
         <activity
             android:name=".screens.SplashActivity"
             android:exported="true"

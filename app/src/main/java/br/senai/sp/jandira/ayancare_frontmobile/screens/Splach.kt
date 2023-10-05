@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -33,6 +34,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInst
 import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInstrucao2.screen.TelaInstrucao2Screen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInstrucao3.screen.TelaInstrucao3Screen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen.HumorTestScreen
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import br.senai.sp.jandira.ayancare_frontmobile.ui.theme.AyanCareFrontMobileTheme
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
@@ -49,21 +51,25 @@ class SplashActivity : ComponentActivity() {
                 ) {
                     val navController = rememberNavController()
 
-                    var viewModelCreateAccount = viewModel<CreateAccountView>()
-
-                    var viewModelPaciente = viewModel<PacienteView>()
+                    val context = LocalContext.current
 
                     NavHost(
                         navController = navController,
                         //startDestination = "main_screen"
-                        startDestination = "tela_principal_screen"
+                        startDestination =
+                            if (PacienteRepository(context).findUsers().isEmpty()){
+                                "tela_principal_screen"
+                            }else{
+                                "main_screen"
+                            }
+
                     ) {
                         composable("tela_principal_screen") {
                             TelaPrincipalScreen(navController = navController)
                         }
 
                         composable("login_screen") {
-                            LoginScreen(navController = navController, lifecycleScope = lifecycleScope, viewModel = viewModelCreateAccount)
+                            LoginScreen(navController = navController, lifecycleScope = lifecycleScope)
                         }
 
                         composable("cadastro_screen") {
@@ -119,11 +125,11 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("edit_profile_screen"){
-                            EditProfileScreen(navController = navController, navRotasController = navController, viewModelPaciente = viewModelPaciente, lifecycleScope = lifecycleScope)
+                            EditProfileScreen(navController = navController, navRotasController = navController, lifecycleScope = lifecycleScope)
                         }
 
                         composable("codigo_paciente_screen"){
-                            PatientCodeScreen(navController = navController, navRotasController = navController, viewModel = viewModelCreateAccount)
+                            PatientCodeScreen(navController = navController, navRotasController = navController)
                         }
 
                         composable("sugestoes_screen"){

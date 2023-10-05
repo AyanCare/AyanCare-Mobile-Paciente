@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -26,21 +27,23 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.components.CardHome
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.components.HeaderHome
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 
 @Composable
 fun HomeScreen(
-    viewModel: CreateAccountView,
     navController: NavController,
     navRotasController: NavController
 ) {
-    //Log.e("View", "HomeScreen: ${viewModel.id}" )
 
-    var nome = viewModel.nome
-    var genero = viewModel.genero
-    val id = viewModel.id
+    val context = LocalContext.current
 
-    //Log.i("AG", "HomeScreen: $nome + $genero + $id")
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+
+    var nome = paciente.nome
+    var genero = paciente.genero
 
     Surface(
         color = Color(248, 240, 236)
@@ -66,7 +69,7 @@ fun HomeScreen(
                     color = Color(0xFF35225F)
                 )
                 Text(
-                    text = "Lohannes!",
+                    text = "$nome!",
                     fontSize = 25.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight.SemiBold,
@@ -111,9 +114,3 @@ fun HomeScreen(
         }
     }
 }
-//
-//@Preview
-//@Composable
-//fun HomePreview() {
-//    HomeScreen()
-//}

@@ -61,7 +61,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
 fun EditProfileScreen(
     navController: NavController,
     navRotasController: NavController,
-    viewModelPaciente: PacienteView,
     lifecycleScope: LifecycleCoroutineScope
 ) {
     var isDialogVisibleChronicDiseases by remember { mutableStateOf(false) }
@@ -75,13 +74,6 @@ fun EditProfileScreen(
     var cpfState by remember {
         mutableStateOf("")
     }
-
-    Log.e("ViewEdit", "EditProfileScreen: $viewModelPaciente", )
-
-    val cpf = viewModelPaciente.cpf
-    val id = viewModelPaciente.id
-
-    Log.e("Dado vindo da ViewModel", "EditProfileScreen: $cpf, $id")
 
     val scrollState = rememberScrollState()
 
@@ -307,9 +299,3 @@ fun EditProfileScreen(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun EditProfileScreenPreview() {
-//    EditProfileScreen()
-//}

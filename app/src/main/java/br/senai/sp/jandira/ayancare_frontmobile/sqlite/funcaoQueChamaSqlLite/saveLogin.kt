@@ -9,19 +9,10 @@ fun saveLogin (
     id: Long,
     nome: String,
     token: String,
-    //dataNascimento: String,
-    //genero: String,
+    dataNascimento: String,
+    genero: String,
     email: String,
-    senha: String,
-//    cpf: String,
-//    foto: String,
-//    idEndereco: Int,
-//    cep: String,
-//    logradouro: String,
-//    bairro: String,
-//    cidade: String,
-//    estado: String,
-//    numero: String
+    //senha: String,
 ) : Long {
 
     val newPaciente = Paciente(
@@ -29,19 +20,13 @@ fun saveLogin (
         nome = nome,
         token = token,
         email = email,
-        senha = senha
-//        cep = cep,
-//        idEndereco = idEndereco,
-//        foto = foto,
-//        dataNascimento = dataNascimento,
-//        logradouro = logradouro,
-//        bairro = bairro,
-//        cidade = cidade,
-//        estado = estado,
-//        cpf = cpf,
-//        numero = numero,
-//        genero = genero
+        //senha = senha,
+        dataNascimento = dataNascimento,
+        genero = genero
     )
 
     return PacienteRepository(context).save(newPaciente)
+}
+fun deleteUserSQLite(context: Context, id: Int): Int {
+    return PacienteRepository(context).deleteUser()
 }
