@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
@@ -45,8 +44,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CardMe
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CircleProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
-import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,14 +76,13 @@ fun ProfileScreen(
 
     var call = RetrofitFactory.getPatient().getPatientById(id = id.toString())
 
+
     call.enqueue(object : Callback<PacienteResponse> {
         override fun onResponse(
             call: Call<PacienteResponse>,
             response: Response<PacienteResponse>
         ) {
             listPaciente = response.body()!!.paciente
-
-
         }
         override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
@@ -170,9 +166,19 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(5.dp))
 
+
                 LazyRow() {
                     items(listPaciente.doencas_cronicas.reversed()) {
-                        ProcessingProfile(text = it.nome)
+
+                        var text = if (listPaciente.doencas_cronicas[0].nome == null){
+                            "Não Existe Comorbidades"
+                        } else {
+                            "${it.nome}"
+                        }
+
+                        ProcessingProfile(
+                            text = text
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
@@ -191,7 +197,14 @@ fun ProfileScreen(
 
                 LazyRow() {
                     items(listPaciente.comorbidades.reversed()) {
-                        ProcessingProfile(text = it.nome)
+
+                        var text = if (listPaciente.comorbidades[0].nome == null){
+                            "Não Existe Comorbidades"
+                        } else {
+                            "${it.nome}"
+                        }
+
+                        ProcessingProfile(text = text)
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }

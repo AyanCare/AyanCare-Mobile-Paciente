@@ -10,6 +10,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface PacienteService {
+
     @GET("/v1/ayan/paciente/{id}")
     fun getPatientById(@Path("id") id: String): retrofit2.Call<PacienteResponse>
 

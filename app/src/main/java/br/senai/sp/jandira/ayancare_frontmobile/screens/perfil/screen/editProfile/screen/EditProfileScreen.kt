@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -26,7 +27,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.CatchingPokemon
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -50,12 +51,18 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DateTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.MedicalHistory
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddComorbidity
-import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun EditProfileScreen(
@@ -67,15 +74,43 @@ fun EditProfileScreen(
 
     var isDialogVisibleComorbidity by remember { mutableStateOf(false) }
 
-    var nomeCompletoState by remember {
-        mutableStateOf("")
-    }
-
-    var cpfState by remember {
-        mutableStateOf("")
-    }
-
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
+
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+    var id = paciente.id.toLong()
+
+    // Mantenha uma lista de  patients no estado da tela
+    var listPaciente by remember {
+        mutableStateOf(
+            Paciente(
+                0, "", "", "", "", "", "", "",
+                emptyList(),
+                emptyList()
+            )
+        )
+    }
+
+    var call = RetrofitFactory.getPatient().getPatientById(id = id.toString())
+
+
+    call.enqueue(object : Callback<PacienteResponse> {
+        override fun onResponse(
+            call: Call<PacienteResponse>,
+            response: Response<PacienteResponse>
+        ) {
+            listPaciente = response.body()!!.paciente
+        }
+        override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
+
+    var nome = listPaciente.nome
+    var cpf = listPaciente.cpf
 
     Surface(
         color = Color(248, 240, 236)
@@ -151,18 +186,18 @@ fun EditProfileScreen(
                     }
 
                     DefaultTextField(
-                        valor = nomeCompletoState,
+                        valor = nome,
                         label = "Nome Completo",
-                        onValueChange = { nomeCompletoState = it},
+                        onValueChange = { nome = it},
                         aoMudar = {}
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     DefaultTextField(
-                        valor = cpfState,
+                        valor = cpf,
                         label = "CPF",
-                        onValueChange = { cpfState = it },
+                        onValueChange = { cpf = it },
                         aoMudar = {}
                     )
 
@@ -207,8 +242,8 @@ fun EditProfileScreen(
                     )
                 }
                 LazyRow() {
-                    items(4) {
-                        ProcessingProfile(text = "Diabete")
+                    items(listPaciente.doencas_cronicas.reversed()) {
+                        ProcessingProfile(text = it.nome)
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
@@ -252,8 +287,8 @@ fun EditProfileScreen(
 
 
                 LazyRow() {
-                    items(4) {
-                        ProcessingProfile(text = "Diabete")
+                    items(listPaciente.comorbidades.reversed()) {
+                        ProcessingProfile(text = it.nome)
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }

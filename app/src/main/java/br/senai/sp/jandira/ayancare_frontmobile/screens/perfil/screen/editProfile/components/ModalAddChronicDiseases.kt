@@ -38,6 +38,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ChronicDiseasesRepository
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,6 +49,11 @@ fun ModalAddChronicDiseases(
 ) {
 
     val context = LocalContext.current
+
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+    var id = paciente.id.toLong()
 
     var nomeState by remember {
         mutableStateOf("")
@@ -148,7 +154,7 @@ fun ModalAddChronicDiseases(
                             chronicDiseases(
                                 nomeState,
                                 grauState,
-                                id_paciente = 5
+                                id_paciente = id.toInt()
                             )
 
                             //navController.navigate("edit_profile_screen")

@@ -77,9 +77,11 @@ fun ResponsibleScreen(
             call: Call<ResponsavelResponse>,
             response: Response<ResponsavelResponse>
         ) {
+
+            Log.e("TAG", "onResponse: ${response.body()}" )
             listResponsavel = response.body()!!.contatos
 
-            Log.e("TAG", "onResponse: $listResponsavel", )
+            Log.e("TAG", "onResponse: $listResponsavel" )
         }
         override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
@@ -128,7 +130,14 @@ fun ResponsibleScreen(
 
             LazyColumn(){
                 items(listResponsavel.reversed()){
-                    CardResponsible(nome = it.nome, numero = it.numero, local = it.local)
+
+                    var text = if (listResponsavel[0].nome == null){
+                        "Não Existe Responsáveis no Momento"
+                    } else {
+                        "${it.nome}"
+                    }
+
+                    CardResponsible(nome = text, numero = "", local = "")
                     Spacer(modifier = Modifier.height(15.dp))
                 }
             }

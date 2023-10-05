@@ -38,6 +38,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ChronicDiseasesRepository
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ComorbidityRepository
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
 
 @Composable
@@ -48,6 +49,11 @@ fun ModalAddComorbidity(
 ) {
 
     val context = LocalContext.current
+
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+    var id = paciente.id.toLong()
 
     var nomeState by remember {
         mutableStateOf("")
@@ -131,8 +137,8 @@ fun ModalAddComorbidity(
                     DefaultButton(
                         onClick = {
                             chronicDiseases(
-                                nomeState,
-                                5
+                                nome = nomeState,
+                                id_paciente = id.toInt()
                             )
 
 
