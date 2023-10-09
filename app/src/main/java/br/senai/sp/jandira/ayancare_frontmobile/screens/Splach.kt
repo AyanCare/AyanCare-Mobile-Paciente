@@ -1,17 +1,14 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -19,11 +16,13 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.AddReme
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.AddStock.screen.AddStockScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.screen.FormMedicineScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.screen.MedicationFrequencyScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.addRemedyNonExistent.screen.AddRemedyNonExistentScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.screen.CadastroScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.registroEmergencia.screen.ViewEmergencyScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.codigoRecuperacao.screen.CodigoRecuperacaoScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.recuperacaoEmail.screen.RecuperacaoEmailScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.redefinirSenha.screen.RedefinirSenhaScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.event.screen.EventScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.FinalizarCadastroScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.PatientAddressScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen.LoginScreen
@@ -41,8 +40,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInst
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen.HumorTestScreen
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import br.senai.sp.jandira.ayancare_frontmobile.ui.theme.AyanCareFrontMobileTheme
-import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
-import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.PacienteView
 
 class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -163,6 +160,14 @@ class SplashActivity : ComponentActivity() {
 
                         composable("add_stock_screen"){
                             AddStockScreen(navController = navController)
+                        }
+
+                        composable("add_remedy_non_existent_screen"){
+                            AddRemedyNonExistentScreen(navController = navController)
+                        }
+
+                        composable("event_screen"){
+                            EventScreen(navController = navController)
                         }
                     }
                 }
