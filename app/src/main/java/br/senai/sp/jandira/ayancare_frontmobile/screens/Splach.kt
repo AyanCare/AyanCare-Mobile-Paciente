@@ -15,7 +15,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.AddRemedyScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.AddStock.screen.AddStockScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.screen.FormMedicineScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.screen.MedicationFrequencyScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.screen.CadastroScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.registroEmergencia.screen.ViewEmergencyScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.codigoRecuperacao.screen.CodigoRecuperacaoScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.recuperacaoEmail.screen.RecuperacaoEmailScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.redefinirSenha.screen.RedefinirSenhaScreen
@@ -132,12 +137,32 @@ class SplashActivity : ComponentActivity() {
                             PatientCodeScreen(navController = navController, navRotasController = navController)
                         }
 
+                        composable("emergencia_screen"){
+                            ViewEmergencyScreen(navController = navController)
+                        }
+
                         composable("sugestoes_screen"){
                             SuggestionScreen(navController = navController, navRotasController = navController)
                         }
 
                         composable("humor_test_screen"){
                             HumorTestScreen(navController = navController)
+                        }
+
+                        composable("add_remedy_screen"){
+                            AddRemedyScreen(navController = navController)
+                        }
+
+                        composable("form_medicine_screen"){
+                            FormMedicineScreen(navController = navController)
+                        }
+
+                        composable("medication_frenquency_screen"){
+                            MedicationFrequencyScreen(navController = navController)
+                        }
+
+                        composable("add_stock_screen"){
+                            AddStockScreen(navController = navController)
                         }
                     }
                 }

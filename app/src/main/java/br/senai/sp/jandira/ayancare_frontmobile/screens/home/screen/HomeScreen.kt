@@ -12,6 +12,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddReaction
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -107,6 +108,16 @@ fun HomeScreen(
                         }
                     )
                     Spacer(modifier = Modifier.height(10.dp))
+                    CardHome(
+                        text = "Teste do Remédio",
+                        icon = Icons.Default.Alarm,
+                        color = Color.Magenta,
+                        color_icon = Color.White,
+                        color_text = Color.White,
+                        onClick = {
+                            navRotasController.navigate("add_remedy_screen")
+                        }
+                    )
                 }
             }
 

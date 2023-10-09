@@ -137,7 +137,9 @@ fun SettingsScreen(
             CardSettings(
                 imageVector = Icons.Default.StarOutline,
                 text = "Desvincular conta",
-                onClick = {}
+                onClick = {
+                    navController.navigate("emergencia_screen")
+                }
             )
             CardSettings(
                 imageVector = Icons.Default.ThumbUpOffAlt,
