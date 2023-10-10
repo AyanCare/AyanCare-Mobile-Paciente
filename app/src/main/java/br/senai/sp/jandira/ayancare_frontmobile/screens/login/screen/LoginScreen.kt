@@ -104,15 +104,15 @@ fun LoginScreen(
         if(validateData(email, password)){
             val loginRepository = LoginRepository()
             lifecycleScope.launch {
-                Log.e("TA", "login: $email e $password", )
+                Log.e("TA", "login: $email e $password")
 
                 val response = loginRepository.loginUser(email, password)
 
-                Log.e("TAG", "login: ${response.body()}", )
+                Log.e("TAG", "login: ${response.body()}")
 
                 if(response.isSuccessful){
                     Log.e(MainActivity::class.java.simpleName, "Login bem-sucedido" )
-                    Log.e("login", "login: ${response.body()}", )
+                    Log.e("login", "login: ${response.body()}")
                     val checagem = response.body()?.get("status")
                     if (checagem.toString() == "404") {
                         Toast.makeText(context, "Email ou senha inválido", Toast.LENGTH_LONG).show()
@@ -129,6 +129,7 @@ fun LoginScreen(
                         val email = pacienteObject.getString("email")
                         val dataNascimento = pacienteObject.getString("data_nascimento")
                         val genero = pacienteObject.getString("genero")
+                        val tipo_usuario = jsonObject.getString("tipo")
 
                         if (PacienteRepository(context).findUsers().isEmpty()) {
                             saveLogin(
@@ -138,10 +139,17 @@ fun LoginScreen(
                                 token = token!!,
                                 email = email,
                                 dataNascimento = dataNascimento,
-                                genero = genero
+                                genero = genero,
+                                tipo = tipo_usuario
                             )
 
-                            navController.navigate("main_screen")
+                            if (tipo_usuario == "Cuidador"){
+                                navController.navigate("main_screen_cuidador")
+                            }else{
+                                navController.navigate("main_screen")
+                            }
+
+
                         } else {
                             deleteUserSQLite(context = context , id)
                             saveLogin(
@@ -151,7 +159,8 @@ fun LoginScreen(
                                 token = token!!,
                                 email = email,
                                 dataNascimento = dataNascimento,
-                                genero = genero
+                                genero = genero,
+                                tipo = tipo_usuario
                             )
 
                             navController.navigate("main_screen")

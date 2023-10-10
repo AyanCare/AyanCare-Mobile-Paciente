@@ -12,6 +12,7 @@ data class Paciente(
     val genero: String = "",
     val email: String = "",
     val senha: String = "",
+    val tipo_usuario: String = "",
     val cpf: String = "",
     val foto: String = "",
     val idEndereco: Int = 0,

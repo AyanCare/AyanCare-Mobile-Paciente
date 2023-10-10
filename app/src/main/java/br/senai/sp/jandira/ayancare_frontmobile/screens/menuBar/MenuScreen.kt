@@ -32,7 +32,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar.components.IconD
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navRotasController: NavController) {
     val navController = rememberNavController()

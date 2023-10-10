@@ -178,25 +178,12 @@ fun PatientCodeScreen(
                             clipboardManager.setText(AnnotatedString("${id.toString()}"))
                             copiadoComSucesso = true
                         },
-                        text = copiadoComSucesso.toString()
+                        text = if(copiadoComSucesso){
+                            "Copiado !!"
+                        }else{
+                            "Copiar"
+                        }
                     )
-                    // Exiba uma mensagem de sucesso se o texto foi copiado
-                    if (copiadoComSucesso == true) {
-                        Text(
-                            text = "Copiado com sucesso!",
-                            color = Color.Green, // Cor da mensagem de sucesso (você pode personalizar)
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-
-                    }else {
-                        Text(
-                            text = "Copiar",
-                            color = Color.Green, // Cor da mensagem de sucesso (você pode personalizar)
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                    }
                 }
             }
         }

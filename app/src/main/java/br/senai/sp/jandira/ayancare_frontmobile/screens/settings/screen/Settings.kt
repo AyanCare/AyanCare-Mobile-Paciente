@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +38,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.components.CardSettings
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.Paciente
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.deleteUserSQLite
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlin.math.log
 
 @Composable
@@ -43,6 +48,21 @@ fun SettingsScreen(
     navController: NavController,
     navRotasController: NavController
 ) {
+
+    val context = LocalContext.current
+
+    val dados = PacienteRepository(context = context).findUsers()
+
+    var id = 0
+
+    var array = Paciente()
+
+    if(dados.isNotEmpty()){
+        array = dados[0]
+
+        id = array.id.toInt()
+    }
+
     Surface(
         color = Color(248, 240, 236)
     ) {
@@ -158,7 +178,11 @@ fun SettingsScreen(
                 Text(
                     text = "Sair",
                     modifier = Modifier
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .clickable {
+                            deleteUserSQLite(context = context, id.toInt())
+                            navController.navigate("login_screen")
+                        },
                     fontSize = 16.sp,
                     lineHeight = 16.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),

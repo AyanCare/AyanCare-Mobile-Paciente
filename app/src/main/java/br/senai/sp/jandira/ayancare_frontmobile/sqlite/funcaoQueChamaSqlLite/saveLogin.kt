@@ -12,7 +12,7 @@ fun saveLogin (
     dataNascimento: String,
     genero: String,
     email: String,
-    //senha: String,
+    tipo: String
 ) : Long {
 
     val newPaciente = Paciente(
@@ -20,9 +20,9 @@ fun saveLogin (
         nome = nome,
         token = token,
         email = email,
-        //senha = senha,
         dataNascimento = dataNascimento,
-        genero = genero
+        genero = genero,
+        tipo_usuario = tipo
     )
 
     return PacienteRepository(context).save(newPaciente)
