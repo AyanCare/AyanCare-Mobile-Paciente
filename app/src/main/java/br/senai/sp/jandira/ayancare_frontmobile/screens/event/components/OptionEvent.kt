@@ -39,65 +39,61 @@ fun OptionEvent() {
         mutableStateOf("")
     }
 
-    Column {
-
-        Column {
-            Text(
-                text = "Título",
-                fontSize = 15.sp,
-                fontFamily = FontFamily(Font(R.font.poppins)),
-                fontWeight = FontWeight(600),
-                color = Color(0xFF191D23)
-            )
-            DefaultTextField(
-                valor = "",
-                label = "Nome do Local",
-                onValueChange = {},
-                aoMudar = {}
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(
-                text = "Paciente",
-                fontSize = 15.sp,
-                fontFamily = FontFamily(Font(R.font.poppins)),
-                fontWeight = FontWeight(600),
-                color = Color(0xFF191D23)
-            )
-
-            Dropdown()
-
-            Spacer(modifier = Modifier.height(40.dp))
-
-            Column {
-                Text(
-                    text = "Descrição",
-                    fontSize = 15.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins)),
-                    color = Color(0xFF191D23)
-                )
-                TextField(
-                    value = descricaoState,
-                    onValueChange = { descricaoState = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(140.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(167, 165, 164),
-                            shape = RoundedCornerShape(4.dp)
-                        ),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color(248, 240, 236)
-                    )
-                )
-            }
-
-        }
-
-
+    var localState by remember {
+        mutableStateOf("")
     }
 
+
+    Column {
+        Text(
+            text = "Nome do Local",
+            fontSize = 15.sp,
+            fontFamily = FontFamily(Font(R.font.poppins)),
+            fontWeight = FontWeight(600),
+            color = Color(0xFF191D23)
+        )
+        DefaultTextField(
+            valor = localState,
+            label = "",
+            onValueChange = { localState = it },
+            aoMudar = {}
+        )
+        Spacer(modifier = Modifier.height(5.dp))
+        Text(
+            text = "Paciente",
+            fontSize = 15.sp,
+            fontFamily = FontFamily(Font(R.font.poppins)),
+            fontWeight = FontWeight(600),
+            color = Color(0xFF191D23)
+        )
+        Dropdown()
+        Spacer(modifier = Modifier.height(40.dp))
+        Column {
+            Text(
+                text = "Descrição",
+                fontSize = 15.sp,
+                fontFamily = FontFamily(Font(R.font.poppins)),
+                color = Color(0xFF191D23)
+            )
+            TextField(
+                value = descricaoState,
+                onValueChange = { descricaoState = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .border(
+                        width = 1.dp,
+                        color = Color(167, 165, 164),
+                        shape = RoundedCornerShape(4.dp)
+                    ),
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color(248, 240, 236)
+                )
+            )
+        }
+    }
 }
+
 
 @Preview
 @Composable
