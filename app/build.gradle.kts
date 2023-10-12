@@ -132,4 +132,9 @@ dependencies {
     annotationProcessor ("androidx.room:room-compiler:2.5.2")
     ksp("androidx.room:room-compiler:2.5.2")
 
+    //COIL
+    implementation("io.coil-kt:coil-compose:2.3.0")
+    implementation("io.coil-kt:coil:2.3.0")
+
+
 }

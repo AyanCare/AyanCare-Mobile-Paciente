@@ -35,7 +35,6 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
-import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.PhoneNumberTextField
 
 @Composable
 fun AddContactScreen(navController: NavController) {

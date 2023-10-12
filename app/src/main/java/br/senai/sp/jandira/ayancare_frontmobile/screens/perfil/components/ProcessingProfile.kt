@@ -25,18 +25,21 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
 fun ProcessingProfile(
-    text: String
+    text: String,
+    width: Int
 ) {
         Card (
             modifier = Modifier
                 .padding(0.dp)
-                .width(150.dp)
+                .width(width.dp)
                 .height(50.dp),
             shape = RoundedCornerShape(size = 16.dp),
             backgroundColor = Color(0xFF35225F)
         ){
             Row (
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 5.dp, end = 5.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             )

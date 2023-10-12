@@ -1,6 +1,9 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.screen
 
+import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -27,7 +30,9 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,6 +65,8 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfil
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddComorbidity
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -82,6 +89,23 @@ fun EditProfileScreen(
     val paciente = array[0]
     var id = paciente.id.toLong()
 
+
+    //Obter foto da galeria de imagens
+    //variavel que vai guardar a uri
+    var photoUri by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ){
+        photoUri = it
+    }
+
+    var painter = rememberAsyncImagePainter(
+        ImageRequest.Builder(LocalContext.current).data(photoUri).build()
+    )
+
     // Mantenha uma lista de  patients no estado da tela
     var listPaciente by remember {
         mutableStateOf(
@@ -102,15 +126,25 @@ fun EditProfileScreen(
             response: Response<PacienteResponse>
         ) {
             listPaciente = response.body()!!.paciente
+            Log.e("TAG", "onResponse: $listPaciente", )
         }
         override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
 
-    })
+    }) // NÃO FALA NADA - RLX EU DIGITO KKKKKKKK
 
-    var nome = listPaciente.nome
-    var cpf = listPaciente.cpf
+    var nome = listPaciente.nome //TA AGR NÃO MEXE :)
+    var cpf = paciente.cpf
+
+
+    //ESSA PORRA NÃO FUNCIONA O CPF - QUAL DAS DUAS VARIAVEIS - ERA APRA ESTAR APARECENDO O DADO
+    var cpfState by remember { mutableStateOf(cpf) } //desisto
+
+    var isEditing by remember { mutableStateOf(false) }
+    var editedCpf by remember { mutableStateOf(cpfState) }
+
+    Log.e("CpfState2", "EditProfileScreen: $cpfState", )
 
     Surface(
         color = Color(248, 240, 236)
@@ -130,7 +164,7 @@ fun EditProfileScreen(
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = "",
                     tint = Color.White
-                )
+                )//DESISTO FÉ
             }
             Column(
                 //verticalArrangement = Arrangement.SpaceBetween,
@@ -147,7 +181,7 @@ fun EditProfileScreen(
                         modifier = Modifier.size(100.dp),
                         contentAlignment = Alignment.BottomEnd
                     ) {
-                        androidx.compose.material3.Card(
+                        Card(
                             modifier = Modifier
                                 .size(100.dp)
                                 .align(Alignment.Center),
@@ -163,10 +197,10 @@ fun EditProfileScreen(
                             )
                         ) {
                             Image(
-                                painter = painterResource(id = R.drawable.google),//painter,
-                                contentDescription = "",
+                                painter = painter,
+                                contentDescription = "imagem do usuário",
                                 //colorFilter = ColorFilter.tint(colorResource(id = R.color.pink_login)),
-                                modifier = Modifier.size(64.dp),
+                                modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
                             )
                         }
@@ -180,7 +214,7 @@ fun EditProfileScreen(
                                 .offset(x = 3.dp, y = 3.dp)
                                 .size(30.dp)
                                 .clickable {
-                                    //launcher.launch("image/*")
+                                    launcher.launch("image/*")
                                 },
                         )
                     }
@@ -194,12 +228,29 @@ fun EditProfileScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    DefaultTextField(
-                        valor = cpf,
-                        label = "CPF",
-                        onValueChange = { cpf = it },
-                        aoMudar = {}
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    ) {
+                        if (isEditing) {
+                            TextField(
+                                value = editedCpf,
+                                onValueChange = {
+                                    editedCpf = it
+                                },
+                                label = { Text("CPF") }
+                            )
+                        } else {
+                            TextField(
+                                value = cpfState,
+                                onValueChange = {
+                                    cpfState = it
+                                },
+                                label = { Text("CPF") }
+                            )
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -243,7 +294,16 @@ fun EditProfileScreen(
                 }
                 LazyRow() {
                     items(listPaciente.doencas_cronicas.reversed()) {
-                        ProcessingProfile(text = it.nome)
+
+                        var text = if (listPaciente.doencas_cronicas[0].nome == null){
+                            "Não Existe Doenças Crônicas"
+                        } else {
+                            "${it.nome}"
+                        }
+                        ProcessingProfile(
+                            text = text,
+                            width = 160
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
@@ -288,7 +348,16 @@ fun EditProfileScreen(
 
                 LazyRow() {
                     items(listPaciente.comorbidades.reversed()) {
-                        ProcessingProfile(text = it.nome)
+
+                        var text = if (listPaciente.comorbidades[0].nome == null){
+                            "Não Existe Comorbidades"
+                        } else {
+                            "${it.nome}"
+                        }
+                        ProcessingProfile(
+                            text = text,
+                            width = 150
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }

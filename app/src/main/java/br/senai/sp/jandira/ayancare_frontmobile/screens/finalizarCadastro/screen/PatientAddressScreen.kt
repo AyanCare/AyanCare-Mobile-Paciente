@@ -27,13 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.components.DateTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components.ProgressBar
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.AutoComplete
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.Dropdown
 
 @Composable
 fun PatientAddressScreen(

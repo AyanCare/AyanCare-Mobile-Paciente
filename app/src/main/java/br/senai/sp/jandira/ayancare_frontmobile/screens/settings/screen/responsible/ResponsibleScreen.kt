@@ -137,7 +137,20 @@ fun ResponsibleScreen(
                         "${it.nome}"
                     }
 
-                    CardResponsible(nome = text, numero = "", local = "")
+                    var numero = if (listResponsavel[0].numero == null){
+                        "Não Existe Responsáveis no Momento"
+                    } else {
+                        "${it.numero}"
+                    }
+
+
+                    var local = if (listResponsavel[0].local == null){
+                        "Não Existe Responsáveis no Momento"
+                    } else {
+                        "${it.local}"
+                    }
+
+                    CardResponsible(nome = text, numero = numero, local = local)
                     Spacer(modifier = Modifier.height(15.dp))
                 }
             }

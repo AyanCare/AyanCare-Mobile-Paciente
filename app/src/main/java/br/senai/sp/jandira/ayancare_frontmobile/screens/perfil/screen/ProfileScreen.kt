@@ -171,13 +171,14 @@ fun ProfileScreen(
                     items(listPaciente.doencas_cronicas.reversed()) {
 
                         var text = if (listPaciente.doencas_cronicas[0].nome == null){
-                            "Não Existe Comorbidades"
+                            "Não Existe Doenças Crônicas"
                         } else {
                             "${it.nome}"
                         }
 
                         ProcessingProfile(
-                            text = text
+                            text = text,
+                            width = 200
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -204,7 +205,10 @@ fun ProfileScreen(
                             "${it.nome}"
                         }
 
-                        ProcessingProfile(text = text)
+                        ProcessingProfile(
+                            text = text,
+                            width = 200
+                        )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
