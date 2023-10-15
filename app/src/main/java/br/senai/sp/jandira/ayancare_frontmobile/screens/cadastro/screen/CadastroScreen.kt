@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -49,16 +48,19 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.CustomOutlinedTextFie
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components.ProgressBar
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.CadastroRepository
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.service.UserService
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 @Composable
 fun CadastroScreen(
     navController: NavController,
     navRotasController: NavController,
-    lifecycleScope: LifecycleCoroutineScope
+    lifecycleScope: LifecycleCoroutineScope,
+    localStorage: Storage
 ) {
 
     lateinit var apiService: UserService
@@ -79,11 +81,8 @@ fun CadastroScreen(
         mutableStateOf("")
     }
 
-    apiService = RetrofitFactory.getInstance().create(UserService::class.java)
-
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val scrollState = rememberScrollState()
 
     var repeatPasswordState by remember {
         mutableStateOf("")
@@ -154,7 +153,25 @@ fun CadastroScreen(
 
                 if (response.isSuccessful) {
 
+                    val jsonString = response.body().toString()
+                    val jsonObject = JSONObject(jsonString)
+                    val pacienteObject = jsonObject.getJSONObject("paciente")
+                    val id = pacienteObject.getInt("id")
+                    val nome = pacienteObject.getString("nome")
+                    val email = pacienteObject.getString("email")
+                    val senha = pacienteObject.getString("senha")
+                    val token = jsonObject.getString("token")
+
                     Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
+
+                    localStorage.salvarValor(context, nameState, "nome")
+                    localStorage.salvarValor(context, id.toString(), "id_paciente")
+                    localStorage.salvarValor(context, token.toString(), "token_paciente")
+                    localStorage.salvarValor(context, nome.toString(), "nome_paciente")
+                    localStorage.salvarValor(context, email.toString(), "email_paciente")
+                    localStorage.salvarValor(context, senha.toString(), "senha_paciente")
+                    Log.i("TAG", "register: $id + $token + $nome + $email + $senha ")
+
 
                     navController.navigate("finalizar_cadastro_screen")
 
@@ -321,8 +338,6 @@ fun CadastroScreen(
                             password = passwordState,
                             confirmPassword = repeatPasswordState
                         )
-
-                        //navController.navigate("finalizar_cadastro_screen")
                     }
                 )
             }

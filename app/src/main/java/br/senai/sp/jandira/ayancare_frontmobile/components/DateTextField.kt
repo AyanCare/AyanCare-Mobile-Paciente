@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.components
 
 import android.app.DatePickerDialog
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,23 +32,31 @@ import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateTextField() {
-    val context = LocalContext.current
+fun DateTextField(
+    context: Context,
+    selectedDate: String,
+    onDateChange: (String) -> Unit
+) {
     val focusManager = LocalFocusManager.current
 
     var showDatePickerDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
-    var selectedDate by remember { mutableStateOf("") }
+
+    LaunchedEffect(showDatePickerDialog) {
+        if (!showDatePickerDialog) {
+            focusManager.clearFocus(force = true)
+        }
+    }
 
     if (showDatePickerDialog) {
         DatePickerDialog(
             onDismissRequest = { showDatePickerDialog = false },
             confirmButton = {
-                Button(
+                androidx.compose.material3.Button(
                     onClick = {
                         datePickerState
                             .selectedDateMillis?.let { millis ->
-                                selectedDate = millis.toBrazilianDateFormat()
+                                onDateChange(millis.toBrazilianDateFormat())
                             }
                         showDatePickerDialog = false
                     }) {
@@ -56,7 +66,6 @@ fun DateTextField() {
             DatePicker(state = datePickerState)
         }
     }
-
     TextField(
         value = selectedDate,
         onValueChange = {},
@@ -78,7 +87,7 @@ fun DateTextField() {
 }
 
 fun Long.toBrazilianDateFormat(
-    pattern: String = "dd/MM/yyyy"
+    pattern: String = "dd/MM/yyyy" //"yyyy-MM-dd"
 ): String {
     val date = Date(this)
     val formatter = SimpleDateFormat(
@@ -87,10 +96,4 @@ fun Long.toBrazilianDateFormat(
         timeZone = TimeZone.getTimeZone("GMT")
     }
     return formatter.format(date)
-}
-
-@Preview
-@Composable
-fun DateTextFieldPreview() {
-    DateTextField()
 }

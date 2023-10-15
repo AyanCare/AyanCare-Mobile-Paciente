@@ -23,6 +23,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.codigoRecu
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.recuperacaoEmail.screen.RecuperacaoEmailScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.redefinirSenha.screen.RedefinirSenhaScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.screen.EventScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.AddDiseaseScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.FinalizarCadastroScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.PatientAddressScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen.LoginScreen
@@ -54,6 +55,7 @@ class SplashActivity : ComponentActivity() {
                     val navController = rememberNavController()
 
                     val context = LocalContext.current
+                    val localStorage: Storage = Storage()
 
                     NavHost(
                         navController = navController,
@@ -75,15 +77,19 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("cadastro_screen") {
-                            CadastroScreen(navController = navController, lifecycleScope = lifecycleScope, navRotasController = navController)
+                            CadastroScreen(navController = navController, lifecycleScope = lifecycleScope, navRotasController = navController, localStorage = localStorage)
                         }
 
                         composable("finalizar_cadastro_screen"){
-                            FinalizarCadastroScreen(navController = navController)
+                            FinalizarCadastroScreen(navController = navController, lifecycleScope = lifecycleScope, localStorage = localStorage)
                         }
 
                         composable("endereco_paciente_screen"){
                             PatientAddressScreen(navController = navController)
+                        }
+
+                        composable("add_disease_screen"){
+                            AddDiseaseScreen(navController = navController, lifecycleScope = lifecycleScope, localStorage = localStorage)
                         }
 
                         composable("tela_instrucao1_screen") {

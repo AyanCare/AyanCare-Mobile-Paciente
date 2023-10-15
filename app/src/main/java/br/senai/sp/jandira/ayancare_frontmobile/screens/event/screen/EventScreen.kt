@@ -45,7 +45,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.HeaderEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionDate
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionEvent
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.Dropdown
+import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
 
 @Composable
 fun EventScreen(
@@ -164,7 +164,7 @@ fun EventScreen(
                     fontWeight = FontWeight(600),
                     color = Color(0xFF191D23)
                 )
-                Dropdown()
+                //DropdownGender()
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.Dropdown
+import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
 
 @Composable
 fun OptionEvent() {
@@ -60,7 +60,7 @@ fun OptionEvent() {
             fontWeight = FontWeight(600),
             color = Color(0xFF191D23)
         )
-        Dropdown()
+        //DropdownGender()
         Spacer(modifier = Modifier.height(40.dp))
         Column {
             Text(

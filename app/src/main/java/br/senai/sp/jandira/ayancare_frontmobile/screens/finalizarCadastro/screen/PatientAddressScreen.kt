@@ -137,8 +137,8 @@ fun PatientAddressScreen(
                 modifier = Modifier.width(190.dp)
             ) {
                 DefaultButton(
-                    text = "Finalizar",
-                    onClick = { navController.navigate("tela_instrucao1_screen") }
+                    text = "Continuar",
+                    onClick = { navController.navigate("add_disease_screen") }
                 )
             }
             ProgressBar(text = "3 / 3", valor = 330)

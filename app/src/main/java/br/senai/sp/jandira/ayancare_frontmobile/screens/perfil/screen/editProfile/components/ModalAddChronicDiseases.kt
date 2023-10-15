@@ -44,7 +44,8 @@ import kotlinx.coroutines.launch
 fun ModalAddChronicDiseases(
     isDialogVisibleChronicDiseases: Boolean,
     navController: NavController,
-    lifecycleScope: LifecycleCoroutineScope
+    lifecycleScope: LifecycleCoroutineScope,
+    nav: String
 ) {
 
     val context = LocalContext.current
@@ -88,7 +89,7 @@ fun ModalAddChronicDiseases(
                     Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
-                    navController.navigate("edit_profile_screen")
+                    navController.navigate("$nav")
                 }
             } else {
                 val errorBody = response.errorBody()?.string()
@@ -171,7 +172,7 @@ fun ModalAddChronicDiseases(
                         textDecoration = TextDecoration.Underline,
                         modifier = Modifier
                             .clickable {
-                                navController.navigate("edit_profile_screen")
+                                navController.navigate("$nav")
                             }
                     )
                 }

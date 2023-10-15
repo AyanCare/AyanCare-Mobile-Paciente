@@ -17,4 +17,31 @@ class CadastroRepository {
 
         return apiService.createUser(requestBody)
     }
+
+
+    suspend fun updateUser(
+        token: String,
+        id: Int,
+        nome: String,
+        data_nascimento: String,
+        email: String,
+        senha: String,
+        cpf: String,
+        id_endereco_paciente: Int,
+        id_genero: Int
+    ): Response<JsonObject> {
+        val requestBody = JsonObject().apply {
+            addProperty("id", id)
+            addProperty("nome", nome)
+            addProperty("data_nascimento", data_nascimento)
+            addProperty("email", email)
+            addProperty("senha", senha)
+            addProperty("cpf", cpf)
+            addProperty("id_endereco_paciente", id_endereco_paciente)
+            addProperty("id_genero", id_genero)
+        }
+
+        return apiService.updateUser(token, requestBody)
+    }
+
 }

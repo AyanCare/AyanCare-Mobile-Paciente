@@ -132,9 +132,9 @@ fun EditProfileScreen(
             Log.i("ds3t", "onFailure: ${t.message}")
         }
 
-    }) // NÃO FALA NADA - RLX EU DIGITO KKKKKKKK
+    })
 
-    var nome = listPaciente.nome //TA AGR NÃO MEXE :)
+    var nome = listPaciente.nome
     var cpf = paciente.cpf
 
 
@@ -254,7 +254,7 @@ fun EditProfileScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    DateTextField()
+                    //DateTextField()
 
                     Spacer(modifier = Modifier.height(16.dp))
                 }
@@ -289,7 +289,8 @@ fun EditProfileScreen(
                     ModalAddChronicDiseases(
                         isDialogVisibleChronicDiseases = false,
                         navController = navController,
-                        lifecycleScope = lifecycleScope
+                        lifecycleScope = lifecycleScope,
+                        nav = "edit_profile_screen"
                     )
                 }
                 LazyRow() {
@@ -340,11 +341,10 @@ fun EditProfileScreen(
                     ModalAddComorbidity(
                         isDialogVisibleComorbidity = false,
                         navController = navController,
-                        lifecycleScope= lifecycleScope
+                        lifecycleScope= lifecycleScope,
+                        nav = "edit_profile_screen"
                     )
                 }
-
-
 
                 LazyRow() {
                     items(listPaciente.comorbidades.reversed()) {

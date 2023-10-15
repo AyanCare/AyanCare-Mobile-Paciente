@@ -143,12 +143,7 @@ fun LoginScreen(
                                 tipo = tipo_usuario
                             )
 
-                            if (tipo_usuario == "Cuidador"){
-                                navController.navigate("main_screen_cuidador")
-                            }else{
-                                navController.navigate("main_screen")
-                            }
-
+                             navController.navigate("main_screen")
 
                         } else {
                             deleteUserSQLite(context = context , id)

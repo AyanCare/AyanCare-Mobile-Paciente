@@ -1,5 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components
 
+import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem
@@ -17,17 +19,47 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.GeneroResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.service.Genero
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Dropdown() {
+fun DropdownGender(
+    context: Context,
+    gender: String,
+    onValueChange: (String) -> Unit
+) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
 
-    var gender by remember {
-        mutableStateOf("")
+    var listGeneros by remember {
+        mutableStateOf<List<Genero>>(emptyList())
     }
+
+    //Cria uma chamada para o endpoint
+    var call = RetrofitFactory.getGenero().getGenero()
+
+    call.enqueue(object : Callback<GeneroResponse> {
+        override fun onResponse(
+            call: Call<GeneroResponse>,
+            response: Response<GeneroResponse>
+        ) {
+            listGeneros = response.body()!!.pacientes
+        }
+        override fun onFailure(call: Call<GeneroResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
+
+    var gender = gender
+
+
 
     Box(
         modifier = Modifier.fillMaxWidth(),
@@ -39,7 +71,7 @@ fun Dropdown() {
         ) {
 
             TextField(
-                value = gender ,
+                value = gender,
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
@@ -49,43 +81,25 @@ fun Dropdown() {
                 modifier = Modifier
                     .menuAnchor()
                     .fillMaxWidth()
-
             )
 
             ExposedDropdownMenu(
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false }
             ) {
-                DropdownMenuItem(
-                    text = { Text(text = "Masculino", color = Color.Black) },
-                    onClick = {
-                        gender = "Masculino"
-                        isExpanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = { Text(text = "Feminino", color = Color.Black)},
-                    onClick = {
-                        gender = "Feminino"
-                        isExpanded = false
-                    }
-                )
-                DropdownMenuItem(
-                    text = {Text(text = "Outros", color = Color.Black)},
-                    onClick = {
-                        gender = "Outros"
-                        isExpanded = false
-                    }
-                )
+                listGeneros.forEach {
+                    DropdownMenuItem(
+                        text = { Text(text = it.nome, color = Color.Black) },
+                        onClick = {
+                            gender = it.nome // Atualiza a variável com a seleção do usuário
+                            onValueChange(it.nome) // Chama a função de retorno com o valor selecionado
+                            isExpanded = false
+                        }
+                    )
+                }
             }
 
         }
     }
 
-}
-
-@Preview
-@Composable
-fun DropdownPreview() {
-    Dropdown()
 }
