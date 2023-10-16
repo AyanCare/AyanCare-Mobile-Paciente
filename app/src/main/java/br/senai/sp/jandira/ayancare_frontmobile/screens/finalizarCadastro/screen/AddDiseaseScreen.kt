@@ -238,7 +238,7 @@ fun AddDiseaseScreen(
                     }
                 )
             }
-            ProgressBar(text = "2 / 3", valor = 220)
+            ProgressBar(text = "4 / 4", valor = 331)
 
         }
     }

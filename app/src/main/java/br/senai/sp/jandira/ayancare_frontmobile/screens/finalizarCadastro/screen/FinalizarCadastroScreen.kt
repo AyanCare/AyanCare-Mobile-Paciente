@@ -291,7 +291,7 @@ fun FinalizarCadastroScreen(
                     }
                 )
             }
-            ProgressBar(text = "2 / 3", valor = 220)
+            ProgressBar(text = "2 / 4", valor = 165)
 
         }
     }

@@ -37,16 +37,6 @@ fun PatientAddressScreen(
     navController: NavController
 ){
 
-    val context = LocalContext.current
-
-    var cpfState by remember {
-        mutableStateOf("")
-    }
-
-    var telefoneState by remember {
-        mutableStateOf("")
-    }
-
     Surface (
         color = Color(248, 240, 236)
     ) {
@@ -141,7 +131,7 @@ fun PatientAddressScreen(
                     onClick = { navController.navigate("add_disease_screen") }
                 )
             }
-            ProgressBar(text = "3 / 3", valor = 330)
+            ProgressBar(text = "3 / 4", valor = 248)
 
         }
     }

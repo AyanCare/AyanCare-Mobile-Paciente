@@ -18,9 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.GeneroResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.ConectarResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.service.Genero
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,14 +43,14 @@ fun DropdownGender(
     //Cria uma chamada para o endpoint
     var call = RetrofitFactory.getGenero().getGenero()
 
-    call.enqueue(object : Callback<GeneroResponse> {
+    call.enqueue(object : Callback<ConectarResponse> {
         override fun onResponse(
-            call: Call<GeneroResponse>,
-            response: Response<GeneroResponse>
+            call: Call<ConectarResponse>,
+            response: Response<ConectarResponse>
         ) {
             listGeneros = response.body()!!.pacientes
         }
-        override fun onFailure(call: Call<GeneroResponse>, t: Throwable) {
+        override fun onFailure(call: Call<ConectarResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
 

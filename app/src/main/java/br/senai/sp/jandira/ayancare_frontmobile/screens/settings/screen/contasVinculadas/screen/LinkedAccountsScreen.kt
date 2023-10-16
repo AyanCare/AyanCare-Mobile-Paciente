@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible
+package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.screen
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -36,12 +36,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.Responsavel
-import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.CardResponsible
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.ConectarResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.service.Conectar
+import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components.CardLinkedAccounts
+import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components.FloatingActionButtonConectarContas
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
@@ -49,11 +51,10 @@ import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun ResponsibleScreen(
+fun LinkedAccountsScreen(
     navController: NavController,
-    navRotasController: NavController
+    lifecycleScope: LifecycleCoroutineScope
 ) {
-
     val context = LocalContext.current
 
     val array = PacienteRepository(context = context).findUsers()
@@ -61,45 +62,32 @@ fun ResponsibleScreen(
     val paciente = array[0]
     var id = paciente.id.toLong()
 
-    // Mantenha uma lista de responsáveis no estado da tela
-    var listResponsavel by remember {
-        mutableStateOf(
-            listOf(
-                Responsavel(0, "", "", "", 0, 0)
-            )
-        )
+    var listCuidadores by remember {
+        mutableStateOf<List<Conectar>>(emptyList())
     }
 
     //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(idContatoPaciente = id)
-    //var call = RetrofitFactory.getResponsible().getTodosResponsaveis()
+    var call = RetrofitFactory.getConectar().getConectar(id.toInt())
 
-    call.enqueue(object : Callback<ResponsavelResponse> {
+    call.enqueue(object : Callback<ConectarResponse> {
         override fun onResponse(
-            call: Call<ResponsavelResponse>,
-            response: Response<ResponsavelResponse>
+            call: Call<ConectarResponse>,
+            response: Response<ConectarResponse>
         ) {
-
-            Log.e("TAG", "onResponse: ${response.body()}")
-
             if (response.body()!!.status == 404) {
                 Log.e("TAG", "a resposta está nula")
-                listResponsavel = emptyList()
+                listCuidadores = emptyList()
             } else {
-                listResponsavel = response.body()!!.contatos
+                listCuidadores = response.body()!!.cuidadores
             }
-
-            Log.e("TAG", "onResponse: $listResponsavel")
-
         }
-
-        override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
+        override fun onFailure(call: Call<ConectarResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
 
     })
 
-    if (listResponsavel.isEmpty()) {
+    if (listCuidadores.isEmpty()) {
         Surface(
             color = Color(248, 240, 236)
         ) {
@@ -118,7 +106,7 @@ fun ResponsibleScreen(
                 ) {
                     IconButton(
                         onClick = {
-                            navRotasController.navigate("setting_screen")
+                            //navRotasController.navigate("setting_screen")
                         }
                     ) {
                         Icon(
@@ -128,7 +116,7 @@ fun ResponsibleScreen(
                     }
                     Spacer(modifier = Modifier.width(80.dp))
                     Text(
-                        text = "Responsáveis",
+                        text = "Contas Vinculadas",
                         fontSize = 18.sp,
                         lineHeight = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
@@ -150,7 +138,7 @@ fun ResponsibleScreen(
                             .size(50.dp)
                     )
                     Text(
-                        text = "Não existe nenhum responsável no momento",
+                        text = "Não existe nenhum cuidador\nno momento",
                         fontSize = 16.sp,
                         lineHeight = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
@@ -159,13 +147,10 @@ fun ResponsibleScreen(
                         textAlign = TextAlign.Center
                     )
                 }
-                Spacer(modifier = Modifier.height(20.dp))
-
-
             }
             FloatingActionButtonResponsible(navController)
         }
-    } else {
+    }else{
         Surface(
             color = Color(248, 240, 236)
         ) {
@@ -184,7 +169,7 @@ fun ResponsibleScreen(
                 ) {
                     IconButton(
                         onClick = {
-                            navRotasController.navigate("setting_screen")
+                            //navRotasController.navigate("setting_screen")
                         }
                     ) {
                         Icon(
@@ -194,7 +179,7 @@ fun ResponsibleScreen(
                     }
                     Spacer(modifier = Modifier.width(80.dp))
                     Text(
-                        text = "Responsáveis",
+                        text = "Contas Vinculadas",
                         fontSize = 18.sp,
                         lineHeight = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
@@ -204,15 +189,27 @@ fun ResponsibleScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-
-                LazyColumn() {
-                    items(listResponsavel.reversed()) {
-                        CardResponsible(nome = it.nome, numero = it.numero, local = it.local)
-                        Spacer(modifier = Modifier.height(15.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    LazyColumn(){
+                        items(listCuidadores){
+                            CardLinkedAccounts(
+                                onUnlinkClick = {},
+                                onProfileClick = {},
+                                nome = it.nome,
+                                id = it.id
+                                //foto =
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                        }
                     }
                 }
             }
-            FloatingActionButtonResponsible(navController)
+            FloatingActionButtonConectarContas(navController, lifecycleScope)
         }
     }
 

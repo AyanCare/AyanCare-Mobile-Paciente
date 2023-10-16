@@ -1,6 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.retrofit
 
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.GeneroResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.service.ConectarService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.service.GeneroService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.PacienteService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ResponsavelService
@@ -35,6 +35,10 @@ object RetrofitFactory {
 
     fun getGenero(): GeneroService{
         return retrofitFactory.create(GeneroService::class.java)
+    }
+
+    fun getConectar(): ConectarService{
+        return retrofitFactory.create(ConectarService::class.java)
     }
 
 }

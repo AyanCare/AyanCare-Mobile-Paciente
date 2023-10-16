@@ -124,7 +124,7 @@ fun SettingsScreen(
                 imageVector = Icons.Default.PersonOutline,
                 text = "Contas Vinculadas",
                 onClick = {
-
+                    navRotasController.navigate("linked_accounts_screen")
                 }
             )
             CardSettings(

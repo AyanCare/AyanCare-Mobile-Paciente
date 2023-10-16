@@ -341,7 +341,7 @@ fun CadastroScreen(
                     }
                 )
             }
-            ProgressBar(text = "1 / 3", valor = 110)
+            ProgressBar(text = "1 / 4", valor = 83)
 
         }
     }
