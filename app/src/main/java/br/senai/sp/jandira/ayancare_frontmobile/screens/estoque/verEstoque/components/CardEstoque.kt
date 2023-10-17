@@ -1,6 +1,8 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.estoque.verEstoque.components
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,12 +23,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
 fun CardEstoque(
     nome_remedio: String,
-    quantidade: Int
+    quantidade: Int,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -36,7 +40,11 @@ fun CardEstoque(
                 ambientColor = Color(0x40000000)
             )
             .fillMaxWidth()
-            .height(80.dp),
+            .height(80.dp)
+            .clickable {
+                Log.e("luizão", "CardEstoque: teste-luiz", )
+                onClick()
+            },
         shape = RoundedCornerShape(size = 4.dp),
         backgroundColor = Color(0xFF35225F)
     ) {
@@ -62,10 +70,4 @@ fun CardEstoque(
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun CardEstoquePreview() {
-    CardEstoque(nome_remedio = "Paracetamol", quantidade = 5)
 }

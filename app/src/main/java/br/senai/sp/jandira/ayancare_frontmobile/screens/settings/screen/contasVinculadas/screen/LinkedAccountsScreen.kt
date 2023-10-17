@@ -106,7 +106,7 @@ fun LinkedAccountsScreen(
                 ) {
                     IconButton(
                         onClick = {
-                            //navRotasController.navigate("setting_screen")
+                            navController.popBackStack()
                         }
                     ) {
                         Icon(
@@ -148,7 +148,7 @@ fun LinkedAccountsScreen(
                     )
                 }
             }
-            FloatingActionButtonResponsible(navController)
+            FloatingActionButtonConectarContas(navController, lifecycleScope)
         }
     }else{
         Surface(
@@ -169,7 +169,7 @@ fun LinkedAccountsScreen(
                 ) {
                     IconButton(
                         onClick = {
-                            //navRotasController.navigate("setting_screen")
+                            navController.popBackStack()
                         }
                     ) {
                         Icon(

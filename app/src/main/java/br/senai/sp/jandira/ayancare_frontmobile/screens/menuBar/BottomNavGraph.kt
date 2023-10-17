@@ -7,6 +7,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import br.senai.sp.jandira.ayancare_frontmobile.screens.estoque.modifyStock.screen.ModifyStockScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.estoque.verEstoque.screen.EstoqueScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.home.screen.HomeScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.ProfileScreen
@@ -24,7 +25,7 @@ fun BottomNavGraph(
         startDestination = BottomBarScreen.Home.route,
     ){
         composable(route = BottomBarScreen.Stock.route){
-            EstoqueScreen(navController = navController)
+            EstoqueScreen(navRotasController = navRotasController, navController = navController)
         }
         composable(route = BottomBarScreen.Cadendary.route){
             //SettingsScreen(navController = navController)

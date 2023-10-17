@@ -26,7 +26,10 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.screens.estoque.verEstoque.components.CardEstoque
 
 @Composable
-fun EstoqueScreen(navController: NavController) {
+fun EstoqueScreen(
+    navController: NavController,
+    navRotasController: NavController
+) {
     Surface(
         color = Color(248, 240, 236)
     ) {
@@ -50,7 +53,12 @@ fun EstoqueScreen(navController: NavController) {
             Row (
                 modifier = Modifier.padding(start = 15.dp, end = 15.dp)
             ){
-                DefaultTextField(valor = "", label = "Pesquisa", aoMudar = {}, onValueChange = {})
+                DefaultTextField(
+                    valor = "",
+                    label = "Pesquisa",
+                    aoMudar = {},
+                    onValueChange = {}
+                )
             }
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -60,7 +68,13 @@ fun EstoqueScreen(navController: NavController) {
                     .fillMaxWidth()
             ) {
                 items(10) {
-                    CardEstoque(nome_remedio = "Paracetamol", quantidade = 6)
+                    CardEstoque(
+                        nome_remedio = "Paracetamol",
+                        quantidade = 6,
+                        onClick = {
+                            navRotasController.navigate("modify_stock_screen")
+                        }
+                    )
                     Spacer(modifier = Modifier.height(10.dp))
                 }
             }

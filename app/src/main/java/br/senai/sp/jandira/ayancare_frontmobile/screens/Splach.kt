@@ -22,6 +22,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.registroEmerg
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.codigoRecuperacao.screen.CodigoRecuperacaoScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.recuperacaoEmail.screen.RecuperacaoEmailScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.redefinirSenha.screen.RedefinirSenhaScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.estoque.modifyStock.screen.ModifyStockScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.screen.EventScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.AddDiseaseScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.FinalizarCadastroScreen
@@ -171,6 +172,10 @@ class SplashActivity : ComponentActivity() {
 
                         composable("add_stock_screen"){
                             AddStockScreen(navController = navController)
+                        }
+
+                        composable("modify_stock_screen"){
+                            ModifyStockScreen(navController = navController, navRotasController = navController)
                         }
 
                         composable("add_remedy_non_existent_screen"){
