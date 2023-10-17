@@ -44,6 +44,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.ModalSuccess
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
 
@@ -52,6 +53,8 @@ fun AddResponsibleScreen(
     navController: NavController,
     lifecycleScope: LifecycleCoroutineScope
 ) {
+
+    var isDialogVisibleSuccess by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val array = PacienteRepository(context = context).findUsers()
@@ -100,7 +103,10 @@ fun AddResponsibleScreen(
                 if (checagem.toString() == "404") {
                     Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+
+                    isDialogVisibleSuccess = true
+
                     navController.navigate("responsible_screen")
                 }
             } else {
@@ -113,7 +119,11 @@ fun AddResponsibleScreen(
 
     }
 
-
+    if (isDialogVisibleSuccess) {
+        ModalSuccess(
+            onDismiss = {}
+        )
+    }
 
     Surface(
         color = Color(248, 240, 236)
