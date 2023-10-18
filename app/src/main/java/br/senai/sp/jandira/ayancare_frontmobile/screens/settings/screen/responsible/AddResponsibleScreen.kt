@@ -21,9 +21,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +48,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.ModalSuccess
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -73,6 +76,8 @@ fun AddResponsibleScreen(
     var localState by remember {
         mutableStateOf("")
     }
+
+    val coroutineScope = rememberCoroutineScope()
 
     fun responsible(
         nome: String,
@@ -105,8 +110,6 @@ fun AddResponsibleScreen(
                 } else {
                     //Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
 
-                    isDialogVisibleSuccess = true
-
                     navController.navigate("responsible_screen")
                 }
             } else {
@@ -123,7 +126,13 @@ fun AddResponsibleScreen(
         ModalSuccess(
             onDismiss = {}
         )
+        LaunchedEffect(isDialogVisibleSuccess) {
+            delay(4000) // Aguarda 4 segundos
+            isDialogVisibleSuccess = false // Fecha o modal
+        }
     }
+
+
 
     Surface(
         color = Color(248, 240, 236)
@@ -208,6 +217,7 @@ fun AddResponsibleScreen(
                             id_paciente = id.toInt(),
                             id_status_contato = 1
                         )
+                        isDialogVisibleSuccess = true
                     },
                     text = "Adicionar"
                 )

@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -66,7 +67,7 @@ fun ModalSuccess(
 
 @Composable
 fun ModalWithVideo() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_ln2lqabi))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.animation_lnw3ncco))
     var isPlaying by remember { mutableStateOf(true) }
 
     val progress by animateLottieCompositionAsState(
@@ -99,7 +100,8 @@ fun ModalWithVideo() {
             fontSize = 20.sp,
             fontFamily = FontFamily(Font(R.font.poppins)),
             fontWeight = FontWeight(600),
-            color = Color(0xFF54595E)
+            color = Color(0xFF54595E),
+            textAlign = TextAlign.Center
         )
 
     }
