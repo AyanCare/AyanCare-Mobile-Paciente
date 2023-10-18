@@ -33,6 +33,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfil
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.SettingsScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.codigoPaciente.screen.PatientCodeScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.screen.LinkedAccountsScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.screen.profileCaregiver.screen.ProfileCaregiverScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.AddResponsibleScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.ResponsibleScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.sugestao.SuggestionScreen
@@ -143,7 +144,11 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("linked_accounts_screen"){
-                            LinkedAccountsScreen(navController = navController, lifecycleScope = lifecycleScope)
+                            LinkedAccountsScreen(navController = navController, lifecycleScope = lifecycleScope, localStorage = localStorage)
+                        }
+
+                        composable("profile_caregiver_screen"){
+                            ProfileCaregiverScreen(navController = navController, localStorage = localStorage)
                         }
 
                         composable("emergencia_screen"){

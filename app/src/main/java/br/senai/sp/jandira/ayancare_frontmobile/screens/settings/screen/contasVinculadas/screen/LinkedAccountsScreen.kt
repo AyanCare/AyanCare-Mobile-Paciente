@@ -42,6 +42,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.ConectarResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.service.Conectar
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components.CardLinkedAccounts
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components.FloatingActionButtonConectarContas
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
@@ -53,7 +54,8 @@ import retrofit2.Response
 @Composable
 fun LinkedAccountsScreen(
     navController: NavController,
-    lifecycleScope: LifecycleCoroutineScope
+    lifecycleScope: LifecycleCoroutineScope,
+    localStorage: Storage
 ) {
     val context = LocalContext.current
 
@@ -198,8 +200,11 @@ fun LinkedAccountsScreen(
                     LazyColumn(){
                         items(listCuidadores){
                             CardLinkedAccounts(
-                                onUnlinkClick = {},
-                                onProfileClick = {},
+                                onUnlinkClick = {  },
+                                onProfileClick = {
+                                    navController.navigate("profile_caregiver_screen")
+                                    localStorage.salvarValor( context, it.id.toString(), "id_cuidador" )
+                                                 },
                                 nome = it.nome,
                                 id = it.id
                                 //foto =

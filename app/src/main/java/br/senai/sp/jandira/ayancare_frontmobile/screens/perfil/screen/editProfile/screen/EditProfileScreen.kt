@@ -137,8 +137,6 @@ fun EditProfileScreen(
     var nome = listPaciente.nome
     var cpf = paciente.cpf
 
-
-    //ESSA PORRA NÃO FUNCIONA O CPF - QUAL DAS DUAS VARIAVEIS - ERA APRA ESTAR APARECENDO O DADO
     var cpfState by remember { mutableStateOf(cpf) } //desisto
 
     var isEditing by remember { mutableStateOf(false) }
@@ -164,7 +162,7 @@ fun EditProfileScreen(
                     imageVector = Icons.Default.ArrowBackIosNew,
                     contentDescription = "",
                     tint = Color.White
-                )//DESISTO FÉ
+                )
             }
             Column(
                 //verticalArrangement = Arrangement.SpaceBetween,

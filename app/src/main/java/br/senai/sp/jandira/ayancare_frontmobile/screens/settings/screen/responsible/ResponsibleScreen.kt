@@ -207,7 +207,11 @@ fun ResponsibleScreen(
 
                 LazyColumn() {
                     items(listResponsavel.reversed()) {
-                        CardResponsible(nome = it.nome, numero = it.numero, local = it.local)
+                        CardResponsible(
+                            nome = it.nome,
+                            numero = it.numero,
+                            local = it.local
+                        )
                         Spacer(modifier = Modifier.height(15.dp))
                     }
                 }
