@@ -28,7 +28,7 @@ class CadastroRepository {
         senha: String,
         cpf: String,
         id_endereco_paciente: Int,
-        id_genero: Int
+        genero: String
     ): Response<JsonObject> {
         val requestBody = JsonObject().apply {
             addProperty("id", id)
@@ -38,7 +38,7 @@ class CadastroRepository {
             addProperty("senha", senha)
             addProperty("cpf", cpf)
             addProperty("id_endereco_paciente", id_endereco_paciente)
-            addProperty("id_genero", id_genero)
+            addProperty("genero", genero)
         }
 
         return apiService.updateUser(token, requestBody)

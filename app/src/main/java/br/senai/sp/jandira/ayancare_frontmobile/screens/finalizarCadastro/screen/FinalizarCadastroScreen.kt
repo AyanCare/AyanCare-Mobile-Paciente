@@ -108,7 +108,7 @@ fun FinalizarCadastroScreen(
         senha: String,
         cpf: String,
         id_endereco_paciente: Int,
-        id_genero: Int
+        genero: String
     ) {
         val userRepository = CadastroRepository()
         lifecycleScope.launch {
@@ -122,7 +122,7 @@ fun FinalizarCadastroScreen(
                 senha,
                 cpf,
                 id_endereco_paciente,
-                id_genero
+                genero
             )
 
 
@@ -281,11 +281,11 @@ fun FinalizarCadastroScreen(
                                 id = id_paciente.toInt(),
                                 nome = nome.toString(),
                                 data_nascimento = selectedDate.toAmericanDateFormat(),
-                                email.toString(),
-                                senha.toString(),
+                                email = email.toString(),
+                                senha = senha.toString(),
                                 cpf = cpfState,
                                 id_endereco_paciente = 1,
-                                id_genero = 1 // lohannes precisa mudar isso para o nome do genero
+                                genero = selectedDrop
                             )
                         }
                     }
