@@ -22,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,11 +34,16 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.compenents.SelectOption
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 
 @Composable
 fun MedicationFrequencyScreen(
-    navController: NavController
+    navController: NavController,
+    localStorage: Storage
 ) {
+
+    var context = LocalContext.current
+
     val options = listOf(
         "Todos os dias",
         "Em dias alternados",
@@ -50,6 +56,9 @@ fun MedicationFrequencyScreen(
     )
     val selectedOptions = remember { mutableStateListOf<Boolean>() }
     selectedOptions.addAll(List(options.size) { false })
+
+    val nome = localStorage.lerValor(context, "nome_medicamento")
+    val medida = localStorage.lerValor(context, "medida_medicamento")
 
     Surface(
         color = Color(248, 240, 236)
@@ -104,14 +113,14 @@ fun MedicationFrequencyScreen(
                         .padding(start = 15.dp, end = 15.dp)
                 ) {
                     Text(
-                        text = "Amoxilina",
+                        text = nome.toString(),
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(600),
                         color = Color(0xFF35225F)
                     )
                     Text(
-                        text = "comprimido(s)",
+                        text = medida.toString(),
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(600),

@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -36,11 +37,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 
 @Composable
 fun AddRemedyNonExistentScreen(
-    navController: NavController
+    navController: NavController,
+    localStorage: Storage
 ) {
+    var context = LocalContext.current
 
     val focusManager = LocalFocusManager.current
 
@@ -110,6 +114,7 @@ fun AddRemedyNonExistentScreen(
             }
             DefaultButton(
                 onClick = {
+                    localStorage.salvarValor(context, nomeState, "nome_medicamento")
                     navController.navigate("form_medicine_screen")
                 },
                 text = "Proximo"

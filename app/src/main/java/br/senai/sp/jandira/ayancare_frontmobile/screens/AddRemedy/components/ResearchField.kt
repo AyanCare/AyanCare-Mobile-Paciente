@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.components
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -39,11 +40,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.RemedyResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.service.Remedy
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun ResearchField() {
 
-    val categories = listOf(
+    var categories = listOf(
         "Food",
         "Beverages",
         "Sports",
@@ -69,6 +76,30 @@ fun ResearchField() {
     val interactionSource = remember {
         MutableInteractionSource()
     }
+
+    var listRemedy by remember {
+        mutableStateOf<List<Remedy>>(emptyList())
+    }
+
+    //Cria uma chamada para o endpoint
+    var call = RetrofitFactory.getRemedy().getRemedy(2)
+
+    call.enqueue(object : Callback<RemedyResponse> {
+        override fun onResponse(
+            call: Call<RemedyResponse>,
+            response: Response<RemedyResponse>
+        ) {
+            Log.e("TAG", "onResponse:${response.body()} ")
+            listRemedy = response.body()!!.medicamento
+            Log.e("TAG", "onResponse:$listRemedy")
+        }
+        override fun onFailure(call: Call<RemedyResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
+
+    categories = listOf(listRemedy.toString())
 
     // Category Field
     Column(
