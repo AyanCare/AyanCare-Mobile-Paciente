@@ -34,8 +34,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.MedidasResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.service.Medidas
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.compenents.SelectOption
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun FormMedicineScreen(
@@ -44,23 +50,47 @@ fun FormMedicineScreen(
 ) {
     var context = LocalContext.current
 
-    val options = listOf(
-        "Comprimido",
-        "Gota",
-        "Grama",
-        "Mililitro",
-        "Unidades",
-        "Injeção",
-        "Aplicação"
-    )
-    val selectedOptions = remember { mutableStateListOf<Boolean>() }
-    selectedOptions.addAll(List(options.size) { false })
+//    val options = listOf(
+//        "Comprimido",
+//        "Gota",
+//        "Grama",
+//        "Mililitro",
+//        "Unidades",
+//        "Injeção",
+//        "Aplicação"
+//    )
 
     val nome = localStorage.lerValor(context, "nome_medicamento")
+    Log.e("nome", "FormMedicineScreen: $nome")
 
     var isSelectState by remember {
         mutableStateOf("")
     }
+
+    var listMedidas by remember {
+        mutableStateOf<List<Medidas>>(emptyList())
+    }
+
+    //Cria uma chamada para o endpoint
+    var call = RetrofitFactory.getMedidas().getMedidas()
+
+    call.enqueue(object : Callback<MedidasResponse> {
+        override fun onResponse(
+            call: Call<MedidasResponse>,
+            response: Response<MedidasResponse>
+        ) {
+            Log.e("TAG", "onResponse:${response.body()} ")
+            listMedidas = response.body()!!.medidas
+            Log.e("TAG", "onResponse:$listMedidas")
+        }
+        override fun onFailure(call: Call<MedidasResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
+
+    val selectedOptions = remember { mutableStateListOf<Boolean>() }
+    selectedOptions.addAll(List(listMedidas.size) { false })
 
     Surface(
         color = Color(248, 240, 236)
@@ -114,7 +144,7 @@ fun FormMedicineScreen(
             )
 
             SelectOption(
-                options = options,
+                options = listMedidas.map { it.tipo },
                 onSelectionChanged = {
                     isSelectState = it
                 }

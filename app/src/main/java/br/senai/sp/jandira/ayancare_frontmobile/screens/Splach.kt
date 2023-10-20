@@ -164,7 +164,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("add_remedy_screen"){
-                            AddRemedyScreen(navController = navController)
+                            AddRemedyScreen(navController = navController, localStorage = localStorage)
                         }
 
                         composable("form_medicine_screen"){

@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,26 +44,19 @@ import androidx.compose.ui.unit.toSize
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.RemedyResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.service.Remedy
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun ResearchField() {
+fun ResearchField(
+    localStorage: Storage
+) {
 
-    var categories = listOf(
-        "Food",
-        "Beverages",
-        "Sports",
-        "Learning",
-        "Travel",
-        "Rent",
-        "Bills",
-        "Fees",
-        "Others",
-    )
+    var context = LocalContext.current
 
-    var category by remember {
+    var remedy by remember {
         mutableStateOf("")
     }
 
@@ -89,9 +83,7 @@ fun ResearchField() {
             call: Call<RemedyResponse>,
             response: Response<RemedyResponse>
         ) {
-            Log.e("TAG", "onResponse:${response.body()} ")
             listRemedy = response.body()!!.medicamento
-            Log.e("TAG", "onResponse:$listRemedy")
         }
         override fun onFailure(call: Call<RemedyResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
@@ -99,7 +91,7 @@ fun ResearchField() {
 
     })
 
-    categories = listOf(listRemedy.toString())
+    //categories = listOf(listRemedy.toString())
 
     // Category Field
     Column(
@@ -128,9 +120,9 @@ fun ResearchField() {
                         .onGloballyPositioned { coordinates ->
                             textFieldSize = coordinates.size.toSize()
                         },
-                    value = category,
+                    value = remedy,
                     onValueChange = {
-                        category = it
+                        remedy = it
                         expanded = true
                     },
                     colors = TextFieldDefaults.textFieldColors(
@@ -173,30 +165,28 @@ fun ResearchField() {
                         modifier = Modifier.heightIn(max = 100.dp),
                     ) {
 
-                        if (category.isNotEmpty()) {
-                            items(
-                                categories.filter {
-                                    it.lowercase()
-                                        .contains(category.lowercase()) || it.lowercase()
-                                        .contains("others")
-                                }
-                                    .sorted()
-                            ) {
-                                CategoryItems(title = it) { title ->
-                                    category = title
+                        if (remedy.isNotEmpty()) {
+                            val filteredList = listRemedy.map { it.nome }
+                                .filter { it.lowercase().contains(remedy.lowercase()) || it.lowercase().contains("others") }
+                                .sorted()
+
+                            items(filteredList) { categoryName ->
+                                CategoryItems(title = categoryName) { title ->
+                                    remedy = title
                                     expanded = false
                                 }
                             }
                         } else {
                             items(
-                                categories.sorted()
-                            ) {
-                                CategoryItems(title = it) { title ->
-                                    category = title
+                                listRemedy.map { it.nome }.sorted()
+                            ) { categoryName ->
+                                CategoryItems(title = categoryName) { title ->
+                                    remedy = title
                                     expanded = false
                                 }
                             }
                         }
+                        localStorage.salvarValor(context, remedy, "nome_medicamento")
 
                     }
 

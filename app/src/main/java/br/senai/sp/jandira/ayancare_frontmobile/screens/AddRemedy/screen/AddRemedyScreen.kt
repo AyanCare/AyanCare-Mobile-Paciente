@@ -30,11 +30,13 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.components.ResearchField
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 
 
 @Composable
 fun AddRemedyScreen(
-    navController: NavController
+    navController: NavController,
+    localStorage: Storage
 ) {
     Surface(
         color = Color(248, 240, 236)
@@ -71,7 +73,7 @@ fun AddRemedyScreen(
 
                 Spacer(modifier = Modifier.height(40.dp))
 
-                ResearchField()
+                ResearchField(localStorage)
 
                 Spacer(modifier = Modifier.height(40.dp))
 
