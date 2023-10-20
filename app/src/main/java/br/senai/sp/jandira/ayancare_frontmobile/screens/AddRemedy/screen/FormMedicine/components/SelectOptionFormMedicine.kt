@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.compenents
+package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun SelectOption(
+fun SelectOptionFormMedicine(
     options: List<String>,
     onSelectionChanged: (String) -> Unit = {},
     onCancelButtonClicked: () -> Unit = {},

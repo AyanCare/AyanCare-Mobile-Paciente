@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,8 +18,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
-import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.compenents.SelectOption
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.SelectOptionMedicationFrequency
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 
 @Composable
@@ -44,14 +48,13 @@ fun MedicationFrequencyScreen(
 
     var context = LocalContext.current
 
+    var isSelectState by remember {
+        mutableStateOf("")
+    }
+
     val options = listOf(
-        "Todos os dias",
-        "Em dias alternados",
-        "Dias específicos",
-        "Ciclo recorrente",
-        "A cada X dias",
-        "A cada X semanas",
-        "A cada X meses",
+        "Intervalos fixos (8 em 8h, 6 em 6h...)",
+        "Horários livres (Uma vez por dia,\nduas vezes....)",
         "Somente quando necessário"
     )
     val selectedOptions = remember { mutableStateListOf<Boolean>() }
@@ -128,9 +131,18 @@ fun MedicationFrequencyScreen(
                     )
                 }
 
-                SelectOption(
-                    options = options
+                Spacer(modifier = Modifier.height(50.dp))
+
+                SelectOptionMedicationFrequency(
+                    //options = options,
+                    onSelectionChanged = {
+                        isSelectState = it
+                    },
+                    localStorage = localStorage
                 )
+                localStorage.salvarValor(context, isSelectState, "jeito_medicamento")
+                Log.e("tag", "MedicationFrequencyScreen: $isSelectState")
+
             }
 
             DefaultButton(

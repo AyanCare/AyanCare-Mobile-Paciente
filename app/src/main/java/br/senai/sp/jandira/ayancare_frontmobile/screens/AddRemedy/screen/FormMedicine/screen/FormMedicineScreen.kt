@@ -37,7 +37,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.MedidasResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.service.Medidas
-import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.compenents.SelectOption
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.components.SelectOptionFormMedicine
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import retrofit2.Call
 import retrofit2.Callback
@@ -49,16 +49,6 @@ fun FormMedicineScreen(
     localStorage: Storage
 ) {
     var context = LocalContext.current
-
-//    val options = listOf(
-//        "Comprimido",
-//        "Gota",
-//        "Grama",
-//        "Mililitro",
-//        "Unidades",
-//        "Injeção",
-//        "Aplicação"
-//    )
 
     val nome = localStorage.lerValor(context, "nome_medicamento")
     Log.e("nome", "FormMedicineScreen: $nome")
@@ -143,7 +133,7 @@ fun FormMedicineScreen(
                 color = Color(0xFF9986BD)
             )
 
-            SelectOption(
+            SelectOptionFormMedicine(
                 options = listMedidas.map { it.tipo },
                 onSelectionChanged = {
                     isSelectState = it
