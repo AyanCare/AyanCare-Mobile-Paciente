@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.screen
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -104,15 +105,12 @@ fun FormMedicineScreen(
                 .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
                 .fillMaxSize()
         ) {
-
             Image(
                 painter = painterResource(id = R.drawable.medicamento),
                 contentDescription = "",
                 modifier = Modifier
                     .size(71.dp)
             )
-
-
             Spacer(modifier = Modifier.height(50.dp))
             Text(
                 text = "Qual é a forma deste \n medicamento?",
@@ -122,9 +120,7 @@ fun FormMedicineScreen(
                 color = Color(0xFF35225F),
                 textAlign = TextAlign.Center
             )
-
             Spacer(modifier = Modifier.height(10.dp))
-
             Text(
                 text = nome.toString(),
                 fontSize = 20.sp,
@@ -132,20 +128,21 @@ fun FormMedicineScreen(
                 fontWeight = FontWeight(600),
                 color = Color(0xFF9986BD)
             )
-
             SelectOptionFormMedicine(
                 options = listMedidas.map { it.tipo },
                 onSelectionChanged = {
                     isSelectState = it
                 }
             )
-
             Spacer(modifier = Modifier.height(90.dp))
-
             DefaultButton(
                 onClick = {
-                    localStorage.salvarValor(context, isSelectState, "medida_medicamento")
-                    navController.navigate("medication_frenquency_screen")
+                    if (isSelectState.isEmpty()){
+                        Toast.makeText(context, "Selecione a medida", Toast.LENGTH_LONG).show()
+                    }else{
+                        localStorage.salvarValor(context, isSelectState, "medida_medicamento")
+                        navController.navigate("medication_frenquency_screen")
+                    }
                 },
                 text = "Proximo"
             )
