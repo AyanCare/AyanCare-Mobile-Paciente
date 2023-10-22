@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.ayancare_frontmobile.screens.event.components
+package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components
 
 import android.app.TimePickerDialog
 import androidx.activity.compose.BackHandler
@@ -16,27 +16,29 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun TimeTextField() {
+fun TimeMedication(
+    width: Int
+) {
     var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
     val formatter = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
     var showTimePicker by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .width(width.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(
+        OutlinedTextField(
             value = "${formatter.format(selectedTime.time)}",
             onValueChange = {
                 //showTimePicker = true
             },
             modifier = Modifier
-                .fillMaxWidth(),
+                .width(width.dp),
             singleLine = true,
             readOnly = true,
-            trailingIcon = {
+            leadingIcon = {
                 IconButton(
                     onClick = {
                         showTimePicker = true

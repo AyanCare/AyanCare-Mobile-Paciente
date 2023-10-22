@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.addRemedyNonExistent.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.IconButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
@@ -31,6 +33,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -83,8 +87,6 @@ fun AddRemedyNonExistentScreen(
                     modifier = Modifier
                         .size(71.dp)
                 )
-
-
                 Spacer(modifier = Modifier.height(50.dp))
                 Text(
                     text = "Qual o nome do medicamento?",
@@ -94,28 +96,30 @@ fun AddRemedyNonExistentScreen(
                     color = Color(0xFF35225F),
                     textAlign = TextAlign.Center
                 )
-
                 Spacer(modifier = Modifier.height(40.dp))
-                
                 OutlinedTextField(
                     value = nomeState ,
                     onValueChange = {
                         nomeState = it
                     },
-                    keyboardActions = KeyboardActions(
-                        onDone = { focusManager.clearFocus() }
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
                     ),
                     modifier = Modifier.fillMaxWidth(),
                     label = {
                         Text(text = "Nome do medicamento")
                     }
                 )
-
             }
             DefaultButton(
                 onClick = {
-                    localStorage.salvarValor(context, nomeState, "nome_medicamento")
-                    navController.navigate("form_medicine_screen")
+                    if (nomeState.isEmpty()){
+                        Toast.makeText(context, "Nome inválido", Toast.LENGTH_LONG).show()
+                    }else{
+                        localStorage.salvarValor(context, nomeState, "nome_medicamento")
+                        navController.navigate("form_medicine_screen")
+                    }
                 },
                 text = "Proximo"
             )
