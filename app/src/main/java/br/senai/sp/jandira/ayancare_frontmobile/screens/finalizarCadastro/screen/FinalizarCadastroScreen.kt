@@ -303,12 +303,11 @@ fun FinalizarCadastroScreen(
                         if (id_paciente != null) {
                             isUploading.value = true
                             bitmap.value?.let { bitmap ->
-                                UploadingImageToFireBase(bitmap, context as ComponentActivity) { success ->
-                                    isUploading.value = false
-                                    if (success) {
-                                        Toast.makeText(context, "Upload Bem-Sucedido", Toast.LENGTH_SHORT).show()
-
-                                        // Agora que o upload foi bem-sucedido, você pode chamar a função finalizarCadastro
+                                UploadingImageToFireBase(bitmap, context as ComponentActivity) { imageURL ->
+                                    if (imageURL != null) {
+                                        // Aqui, imageURL contém a URL da imagem após o upload bem-sucedido
+                                        Toast.makeText(context, "Upload Bem-Sucedido. URL: $imageURL", Toast.LENGTH_SHORT).show()
+                                        // Continue com a função finalizarCadastro, passando a imageURL se necessário
                                         finalizarCadastro(
                                             token = token.toString(),
                                             id = id_paciente.toInt(),
@@ -316,7 +315,7 @@ fun FinalizarCadastroScreen(
                                             data_nascimento = selectedDate.toAmericanDateFormat(),
                                             email = email.toString(),
                                             senha = senha.toString(),
-                                            foto = foto.toString(),
+                                            foto = imageURL, // Use a imageURL
                                             cpf = cpfState,
                                             id_endereco_paciente = 1,
                                             genero = selectedDrop
@@ -352,23 +351,33 @@ fun String.toAmericanDateFormat(
 
 
 //Função de Upload
-fun UploadingImageToFireBase(bitmap: Bitmap, context: ComponentActivity, callback: (Boolean) -> Unit){
+fun UploadingImageToFireBase(bitmap: Bitmap, context: ComponentActivity, callback: (String?) -> Unit){
 
-    val  storageRef = Firebase.storage.reference
-    val imageRef = storageRef.child("images/${bitmap}")
+        val storageRef = Firebase.storage.reference
+        val imageRef = storageRef.child("images/${bitmap}")
 
-    val baos = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos)
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
 
-    val imageData = baos.toByteArray()
+        val imageData = baos.toByteArray()
 
-    imageRef.putBytes(imageData)
-        .addOnSuccessListener {
-            callback (true)
-        }.addOnFailureListener { e ->
-            // Aqui você trata a falha
-            callback(false)
-            // Você pode imprimir uma mensagem de erro ou registrar o erro para depuração
-            Log.e("FirebaseStorage", "Erro ao fazer upload da imagem: $e")
-        }
+        imageRef.putBytes(imageData)
+            .addOnSuccessListener { taskSnapshot ->
+                // Upload bem-sucedido
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    // Aqui você obtém a URL da imagem após o upload
+                    val imageURL = uri.toString()
+                    callback(imageURL)
+                }.addOnFailureListener { e ->
+                    // Tratar erro ao obter a URL
+                    callback(null)
+                    Log.e("FirebaseStorage", "Erro ao obter a URL da imagem: $e")
+                }
+            }
+            .addOnFailureListener { e ->
+                // Tratar erro ao fazer o upload
+                callback(null)
+                // Você pode imprimir uma mensagem de erro ou registrar o erro para depuração
+                Log.e("FirebaseStorage", "Erro ao fazer upload da imagem: $e")
+            }
 }
