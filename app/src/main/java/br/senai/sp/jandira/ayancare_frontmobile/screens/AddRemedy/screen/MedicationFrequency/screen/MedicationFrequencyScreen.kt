@@ -134,7 +134,7 @@ fun MedicationFrequencyScreen(
                 Spacer(modifier = Modifier.height(50.dp))
 
                 SelectOptionMedicationFrequency(
-                    //options = options,
+                    options = options,
                     onSelectionChanged = {
                         isSelectState = it
                     },

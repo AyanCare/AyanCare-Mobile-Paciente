@@ -26,6 +26,7 @@ class CadastroRepository {
         data_nascimento: String,
         email: String,
         senha: String,
+        foto:String,
         cpf: String,
         id_endereco_paciente: Int,
         genero: String
@@ -36,6 +37,7 @@ class CadastroRepository {
             addProperty("data_nascimento", data_nascimento)
             addProperty("email", email)
             addProperty("senha", senha)
+            addProperty("foto", foto)
             addProperty("cpf", cpf)
             addProperty("id_endereco_paciente", id_endereco_paciente)
             addProperty("genero", genero)
