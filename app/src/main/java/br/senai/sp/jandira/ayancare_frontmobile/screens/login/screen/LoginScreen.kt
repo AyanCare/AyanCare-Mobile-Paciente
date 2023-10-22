@@ -127,6 +127,7 @@ fun LoginScreen(
                         val id = pacienteObject.getInt("id")
                         val nome = pacienteObject.getString("nome")
                         val email = pacienteObject.getString("email")
+                        val foto = pacienteObject.getString("foto")
                         val dataNascimento = pacienteObject.getString("data_nascimento")
                         val genero = pacienteObject.getString("genero")
                         val tipo_usuario = jsonObject.getString("tipo")
@@ -138,6 +139,7 @@ fun LoginScreen(
                                 nome = nome,
                                 token = token!!,
                                 email = email,
+                                foto = foto,
                                 dataNascimento = dataNascimento,
                                 genero = genero,
                                 tipo = tipo_usuario
@@ -154,6 +156,7 @@ fun LoginScreen(
                                 token = token!!,
                                 email = email,
                                 dataNascimento = dataNascimento,
+                                foto = foto,
                                 genero = genero,
                                 tipo = tipo_usuario
                             )

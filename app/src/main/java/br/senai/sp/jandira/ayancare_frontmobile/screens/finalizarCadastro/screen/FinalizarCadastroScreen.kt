@@ -1,8 +1,15 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen
 
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -31,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -56,7 +64,10 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.compon
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.google.firebase.Firebase
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -75,24 +86,35 @@ fun FinalizarCadastroScreen(
     var selectedDate by remember { mutableStateOf("") }
     var selectedDrop by remember { mutableStateOf("") }
 
-    //Obter foto da galeria de imagens
-    //variavel que vai guardar a uri
-    var photoUri by remember {
-        mutableStateOf<Uri?>(null)
+    //FireBase
+
+    val isUploading = remember{
+        mutableStateOf(false)
     }
 
-    val launcher = rememberLauncherForActivityResult(
+    val img:Bitmap = BitmapFactory.decodeResource(Resources.getSystem(), android.R.drawable.ic_menu_gallery)
+    val bitmap = remember {
+        mutableStateOf(img)
+    }
+
+
+    val launcherImage = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
-    ) {
-        photoUri = it
-    }
+    ){
+        if (Build.VERSION.SDK_INT < 28){
+            bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver,it)
 
-    var painter = rememberAsyncImagePainter(
-        ImageRequest.Builder(LocalContext.current).data(photoUri).build()
-    )
+        }else{
+            val source = it?.let {
+                    it1 -> ImageDecoder.createSource(context.contentResolver, it1)
+            }
+            bitmap.value = source?.let { it1 -> ImageDecoder.decodeBitmap(it1)}!!
+        }
+    }
 
     val id = localStorage.lerValor(context, "id_paciente")
     val token = localStorage.lerValor(context, "token_paciente")
+    val foto = localStorage.lerValor(context, "foto_paciente")
     val nome = localStorage.lerValor(context, "nome_paciente")
     val email = localStorage.lerValor(context, "email_paciente")
     val senha = localStorage.lerValor(context, "senha_paciente")
@@ -106,6 +128,7 @@ fun FinalizarCadastroScreen(
         data_nascimento: String,
         email: String,
         senha: String,
+        foto:String,
         cpf: String,
         id_endereco_paciente: Int,
         genero: String
@@ -120,6 +143,7 @@ fun FinalizarCadastroScreen(
                 data_nascimento,
                 email,
                 senha,
+                foto,
                 cpf,
                 id_endereco_paciente,
                 genero
@@ -139,6 +163,7 @@ fun FinalizarCadastroScreen(
                     nome = nome,
                     token = token!!,
                     email = email,
+                    foto= foto,
                     dataNascimento = selectedDate,
                     genero = selectedDrop,
                     tipo = "Paciente"
@@ -217,7 +242,7 @@ fun FinalizarCadastroScreen(
                             )
                         ) {
                             Image(
-                                painter = painter,
+                                bitmap = bitmap.value.asImageBitmap(),
                                 contentDescription = "imagem do usuário",
                                 //colorFilter = ColorFilter.tint(colorResource(id = R.color.pink_login)),
                                 modifier = Modifier.fillMaxSize(),
@@ -234,11 +259,11 @@ fun FinalizarCadastroScreen(
                                 .offset(x = 3.dp, y = 3.dp)
                                 .size(30.dp)
                                 .clickable {
-                                    launcher.launch("image/*")
+                                    launcherImage.launch("image/*")
                                 },
-                        )
-                    }
 
+                            )
+                    }
                     Spacer(modifier = Modifier.height(20.dp))
 
                     TextFieldNumber(
@@ -276,18 +301,34 @@ fun FinalizarCadastroScreen(
                     text = "Finalizar",
                     onClick = {
                         if (id_paciente != null) {
-                            finalizarCadastro(
-                                token = token.toString(),
-                                id = id_paciente.toInt(),
-                                nome = nome.toString(),
-                                data_nascimento = selectedDate.toAmericanDateFormat(),
-                                email = email.toString(),
-                                senha = senha.toString(),
-                                cpf = cpfState,
-                                id_endereco_paciente = 1,
-                                genero = selectedDrop
-                            )
+                            isUploading.value = true
+                            bitmap.value?.let { bitmap ->
+                                UploadingImageToFireBase(bitmap, context as ComponentActivity) { success ->
+                                    isUploading.value = false
+                                    if (success) {
+                                        Toast.makeText(context, "Upload Bem-Sucedido", Toast.LENGTH_SHORT).show()
+
+                                        // Agora que o upload foi bem-sucedido, você pode chamar a função finalizarCadastro
+                                        finalizarCadastro(
+                                            token = token.toString(),
+                                            id = id_paciente.toInt(),
+                                            nome = nome.toString(),
+                                            data_nascimento = selectedDate.toAmericanDateFormat(),
+                                            email = email.toString(),
+                                            senha = senha.toString(),
+                                            foto = foto.toString(),
+                                            cpf = cpfState,
+                                            id_endereco_paciente = 1,
+                                            genero = selectedDrop
+                                        )
+                                    } else {
+                                        Toast.makeText(context, "Falha ao fazer o upload", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
                         }
+
+
                     }
                 )
             }
@@ -307,4 +348,27 @@ fun String.toAmericanDateFormat(
         timeZone = TimeZone.getTimeZone("GMT")
     }
     return formatter.format(date)
+}
+
+
+//Função de Upload
+fun UploadingImageToFireBase(bitmap: Bitmap, context: ComponentActivity, callback: (Boolean) -> Unit){
+
+    val  storageRef = Firebase.storage.reference
+    val imageRef = storageRef.child("images/${bitmap}")
+
+    val baos = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG,100,baos)
+
+    val imageData = baos.toByteArray()
+
+    imageRef.putBytes(imageData)
+        .addOnSuccessListener {
+            callback (true)
+        }.addOnFailureListener { e ->
+            // Aqui você trata a falha
+            callback(false)
+            // Você pode imprimir uma mensagem de erro ou registrar o erro para depuração
+            Log.e("FirebaseStorage", "Erro ao fazer upload da imagem: $e")
+        }
 }

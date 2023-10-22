@@ -12,6 +12,7 @@ fun saveLogin (
     dataNascimento: String,
     genero: String,
     email: String,
+    foto:String,
     tipo: String
 ) : Long {
 
@@ -22,6 +23,7 @@ fun saveLogin (
         email = email,
         dataNascimento = dataNascimento,
         genero = genero,
+        foto = foto,
         tipo_usuario = tipo
     )
 
