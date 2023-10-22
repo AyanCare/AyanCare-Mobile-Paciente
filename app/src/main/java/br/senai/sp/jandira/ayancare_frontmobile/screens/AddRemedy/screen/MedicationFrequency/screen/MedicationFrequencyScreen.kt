@@ -82,22 +82,19 @@ fun MedicationFrequencyScreen(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
+                .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 60.dp)
                 .fillMaxSize()
         ) {
-
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Image(
                     painter = painterResource(id = R.drawable.calendario),
-                    contentDescription = "",
+                    contentDescription = "calendario",
                     modifier = Modifier
                         .size(71.dp)
                 )
-
                 Spacer(modifier = Modifier.height(50.dp))
-
                 Text(
                     text = "Com que frequência você toma \neste medicamento? ",
                     fontSize = 18.sp,
@@ -106,9 +103,7 @@ fun MedicationFrequencyScreen(
                     color = Color(0xFF35225F),
                     textAlign = TextAlign.Center
                 )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
+                Spacer(modifier = Modifier.height(5.dp))
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
@@ -130,11 +125,9 @@ fun MedicationFrequencyScreen(
                         color = Color(0xFF35225F)
                     )
                 }
-
-                Spacer(modifier = Modifier.height(50.dp))
-
+                Spacer(modifier = Modifier.height(20.dp))
                 SelectOptionMedicationFrequency(
-                    //options = options,
+                    options = options,
                     onSelectionChanged = {
                         isSelectState = it
                     },
@@ -144,7 +137,14 @@ fun MedicationFrequencyScreen(
                 Log.e("tag", "MedicationFrequencyScreen: $isSelectState")
 
             }
-
+        }
+        Column (
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 20.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
             DefaultButton(
                 onClick = {
                     navController.navigate("add_stock_screen")
