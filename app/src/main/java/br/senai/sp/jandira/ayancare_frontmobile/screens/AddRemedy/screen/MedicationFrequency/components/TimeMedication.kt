@@ -24,8 +24,6 @@ fun TimeMedication(
     var showTimePicker by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
-            .width(width.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -51,8 +49,6 @@ fun TimeMedication(
                 }
             }
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         BackHandler(enabled = showTimePicker) {
             showTimePicker = false

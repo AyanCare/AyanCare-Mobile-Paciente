@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
@@ -105,7 +106,7 @@ fun SelectOptionMedicationFrequency(
             ) {
                 DropdownGender(context = context, gender = "", onValueChange = {})
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.Center
                 ) {
                     TimeMedication(width = 150)
@@ -229,7 +230,7 @@ fun AddNewRow(index: Int) {
             }
 
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.Center
             ) {
                 TimeMedication(width = 150)
@@ -242,4 +243,10 @@ fun AddNewRow(index: Int) {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun fsdfs() {
+    AddNewRow(index = 1)
 }
