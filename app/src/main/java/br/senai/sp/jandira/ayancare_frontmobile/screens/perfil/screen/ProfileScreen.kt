@@ -62,6 +62,7 @@ fun ProfileScreen(
 
     val paciente = array[0]
     var id = paciente.id.toLong()
+    var foto = paciente.foto
 
     // Mantenha uma lista de  patients no estado da tela
     var listPaciente by remember {
@@ -135,7 +136,7 @@ fun ProfileScreen(
                     .fillMaxSize()
             ) {
                 CircleProfile(
-                    painter = painterResource(id = R.drawable.instrucao3)
+                    painter = "$foto"
                 )
 
                 Text(
@@ -165,7 +166,6 @@ fun ProfileScreen(
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
-
 
                 LazyRow() {
                     items(listPaciente.doencas_cronicas.reversed()) {

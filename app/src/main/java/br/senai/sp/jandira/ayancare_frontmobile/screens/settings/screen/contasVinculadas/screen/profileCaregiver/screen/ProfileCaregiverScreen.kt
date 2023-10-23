@@ -79,7 +79,7 @@ fun ProfileCaregiverScreen(
                     .fillMaxSize()
             ) {
                 CircleProfile(
-                    painter = painterResource(id = R.drawable.instrucao3)
+                    painter = "painterResource(id = R.drawable.instrucao3)"
                 )
 
                 Text(
