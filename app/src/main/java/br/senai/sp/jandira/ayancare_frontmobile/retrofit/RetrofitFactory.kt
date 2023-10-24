@@ -6,6 +6,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.service.Medidas
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.PacienteService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.service.RemedyService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ResponsavelService
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.TesteHumorService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -49,6 +50,10 @@ object RetrofitFactory {
 
     fun getMedidas(): MedidasService {
         return retrofitFactory.create(MedidasService::class.java)
+    }
+
+    fun getTesteHumor(): TesteHumorService {
+        return retrofitFactory.create(TesteHumorService::class.java)
     }
 
 }

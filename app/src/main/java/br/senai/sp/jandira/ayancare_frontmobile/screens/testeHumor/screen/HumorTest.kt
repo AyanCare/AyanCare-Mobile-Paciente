@@ -1,7 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,41 +10,80 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.TesteHumorResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Exercicio
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Humor
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Sintoma
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.CardMoodToday
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Exercise
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Symptoms
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun HumorTestScreen(navController: NavController) {
 
     val text = rememberSaveable { mutableStateOf("") }
+
+    var listTesteHumor_Humor by remember {
+        mutableStateOf<List<Humor>>(emptyList())
+    }
+
+    var listTesteHumor_Sintoma by remember {
+        mutableStateOf<List<Sintoma>>(emptyList())
+    }
+
+    var listTesteHumor_Exercicio by remember {
+        mutableStateOf<List<Exercicio>>(emptyList())
+    }
+
+
+    //Cria uma chamada para o endpoint
+    var call = RetrofitFactory.getTesteHumor().getTesteHumor()
+
+    call.enqueue(object : Callback<TesteHumorResponse> {
+        override fun onResponse(
+            call: Call<TesteHumorResponse>,
+            response: Response<TesteHumorResponse>
+        ) {
+            listTesteHumor_Humor = response.body()!!.opcoes.humores
+            listTesteHumor_Sintoma = response.body()!!.opcoes.sintomas
+            listTesteHumor_Exercicio = response.body()!!.opcoes.exercicios
+        }
+        override fun onFailure(call: Call<TesteHumorResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
 
     Surface(
         color = Color(248, 240, 236)
@@ -54,7 +92,7 @@ fun HumorTestScreen(navController: NavController) {
             //verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
+                .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 20.dp)
                 .fillMaxSize()
         ) {
             Text(
@@ -89,8 +127,8 @@ fun HumorTestScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 LazyRow() {
-                    items(10) {
-                        CardMoodToday()
+                    items(listTesteHumor_Humor) {
+                        CardMoodToday(text = it.resposta)
                         Spacer(modifier = Modifier.width(5.dp))
                     }
                 }
@@ -110,8 +148,8 @@ fun HumorTestScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(10.dp))
 
                     LazyRow() {
-                        items(10) {
-                            Exercise()
+                        items(listTesteHumor_Exercicio) {
+                            Exercise(it.exercicio)
                             Spacer(modifier = Modifier.width(10.dp))
                         }
                     }
@@ -131,13 +169,13 @@ fun HumorTestScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 LazyRow() {
-                    items(10) {
-                        Symptoms()
+                    items(listTesteHumor_Sintoma) {
+                        Symptoms(it.sintoma)
                         Spacer(modifier = Modifier.width(5.dp))
                     }
                 }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Column {
                     Text(
@@ -149,7 +187,7 @@ fun HumorTestScreen(navController: NavController) {
 
                     )
 
-                    TextField(
+                    OutlinedTextField(
                         value = text.value,
                         onValueChange = { text.value = it },
                         modifier = Modifier
