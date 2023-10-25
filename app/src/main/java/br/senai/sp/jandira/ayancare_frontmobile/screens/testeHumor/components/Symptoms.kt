@@ -26,13 +26,13 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Symptoms(
-    text: String
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
 ) {
 
-    var selected by remember { mutableStateOf(false) }
-
     FilterChip(
-        onClick = { selected = !selected },
+        onClick = { onClick() },
         label = {
             Text(
                 text = text,

@@ -34,19 +34,19 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardMoodToday(
-    text: String
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
 ) {
-    var selected by remember { mutableStateOf(false) }
-
     FilterChip(
-        onClick = { selected = !selected },
+        onClick = { onClick() },
         label = {
             Text(
                 text = text,
                 fontSize = 16.sp,
                 fontFamily = FontFamily(Font(R.font.poppins)),
                 fontWeight = FontWeight(600),
-                color = if (selected)Color.White else Color(0xFF35225F)
+                color = if (selected) Color.White else Color(0xFF35225F)
             )
         },
         shape = RoundedCornerShape(15.dp),
@@ -78,7 +78,4 @@ fun CardMoodToday(
             selectedContainerColor = Color(0xFF35225F)
         )
     )
-
-    Log.e("como vc está se sentindo hoje?", "CardMoodToday: $selected + $text" )
-
 }

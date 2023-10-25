@@ -15,10 +15,6 @@ interface PacienteService {
     fun getPatientById(@Path("id") id: String): retrofit2.Call<PacienteResponse>
 
     @Headers("Content-Type: application/json")
-    @POST("/paciente")
-    suspend fun createPatient(@Body body: JsonObject): Response<JsonObject>
-
-    @Headers("Content-Type: application/json")
     @POST("/v1/ayan/doenca")
     suspend fun createChronicDiseases(@Body body: JsonObject): Response<JsonObject>
 

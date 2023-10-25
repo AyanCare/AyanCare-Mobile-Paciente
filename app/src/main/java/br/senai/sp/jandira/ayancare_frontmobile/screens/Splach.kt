@@ -160,7 +160,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("humor_test_screen"){
-                            HumorTestScreen(navController = navController)
+                            HumorTestScreen(navController = navController, lifecycleScope = lifecycleScope)
                         }
 
                         composable("add_remedy_screen"){

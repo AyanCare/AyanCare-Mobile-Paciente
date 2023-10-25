@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +20,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +35,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
@@ -42,17 +45,27 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.TesteHumorRe
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Exercicio
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Humor
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Sintoma
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.TesteHumorRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.CardMoodToday
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Exercise
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Symptoms
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun HumorTestScreen(navController: NavController) {
+fun HumorTestScreen(
+    navController: NavController,
+    lifecycleScope: LifecycleCoroutineScope
+) {
 
-    val text = rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
+
+    var descricaoState by remember {
+        mutableStateOf("")
+    }
 
     var listTesteHumor_Humor by remember {
         mutableStateOf<List<Humor>>(emptyList())
@@ -79,11 +92,51 @@ fun HumorTestScreen(navController: NavController) {
             listTesteHumor_Sintoma = response.body()!!.opcoes.sintomas
             listTesteHumor_Exercicio = response.body()!!.opcoes.exercicios
         }
+
         override fun onFailure(call: Call<TesteHumorResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
 
     })
+
+    fun testeHumor(
+        observacao: String,
+        id_paciente: Int,
+        escolhas: List<String>,
+    ) {
+
+        val testeHumorRepository = TesteHumorRepository()
+        lifecycleScope.launch {
+
+            val response = testeHumorRepository.registerTesteHumor(
+                observacao,
+                id_paciente,
+                escolhas
+            )
+
+            if (response.isSuccessful) {
+                Log.e(MainActivity::class.java.simpleName, "teste_humor bem-sucedido")
+                Log.e("teste_humor", "teste_humor: ${response.body()}")
+                val checagem = response.body()?.get("status")
+
+                Log.e("teste_humor", "teste_humor: ${checagem}")
+
+                if (checagem.toString() == "404") {
+                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+
+                    navController.navigate("main_screen")
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o teste_humor: $errorBody")
+                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
 
     Surface(
         color = Color(248, 240, 236)
@@ -114,9 +167,9 @@ fun HumorTestScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            Column (
+            Column(
                 verticalArrangement = Arrangement.SpaceBetween
-            ){
+            ) {
                 Text(
                     text = "Como você está hoje?",
                     fontSize = 16.sp,
@@ -126,9 +179,36 @@ fun HumorTestScreen(navController: NavController) {
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(10.dp))
+
+                //val items = listOf(listTesteHumor_Humor[0].resposta)
+                var selectedItems by remember {
+                    mutableStateOf(listOf<String>())
+                }
+
                 LazyRow() {
                     items(listTesteHumor_Humor) {
-                        CardMoodToday(text = it.resposta)
+                        val isSelected = selectedItems.contains(it.resposta)
+                        var selected by remember {
+                            mutableStateOf(false)
+                        }
+
+                        CardMoodToday(
+                            text = it.resposta,
+                            selected = isSelected,
+                            onClick = {
+                                if (!selected) {
+                                    selectedItems = selectedItems + it.resposta
+                                    selected = true
+                                } else {
+                                    selectedItems = selectedItems.filter { item ->
+                                        item != it.resposta
+                                    }
+                                    selected = false
+                                }
+                                Log.e("TAG", "HumorTestScreen: $selectedItems")
+                            }
+                        )
+
                         Spacer(modifier = Modifier.width(5.dp))
                     }
                 }
@@ -149,7 +229,29 @@ fun HumorTestScreen(navController: NavController) {
 
                     LazyRow() {
                         items(listTesteHumor_Exercicio) {
-                            Exercise(it.exercicio)
+
+                            val isSelected = selectedItems.contains(it.exercicio)
+                            var selected by remember {
+                                mutableStateOf(false)
+                            }
+
+                            Exercise(
+                                text = it.exercicio,
+                                selected = isSelected,
+                                onClick = {
+                                    if (!selected) {
+                                        selectedItems = selectedItems + it.exercicio
+                                        selected = true
+                                    } else {
+                                        selectedItems = selectedItems.filter { item ->
+                                            item != it.exercicio
+                                        }
+                                        selected = false
+                                    }
+                                    Log.e("TAG", "HumorTestScreen: $selectedItems")
+                                }
+                            )
+
                             Spacer(modifier = Modifier.width(10.dp))
                         }
                     }
@@ -170,7 +272,29 @@ fun HumorTestScreen(navController: NavController) {
 
                 LazyRow() {
                     items(listTesteHumor_Sintoma) {
-                        Symptoms(it.sintoma)
+
+                        val isSelected = selectedItems.contains(it.sintoma)
+                        var selected by remember {
+                            mutableStateOf(false)
+                        }
+
+                        Symptoms(
+                            text = it.sintoma,
+                            selected = isSelected,
+                            onClick = {
+                                if (!selected) {
+                                    selectedItems = selectedItems + it.sintoma
+                                    selected = true
+                                } else {
+                                    selectedItems = selectedItems.filter { item ->
+                                        item != it.sintoma
+                                    }
+                                    selected = false
+                                }
+                                Log.e("TAG", "HumorTestScreen: $selectedItems")
+                            }
+                        )
+
                         Spacer(modifier = Modifier.width(5.dp))
                     }
                 }
@@ -188,8 +312,8 @@ fun HumorTestScreen(navController: NavController) {
                     )
 
                     OutlinedTextField(
-                        value = text.value,
-                        onValueChange = { text.value = it },
+                        value = descricaoState,
+                        onValueChange = { descricaoState = it },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(140.dp)
@@ -202,14 +326,27 @@ fun HumorTestScreen(navController: NavController) {
                     )
                 }
 
-                Column (
+                Column(
                     modifier = Modifier
                         .fillMaxSize(),
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     DefaultButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            testeHumor(
+                                observacao = descricaoState,
+                                id_paciente = 44,
+                                escolhas = selectedItems
+                            )
+                            Log.e("TAG", "HumorTestScreen: ${
+                                testeHumor(
+                                    observacao = descricaoState,
+                                    id_paciente = 47,
+                                    escolhas = selectedItems
+                                )
+                            }", )
+                        },
                         text = "Enviar"
                     )
                     Spacer(modifier = Modifier.height(25.dp))

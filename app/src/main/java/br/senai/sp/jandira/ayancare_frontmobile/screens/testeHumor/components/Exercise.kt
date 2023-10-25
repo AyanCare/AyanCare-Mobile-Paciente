@@ -29,27 +29,10 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
 fun Exercise(
-    text: String
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
 ) {
-    var selected by remember { mutableStateOf(false) }
-//    Column (
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ){
-//        Image(
-//            painter = painterResource(id = R.drawable.google) ,
-//            contentDescription = "",
-//            modifier = Modifier
-//                .size(50.dp)
-//        )
-//        Text(
-//            text = text,
-//            fontSize = 16.sp,
-//            fontFamily = FontFamily(Font(R.font.poppins)),
-//            fontWeight = FontWeight(500),
-//            color = Color(0xFF9986BD)
-//        )
-//    }
-
     Box(
         modifier = Modifier
             .background(
@@ -57,7 +40,9 @@ fun Exercise(
                 shape = RoundedCornerShape(14.dp)
             )
             .border(1.dp, Color(0xFF35225F), shape = RoundedCornerShape(14.dp))
-            .clickable { selected = !selected }
+            .clickable {
+                onClick()
+            }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,11 +64,4 @@ fun Exercise(
         }
     }
 
-
-}
-
-@Preview
-@Composable
-fun fsdf() {
-    Exercise(text = "teste")
 }
