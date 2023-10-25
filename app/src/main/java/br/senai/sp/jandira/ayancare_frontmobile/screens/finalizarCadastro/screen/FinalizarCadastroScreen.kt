@@ -4,7 +4,6 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
@@ -62,8 +61,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components.ProgressBar
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
-import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.google.firebase.Firebase
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.launch
@@ -163,7 +160,7 @@ fun FinalizarCadastroScreen(
 
                 Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
 
-                navController.navigate("endereco_paciente_screen")
+                navController.navigate("add_disease_screen")
 
             } else {
 
@@ -280,7 +277,7 @@ fun FinalizarCadastroScreen(
                     )
 
                     // Agora você pode acessar 'dateTyped' que contém o valor digitado
-                    Text("genero digitada na tela principal: ${cpfState + selectedDate + selectedDrop}")
+                    //Text("genero digitada na tela principal: ${cpfState + selectedDate + selectedDrop}")
                 }
 
             }
@@ -299,9 +296,14 @@ fun FinalizarCadastroScreen(
                                 ) { imageURL ->
                                     if (imageURL != null) {
                                         // Aqui, imageURL contém a URL da imagem após o upload bem-sucedido
+//                                        Toast.makeText(
+//                                            context,
+//                                            "Upload Bem-Sucedido. URL: $imageURL",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
                                         Toast.makeText(
                                             context,
-                                            "Upload Bem-Sucedido. URL: $imageURL",
+                                            "Upload Bem-Sucedido.",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                         // Continue com a função finalizarCadastro, passando a imageURL se necessário
@@ -330,7 +332,7 @@ fun FinalizarCadastroScreen(
                     }
                 )
             }
-            ProgressBar(text = "2 / 4", valor = 165)
+            ProgressBar(text = "2 / 3", valor = 220)
         }
     }
 }

@@ -22,7 +22,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +44,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.TesteHumorRe
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Exercicio
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Humor
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Sintoma
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.TesteHumorRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.CardMoodToday
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Exercise
@@ -342,7 +340,7 @@ fun HumorTestScreen(
                             Log.e("TAG", "HumorTestScreen: ${
                                 testeHumor(
                                     observacao = descricaoState,
-                                    id_paciente = 47,
+                                    id_paciente = 49,
                                     escolhas = selectedItems
                                 )
                             }", )
