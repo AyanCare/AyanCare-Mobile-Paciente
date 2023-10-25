@@ -53,13 +53,13 @@ fun OptionEvent() {
             aoMudar = {}
         )
         Spacer(modifier = Modifier.height(5.dp))
-        Text(
-            text = "Paciente",
-            fontSize = 15.sp,
-            fontFamily = FontFamily(Font(R.font.poppins)),
-            fontWeight = FontWeight(600),
-            color = Color(0xFF191D23)
-        )
+//        Text(
+//            text = "Paciente",
+//            fontSize = 15.sp,
+//            fontFamily = FontFamily(Font(R.font.poppins)),
+//            fontWeight = FontWeight(600),
+//            color = Color(0xFF191D23)
+//        )
         //DropdownGender()
         Spacer(modifier = Modifier.height(40.dp))
         Column {

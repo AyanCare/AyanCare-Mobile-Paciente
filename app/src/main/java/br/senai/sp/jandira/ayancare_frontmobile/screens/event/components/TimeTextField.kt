@@ -27,7 +27,7 @@ fun TimeTextField() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(
+        OutlinedTextField(
             value = "${formatter.format(selectedTime.time)}",
             onValueChange = {
                 //showTimePicker = true

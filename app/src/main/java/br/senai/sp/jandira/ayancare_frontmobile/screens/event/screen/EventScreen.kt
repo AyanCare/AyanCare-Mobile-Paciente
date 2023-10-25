@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
@@ -84,7 +85,7 @@ fun EventScreen(
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFFE7EAEE))
                 ) {
-                    androidx.compose.material.Text(
+                    Text(
                         text = "Cancelar",
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
@@ -111,7 +112,7 @@ fun EventScreen(
                         tint = Color(0xFFFFFFFF)
                     )
                     //Spacer(modifier = Modifier.width(4.dp))
-                    androidx.compose.material.Text(
+                    Text(
                         text = "Criar Evento",
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
@@ -157,13 +158,13 @@ fun EventScreen(
                     aoMudar = {}
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(
-                    text = "Tipo",
-                    fontSize = 15.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins)),
-                    fontWeight = FontWeight(600),
-                    color = Color(0xFF191D23)
-                )
+//                Text(
+//                    text = "Tipo",
+//                    fontSize = 15.sp,
+//                    fontFamily = FontFamily(Font(R.font.poppins)),
+//                    fontWeight = FontWeight(600),
+//                    color = Color(0xFF191D23)
+//                )
                 //DropdownGender()
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(
@@ -187,11 +188,11 @@ fun EventScreen(
                             Card(
                                 Modifier
                                     .size(16.dp)
-                                    .background(cor)
+                                    .background(cor, CircleShape)
                                     .clickable {
                                         corFundo = cor
                                     },
-                                shape = RoundedCornerShape(10.dp),
+                                shape = CircleShape,
                                 backgroundColor = cor
                             ) {}
                             Spacer(modifier = Modifier.width(8.dp))
@@ -201,7 +202,7 @@ fun EventScreen(
                         modifier = Modifier
                             .width(40.dp)
                             .height(20.dp)
-                            .background(corFundo),
+                            .background(corFundo, CircleShape),
                     ){}
                 }
                 Spacer(modifier = Modifier.height(40.dp))
