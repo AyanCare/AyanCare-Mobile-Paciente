@@ -105,9 +105,14 @@ fun ResearchField(
                 }
             )
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-
-            Row(modifier = Modifier.fillMaxWidth()) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier
+                .fillMaxWidth()
+            ) {
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -152,7 +157,6 @@ fun ResearchField(
                     }
                 )
             }
-
             AnimatedVisibility(visible = expanded) {
                 Card(
                     modifier = Modifier
@@ -160,7 +164,6 @@ fun ResearchField(
                         .width(textFieldSize.width.dp),
                     elevation = 15.dp
                 ) {
-
                     LazyColumn(
                         modifier = Modifier.heightIn(max = 100.dp),
                     ) {
@@ -187,17 +190,11 @@ fun ResearchField(
                             }
                         }
                         localStorage.salvarValor(context, remedy, "nome_medicamento")
-
                     }
-
                 }
             }
-
         }
-
     }
-
-
 }
 
 @Composable
