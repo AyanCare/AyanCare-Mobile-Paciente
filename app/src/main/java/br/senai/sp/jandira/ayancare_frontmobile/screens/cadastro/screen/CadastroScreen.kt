@@ -51,7 +51,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.CadastroRepository
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.service.UserService
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
-import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 

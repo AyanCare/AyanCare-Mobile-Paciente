@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.screen.profileCaregiver.screen
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,11 +19,14 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,11 +35,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cuidador.CuidadorResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cuidador.service.Cuidador
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CircleProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.screen.profileCaregiver.components.CardTask
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun ProfileCaregiverScreen(
     navController: NavController,
@@ -48,8 +59,46 @@ fun ProfileCaregiverScreen(
     val scrollState = rememberScrollState()
 
     var id = localStorage.lerValor(context, "id_cuidador")
+    val token = localStorage.lerValor(context, "token_paciente")
 
-    Log.e("TAG", "ProfileCaregiverScreen: $id", )
+    Log.e("TAG", "ProfileCaregiverScreen: $id")
+
+    var listCuidadores by remember {
+        mutableStateOf(
+            Cuidador(
+                id = 0,
+                nome = "",
+                foto = "",
+                data_nascimento = "",
+                descricao_experiencia = "",
+                genero = "",
+                endereco_id = 0,
+                logradouro = "",
+                bairro = "",
+                numero = 0,
+                cep = "",
+                cidade = "",
+                estado = "",
+            )
+        )
+    }
+
+    //Cria uma chamada para o endpoint
+    var call = RetrofitFactory.getCuidador().getCuidadorByID(token = token.toString(), id = id)
+
+    call.enqueue(object : Callback<CuidadorResponse> {
+        override fun onResponse(
+            call: Call<CuidadorResponse>,
+            response: Response<CuidadorResponse>
+        ) {
+            listCuidadores = response.body()!!.cuidador
+        }
+
+        override fun onFailure(call: Call<CuidadorResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
 
     Surface(
         color = Color(248, 240, 236)
@@ -62,7 +111,7 @@ fun ProfileCaregiverScreen(
             BoxProfile()
             IconButton(
                 onClick = {
-                    navController.popBackStack()
+                    navController.navigate("setting_screen")
                 }
             ) {
                 Icon(
@@ -83,7 +132,7 @@ fun ProfileCaregiverScreen(
                 )
 
                 Text(
-                    text = "listPaciente.nome",
+                    text = listCuidadores.nome,
                     fontSize = 24.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(500),
@@ -91,7 +140,7 @@ fun ProfileCaregiverScreen(
                 )
 
                 Text(
-                    text = "Paciente",
+                    text = "Cuidador",
                     fontSize = 16.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(400),
@@ -104,10 +153,11 @@ fun ProfileCaregiverScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp)
-                        .background(Color.White)
+                        .background(Color.White),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto ",
+                        text = listCuidadores.descricao_experiencia,
                         fontSize = 14.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(400),
