@@ -14,6 +14,7 @@ class TesteHumorRepository {
         observacao: String,
         id_paciente: Int,
         escolhas: List<String>,
+        data: String
     ): Response<JsonObject> {
         val requestBody = JsonObject().apply {
             addProperty("observacao", observacao)
@@ -25,6 +26,7 @@ class TesteHumorRepository {
                 escolhasArray.add(escolha)
             }
             add("escolhas", escolhasArray)
+            addProperty("data", data)
 
         }
 

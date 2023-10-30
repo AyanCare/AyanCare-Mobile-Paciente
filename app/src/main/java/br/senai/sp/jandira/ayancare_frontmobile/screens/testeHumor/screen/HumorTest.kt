@@ -52,6 +52,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
+import java.util.Date
 
 @Composable
 fun HumorTestScreen(
@@ -77,6 +79,10 @@ fun HumorTestScreen(
         mutableStateOf<List<Exercicio>>(emptyList())
     }
 
+    val data = LocalDate.now()
+
+    Log.i("TAG", "HumorTestScreen: $data")
+
 
     //Cria uma chamada para o endpoint
     var call = RetrofitFactory.getTesteHumor().getTesteHumor()
@@ -101,6 +107,7 @@ fun HumorTestScreen(
         observacao: String,
         id_paciente: Int,
         escolhas: List<String>,
+        data: String
     ) {
 
         val testeHumorRepository = TesteHumorRepository()
@@ -109,7 +116,8 @@ fun HumorTestScreen(
             val response = testeHumorRepository.registerTesteHumor(
                 observacao,
                 id_paciente,
-                escolhas
+                escolhas,
+                data
             )
 
             if (response.isSuccessful) {
@@ -133,9 +141,7 @@ fun HumorTestScreen(
                 Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
-
     Surface(
         color = Color(248, 240, 236)
     ) {
@@ -335,13 +341,15 @@ fun HumorTestScreen(
                             testeHumor(
                                 observacao = descricaoState,
                                 id_paciente = 44,
-                                escolhas = selectedItems
+                                escolhas = selectedItems,
+                                data = data.toString()
                             )
                             Log.e("TAG", "HumorTestScreen: ${
                                 testeHumor(
                                     observacao = descricaoState,
                                     id_paciente = 49,
-                                    escolhas = selectedItems
+                                    escolhas = selectedItems,
+                                    data = data.toString()
                                 )
                             }", )
                         },
@@ -361,16 +369,7 @@ fun HumorTestScreen(
                         }
                     )
                 }
-
-
             }
-
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun HumorTestScreenPreview() {
-//    HumorTestScreen()
-//}

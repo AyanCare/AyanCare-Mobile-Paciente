@@ -18,6 +18,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMed
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.screen.MedicationFrequencyScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.addRemedyNonExistent.screen.AddRemedyNonExistentScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.screen.CadastroScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.screen.AddContactScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.registroEmergencia.screen.ViewEmergencyScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.codigoRecuperacao.screen.CodigoRecuperacaoScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.esquecerSenha.recuperacaoEmail.screen.RecuperacaoEmailScreen
@@ -153,6 +154,10 @@ class SplashActivity : ComponentActivity() {
 
                         composable("emergencia_screen"){
                             ViewEmergencyScreen(navController = navController)
+                        }
+
+                        composable("add_contact_screen"){
+                            AddContactScreen(navController = navController, lifecycleScope = lifecycleScope)
                         }
 
                         composable("sugestoes_screen"){

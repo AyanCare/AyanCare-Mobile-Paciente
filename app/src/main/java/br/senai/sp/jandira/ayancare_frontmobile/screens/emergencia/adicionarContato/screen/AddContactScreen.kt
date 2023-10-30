@@ -1,5 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.screen
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,11 +21,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,15 +37,90 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
+import br.senai.sp.jandira.ayancare_frontmobile.components.ModalSuccess
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun AddContactScreen(navController: NavController) {
+fun AddContactScreen(
+    navController: NavController,
+    lifecycleScope: LifecycleCoroutineScope
+) {
+    var isDialogVisibleSuccess by remember { mutableStateOf(false) }
 
-    val text = rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+    var id = paciente.id.toLong()
+
+    var nomeState by remember {
+        mutableStateOf("")
+    }
+
+    var telefoneState by remember {
+        mutableStateOf("")
+    }
+
+    var localState by remember {
+        mutableStateOf("")
+    }
+
+    fun responsible(
+        nome: String,
+        numero: String,
+        local: String,
+        id_paciente: Int,
+        id_status_contato: Int
+    ) {
+        val responsibleRepository = ResponsibleRepository()
+        lifecycleScope.launch {
+            val response = responsibleRepository.registerResponsible(
+                nome,
+                numero,
+                local,
+                id_paciente,
+                id_status_contato
+            )
+            if (response.isSuccessful) {
+                Log.e(MainActivity::class.java.simpleName, "contact bem-sucedido")
+                Log.e("contact", "contact: ${response.body()}")
+                val checagem = response.body()?.get("status")
+
+                Log.e("contact", "contact: ${checagem}")
+
+                if (checagem.toString() == "404") {
+                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                } else {
+                    //Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+                    navController.navigate("emergencia_screen")
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o contact: $errorBody")
+                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    if (isDialogVisibleSuccess) {
+        ModalSuccess(
+            onDismiss = {}
+        )
+        LaunchedEffect(isDialogVisibleSuccess) {
+            delay(4000) // Aguarda 4 segundos
+            isDialogVisibleSuccess = false // Fecha o modal
+        }
+    }
 
     Surface(
         color = Color(248, 240, 236)
@@ -56,7 +137,9 @@ fun AddContactScreen(navController: NavController) {
                 contentDescription = "add responsible",
                 modifier = Modifier.size(50.dp)
             )
+
             Spacer(modifier = Modifier.height(40.dp))
+
             Text(
                 text = "Adicionar Contato",
                 fontSize = 24.sp,
@@ -69,18 +152,18 @@ fun AddContactScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(40.dp))
 
             DefaultTextField(
-                valor = "",
+                valor = nomeState,
                 label = "Nome",
-                onValueChange = {},
+                onValueChange = { nomeState = it },
                 aoMudar = {}
             )
 
             Spacer(modifier = Modifier.height(50.dp))
 
             DefaultTextField(
-                valor = "",
+                valor = telefoneState,
                 label = "Telefone",
-                onValueChange = {},
+                onValueChange = { telefoneState = it },
                 aoMudar = {}
             )
 
@@ -94,8 +177,8 @@ fun AddContactScreen(navController: NavController) {
                     color = Color(0xFF191D23)
                 )
                 TextField(
-                    value = text.value,
-                    onValueChange = { text.value = it },
+                    value = localState,
+                    onValueChange = { localState = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(140.dp)
@@ -107,12 +190,8 @@ fun AddContactScreen(navController: NavController) {
                     colors = TextFieldDefaults.textFieldColors(
                         backgroundColor = Color(248, 240, 236)
                     )
-
-
-
                 )
             }
-
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -120,10 +199,21 @@ fun AddContactScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 DefaultButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        responsible(
+                            nome = nomeState,
+                            numero = telefoneState,
+                            local = localState,
+                            id_paciente = id.toInt(),
+                            id_status_contato = 1
+                        )
+                        isDialogVisibleSuccess = true
+                    },
                     text = "Adicionar"
                 )
+
                 Spacer(modifier = Modifier.height(25.dp))
+
                 Text(
                     text = "Cancelar",
                     fontSize = 14.sp,
@@ -134,13 +224,10 @@ fun AddContactScreen(navController: NavController) {
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier
                         .clickable {
-                            navController.navigate("responsible_screen")
+                            navController.navigate("emergencia_screen")
                         }
                 )
             }
-
-
         }
     }
-
 }

@@ -3,6 +3,7 @@ package br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.registroEmer
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,10 +14,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.IconButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Description
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,13 +34,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -49,25 +56,19 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ViewEmergencyScreen(
     navController: NavController
 ) {
-
-    //var phoneNumber by remember { mutableStateOf("966917301") }
     var switchState by remember { mutableStateOf(false) }
-
     val context = LocalContext.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
     val array = PacienteRepository(context = context).findUsers()
 
     val paciente = array[0]
     var id = paciente.id.toLong()
 
     // Mantenha uma lista de responsáveis no estado da tela
-    var listContato by remember {
+    var listResponsavel by remember {
         mutableStateOf(
             listOf(
                 Responsavel(0, "", "", "", 0, 0)
@@ -76,84 +77,207 @@ fun ViewEmergencyScreen(
     }
 
     //Cria uma chamada para o endpoint
-    //var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(idContatoPaciente = id)
-    var call = RetrofitFactory.getResponsible().getTodosResponsaveis()
+    var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(idContatoPaciente = id)
+    //var call = RetrofitFactory.getResponsible().getTodosResponsaveis()
 
     call.enqueue(object : Callback<ResponsavelResponse> {
         override fun onResponse(
             call: Call<ResponsavelResponse>,
             response: Response<ResponsavelResponse>
         ) {
+            Log.e("TAG", "onResponse: ${response.body()}")
 
-            Log.e("TAG", "onResponse: ${response.body()}" )
-            listContato = response.body()!!.contatos
+            if (response.body()!!.status == 404) {
+                Log.e("TAG", "a resposta está nula")
+                listResponsavel = emptyList()
+            } else {
+                listResponsavel = response.body()!!.contatos
+            }
 
-            Log.e("TAG", "onResponse: $listContato" )
+            Log.e("TAG", "onResponse: $listResponsavel")
         }
         override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
-
     })
 
-    Surface(
-        color = Color(214, 69, 69)
-    ) {
-        Column(
-            //verticalArrangement = Arrangement.SpaceAround,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
-                .fillMaxSize()
+    if (listResponsavel.isEmpty()) {
+        Surface(
+            color = Color(214, 69, 69)
         ) {
-            Text(
-                text = "Ligações de",
-                fontSize = 24.sp,
-                fontFamily = FontFamily(Font(R.font.poppins)),
-                fontWeight = FontWeight(500),
-                color = Color(0xFFFFFFFF),
-                textAlign = TextAlign.Center
-
-            )
-
-            Text(
-                text = "Emergência",
-                fontSize = 48.sp,
-                fontFamily = FontFamily(Font(R.font.poppins)),
-                fontWeight = FontWeight(500),
-                color = Color(0xFFFFFFFF),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.h4.copy(
-                    shadow = Shadow(
-                        offset = Offset(10f, 10f),
-                        blurRadius = 30f
+            IconButton(
+                onClick = {
+                    navController.popBackStack()
+                },
+                modifier = Modifier.padding(start = 15.dp, top = 15.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "",
+                    modifier = Modifier.size(30.dp),
+                    tint = Color(0xFFFFFFFF)
+                )
+            }
+            Column(
+                //verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
+                    .fillMaxSize()
+            ) {
+                Text(
+                    text = "Ligações de",
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins)),
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFFFFFFFF),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "Emergência",
+                    fontSize = 48.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins)),
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFFFFFFFF),
+                    textAlign = TextAlign.Center,
+                    style = androidx.compose.material.MaterialTheme.typography.h4.copy(
+                        shadow = Shadow(
+                            offset = Offset(10f, 10f),
+                            blurRadius = 30f
+                        )
                     )
                 )
-            )
 
-            Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(30.dp))
 
-            DefaultButton(onClick = { /*TODO*/ }, text = "Adicionar um novo contato")
+                DefaultButton(
+                    onClick = {
+                        navController.navigate("add_contact_screen")
+                    },
+                    text = "+ Adicionar um novo contato"
+                )
 
-            LazyColumn(){
-                items(5){
-                    CustomSwitchWithLabel(
-                        text = "Telefone Pessoal",
-                        phoneNumber = "11966927301",
-                        onSwitchChange = { newState ->
-                            switchState = newState
-                            if (switchState) {
-                                // Inicie a chamada telefônica aqui
-                                val intent = Intent(Intent.ACTION_DIAL)
-                                intent.data = Uri.parse("tel: 11966927301")
-                                context.startActivity(intent)
-                            }
-                        }
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Image(
+                        imageVector = Icons.Default.Description,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(50.dp)
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "Não existe nenhum responsável no momento",
+                        fontSize = 16.sp,
+                        lineHeight = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins)),
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF000000),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+            }
+        }
+    } else {
+        Surface(
+            color = Color(214, 69, 69)
+        ) {
+            IconButton(
+                onClick = {
+                    navController.popBackStack()
+                },
+                modifier = Modifier.padding(start = 15.dp, top = 15.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "",
+                    modifier = Modifier.size(30.dp),
+                    tint = Color(0xFFFFFFFF)
+                )
+            }
+            Column(
+                //verticalArrangement = Arrangement.SpaceAround,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
+                    .fillMaxSize()
+            ) {
+                Text(
+                    text = "Ligações de",
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins)),
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFFFFFFFF),
+                    textAlign = TextAlign.Center
+                )
+                Text(
+                    text = "Emergência",
+                    fontSize = 48.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins)),
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFFFFFFFF),
+                    textAlign = TextAlign.Center,
+                    style = androidx.compose.material.MaterialTheme.typography.h4.copy(
+                        shadow = Shadow(
+                            offset = Offset(10f, 10f),
+                            blurRadius = 30f
+                        )
+                    )
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Column(
+                    modifier = Modifier
+                        .padding(start = 15.dp, end = 15.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            navController.navigate("add_contact_screen")
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
+                    ) {
+                        Text(
+                            text = "Adicionar um novo contato",
+                            fontSize = 18.sp,
+                            fontFamily = FontFamily(Font(R.font.poppins)),
+                            fontWeight = FontWeight(600),
+                            color = Color(0xFFFFFEFE),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                LazyColumn() {
+                    items(listResponsavel) {
+                        CustomSwitchWithLabel(
+                            text = it.nome,
+                            phoneNumber = it.numero,
+                            onSwitchChange = { newState ->
+                                switchState = newState
+                                if (switchState) {
+                                    // Inicie a chamada telefônica aqui
+                                    val intent = Intent(Intent.ACTION_DIAL)
+                                    intent.data = Uri.parse("tel: ${it.numero}")
+                                    context.startActivity(intent)
+                                }
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
                 }
             }
-
         }
     }
 }
@@ -178,21 +302,24 @@ fun CustomSwitchWithLabel(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.background)
+                .background(Color.White)
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = text,
-                fontSize = 20.sp,
-                color = androidx.compose.material3.MaterialTheme.colorScheme.onBackground
+                fontSize = 16.sp,
+                fontFamily = FontFamily(Font(R.font.poppins)),
+                fontWeight = FontWeight(700),
+                color = Color(0xFF000000),
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
                 text = phoneNumber,
                 fontSize = 18.sp,
-                color = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                color = Color(0xFF35225F),
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
@@ -200,8 +327,8 @@ fun CustomSwitchWithLabel(
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(1.dp)
-                .background(androidx.compose.material3.MaterialTheme.colorScheme.primary)
+                .height(4.dp)
+                .background(Color.White)
         )
     }
 }
