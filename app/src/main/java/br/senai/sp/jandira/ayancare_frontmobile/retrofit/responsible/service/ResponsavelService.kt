@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ResponsavelService {
@@ -16,6 +17,9 @@ interface ResponsavelService {
 
     @GET("/v1/ayan/contatos")
     fun getTodosResponsaveis(): Call<ResponsavelResponse>
+
+    @GET("/v1/ayan/contato/responsavel/{id}")
+    fun getTodosResponsaveisByIdPaciente(@Path("id") id: Int): Call<ResponsavelResponse>
 
     @GET("/v1/ayan/contatos/")
     fun getResponsavelByPacienteId(@Query("idContatoPaciente") idContatoPaciente: Long): Call<ResponsavelResponse>

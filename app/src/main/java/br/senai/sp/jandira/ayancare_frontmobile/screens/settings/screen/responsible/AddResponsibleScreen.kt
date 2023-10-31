@@ -215,7 +215,7 @@ fun AddResponsibleScreen(
                             numero = telefoneState,
                             local = localState,
                             id_paciente = id.toInt(),
-                            id_status_contato = 1
+                            id_status_contato = 3
                         )
                         isDialogVisibleSuccess = true
                     },

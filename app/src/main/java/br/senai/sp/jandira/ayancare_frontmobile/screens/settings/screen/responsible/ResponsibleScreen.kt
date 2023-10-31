@@ -71,8 +71,8 @@ fun ResponsibleScreen(
     }
 
     //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(idContatoPaciente = id)
-    //var call = RetrofitFactory.getResponsible().getTodosResponsaveis()
+    //var call = RetrofitFactory.getResponsible().getResponsavelByPacienteId(idContatoPaciente = id)
+    var call = RetrofitFactory.getResponsible().getTodosResponsaveisByIdPaciente(id = id.toInt())
 
     call.enqueue(object : Callback<ResponsavelResponse> {
         override fun onResponse(

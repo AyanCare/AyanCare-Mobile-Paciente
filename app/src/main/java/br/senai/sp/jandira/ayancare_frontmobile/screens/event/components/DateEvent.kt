@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.ayancare_frontmobile.components
+package br.senai.sp.jandira.ayancare_frontmobile.screens.event.components
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateTextField(
+fun DateEvent(
     context: Context,
     selectedDate: String,
     onDateChange: (String) -> Unit

@@ -24,7 +24,10 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DateTextField
 
 @Composable
-fun OptionDate() {
+fun OptionDate(
+    selectDate: String,
+    onValueChange: (String) -> Unit
+) {
 
     val context = LocalContext.current
 
@@ -32,7 +35,7 @@ fun OptionDate() {
         mutableStateOf(false)
     }
 
-    var selectedDate by remember { mutableStateOf("") }
+   var selectedDate = selectDate
 
     Column {
 //        Switch(
@@ -71,21 +74,14 @@ fun OptionDate() {
                 fontWeight = FontWeight(600),
                 color = Color(0xFF191D23)
             )
-            DateTextField(
+            DateEvent(
                 context = context,
                 selectedDate = selectedDate,
-                onDateChange = {}
+                onDateChange = { onValueChange(it) }
             )
             Spacer(modifier = Modifier.height(12.dp))
             TimeTextField()
         //}
 
-
     }
-}
-
-@Preview
-@Composable
-fun ddd() {
-    OptionDate()
 }

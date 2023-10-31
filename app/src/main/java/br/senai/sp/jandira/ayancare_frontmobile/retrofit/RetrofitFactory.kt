@@ -2,6 +2,7 @@ package br.senai.sp.jandira.ayancare_frontmobile.retrofit
 
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.service.ConectarService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cuidador.service.CuidadorService
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.event.service.EventService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.service.GeneroService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.service.MedidasService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.PacienteService
@@ -13,8 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitFactory {
 
-    //private const val BASE_URL = "http://10.107.144.22:8080"
-    private const val BASE_URL = "https://ayancare-api.cyclic.cloud"
+    private const val BASE_URL = "http://10.107.144.22:8080"
+    ///private const val BASE_URL = "https://ayancare-api.cyclic.cloud"
     //private const val BASE_URL = "http://192.168.0.115:8080" //192.168.0.120
     fun getInstance(): Retrofit{
         return Retrofit.Builder()
@@ -59,6 +60,10 @@ object RetrofitFactory {
 
     fun getCuidador(): CuidadorService {
         return retrofitFactory.create(CuidadorService::class.java)
+    }
+
+    fun getEvent(): EventService {
+        return retrofitFactory.create(EventService::class.java)
     }
 
 }

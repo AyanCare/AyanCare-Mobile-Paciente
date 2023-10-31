@@ -1,5 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.event.screen
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -40,23 +41,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.EventRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.HeaderEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionDate
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionEvent
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
+import kotlinx.coroutines.launch
 
 @Composable
 fun EventScreen(
-    navController: NavController
+    navController: NavController,
+    lifecycleScope: LifecycleCoroutineScope
 ) {
 
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
     var selecionado by remember { mutableStateOf("evento") }
+    var nameState by remember { mutableStateOf("") }
+    var localSelecionado by remember { mutableStateOf("") }
+    var descricaoSelecionada by remember { mutableStateOf("") }
+    var selectedDate by remember { mutableStateOf("") }
+
 
     val cores = listOf(
         Color(0xFFF7CE46),
@@ -69,15 +79,62 @@ fun EventScreen(
 
     var corFundo by remember { mutableStateOf(cores[0]) }
 
-    Surface (
+    fun event(
+        nome: String,
+        descricao: String,
+        local: String,
+        hora: String,
+        dia: String,
+        idPaciente: Int,
+        idCuidador: Int,
+    ) {
+
+        val eventRepository = EventRepository()
+        lifecycleScope.launch {
+
+            val response = eventRepository.registerEvent(
+                nome,
+                descricao,
+                local,
+                hora,
+                dia,
+                idPaciente,
+                idCuidador
+            )
+
+            if (response.isSuccessful) {
+                Log.e(MainActivity::class.java.simpleName, "event bem-sucedido")
+                Log.e("event", "event: ${response.body()}")
+                val checagem = response.body()?.get("status")
+
+                Log.e("event", "event: ${checagem}")
+
+                if (checagem.toString() == "404") {
+                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+
+                    //navController.navigate("responsible_screen")
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o event: $errorBody")
+                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    Surface(
         color = Color(248, 240, 236)
     ) {
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(start = 15.dp, end = 15.dp, bottom = 20.dp),
             verticalArrangement = Arrangement.Bottom
-        ){
+        ) {
             Row {
                 Button(
                     onClick = {
@@ -95,7 +152,6 @@ fun EventScreen(
                         modifier = Modifier
                             .padding(top = 6.dp, bottom = 6.dp, start = 12.dp, end = 12.dp)
                     )
-
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
@@ -123,11 +179,9 @@ fun EventScreen(
                             .padding(top = 6.dp, bottom = 6.dp)
                             .fillMaxWidth()
                     )
-
                 }
             }
         }
-
         Column(
             //verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -140,10 +194,10 @@ fun EventScreen(
                 navController
             )
 
-            Column (
+            Column(
                 modifier = Modifier
                     .verticalScroll(scrollState)
-            ){
+            ) {
                 Text(
                     text = "Título",
                     fontSize = 15.sp,
@@ -152,9 +206,9 @@ fun EventScreen(
                     color = Color(0xFF191D23)
                 )
                 DefaultTextField(
-                    valor = "",
+                    valor = nameState,
                     label = "Nome do Evento",
-                    onValueChange = {},
+                    onValueChange = { nameState = it},
                     aoMudar = {}
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -173,9 +227,9 @@ fun EventScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    Row (
+                    Row(
                         verticalAlignment = Alignment.CenterVertically
-                    ){
+                    ) {
                         Text(
                             text = "Cor",
                             fontSize = 16.sp,
@@ -198,26 +252,26 @@ fun EventScreen(
                             Spacer(modifier = Modifier.width(8.dp))
                         }
                     }
-                    Box (
+                    Box(
                         modifier = Modifier
                             .width(40.dp)
                             .height(20.dp)
                             .background(corFundo, CircleShape),
-                    ){}
+                    ) {}
                 }
                 Spacer(modifier = Modifier.height(40.dp))
 
-                Row (
+                Row(
                     Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
-                ){
-                    Column (
+                ) {
+                    Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .clickable {
                                 selecionado = "evento"
                             }
-                    ){
+                    ) {
                         Text(
                             text = "Evento",
                             fontSize = 16.sp,
@@ -225,23 +279,23 @@ fun EventScreen(
                             fontWeight = FontWeight(600),
                             color = if (selecionado == "evento") Color.Black else Color(0xFF64748B)
                         )
-                        Box (
+                        Box(
                             modifier = Modifier
                                 .width(155.dp)
                                 .height(2.dp)
                                 .background(if (selecionado == "evento") Color(0xFF047857) else Color.Transparent),
-                        ){}
+                        ) {}
                     }
 
                     Spacer(modifier = Modifier.width(10.dp))
 
-                    Column (
+                    Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .clickable {
                                 selecionado = "dia"
                             }
-                    ){
+                    ) {
                         Text(
                             text = "Dia e Horário",
                             fontSize = 16.sp,
@@ -249,36 +303,45 @@ fun EventScreen(
                             fontWeight = FontWeight(400),
                             color = if (selecionado == "dia") Color.Black else Color(0xFF64748B)
                         )
-                        Box (
+                        Box(
                             modifier = Modifier
                                 .width(155.dp)
                                 .height(2.dp)
                                 .background(if (selecionado == "dia") Color(0xFF047857) else Color.Transparent)
-                        ){}
+                        ) {}
                     }
 
                 }
 
                 if (selecionado == "evento") {
-                    Column () {
+                    Column() {
                         Spacer(modifier = Modifier.height(40.dp))
-                        OptionEvent()
+                        OptionEvent(
+                            localSelecionado,
+                            descricaoSelecionada,
+                            onValueChange = {
+                                localSelecionado = it
+                                descricaoSelecionada = it
+                            }
+                        )
                     }
                 } else if (selecionado == "dia") {
                     Column {
                         Spacer(modifier = Modifier.height(40.dp))
-                        OptionDate()
+                        OptionDate(
+                            selectedDate,
+                            onValueChange = {
+                                selectedDate = it
+                            }
+                        )
                     }
                 }
-
             }
         }
     }
 
+
+    Log.e("event", "EventScreen: ${nameState + localSelecionado + descricaoSelecionada + selectedDate}")
+
 }
 
-//@Preview
-//@Composable
-//fun aa() {
-//    EventScreen()
-//}

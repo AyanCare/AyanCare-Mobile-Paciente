@@ -10,33 +10,25 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
 
 @Composable
-fun OptionEvent() {
+fun OptionEvent(
+    localState: String,
+    descricaoState: String,
+    onValueChange: (String) -> Unit
+) {
 
-    var descricaoState by remember {
-        mutableStateOf("")
-    }
-
-    var localState by remember {
-        mutableStateOf("")
-    }
-
+    var descricaoState = descricaoState
+    var localState = localState
 
     Column {
         Text(
@@ -49,7 +41,7 @@ fun OptionEvent() {
         DefaultTextField(
             valor = localState,
             label = "",
-            onValueChange = { localState = it },
+            onValueChange = { onValueChange(it) },
             aoMudar = {}
         )
         Spacer(modifier = Modifier.height(5.dp))
@@ -71,7 +63,7 @@ fun OptionEvent() {
             )
             TextField(
                 value = descricaoState,
-                onValueChange = { descricaoState = it },
+                onValueChange = { onValueChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp)
@@ -86,11 +78,4 @@ fun OptionEvent() {
             )
         }
     }
-}
-
-
-@Preview
-@Composable
-fun ds() {
-    OptionEvent()
 }

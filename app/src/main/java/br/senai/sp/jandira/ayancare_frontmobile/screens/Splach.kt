@@ -193,7 +193,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("event_screen"){
-                            EventScreen(navController = navController)
+                            EventScreen(navController = navController, lifecycleScope = lifecycleScope)
                         }
                     }
                 }
