@@ -41,6 +41,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.Responsavel
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.CardResponsible
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
@@ -51,7 +52,8 @@ import retrofit2.Response
 @Composable
 fun ResponsibleScreen(
     navController: NavController,
-    navRotasController: NavController
+    navRotasController: NavController,
+    localStorage: Storage
 ) {
 
     val context = LocalContext.current
@@ -60,6 +62,8 @@ fun ResponsibleScreen(
 
     val paciente = array[0]
     var id = paciente.id.toLong()
+
+    var selectedId by remember { mutableStateOf(-1) }
 
     // Mantenha uma lista de responsáveis no estado da tela
     var listResponsavel by remember {
@@ -79,7 +83,6 @@ fun ResponsibleScreen(
             call: Call<ResponsavelResponse>,
             response: Response<ResponsavelResponse>
         ) {
-
             Log.e("TAG", "onResponse: ${response.body()}")
 
             if (response.body()!!.status == 404) {
@@ -90,9 +93,7 @@ fun ResponsibleScreen(
             }
 
             Log.e("TAG", "onResponse: $listResponsavel")
-
         }
-
         override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
@@ -160,8 +161,6 @@ fun ResponsibleScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-
-
             }
             FloatingActionButtonResponsible(navController)
         }
@@ -203,22 +202,28 @@ fun ResponsibleScreen(
                         textAlign = TextAlign.Center
                     )
                 }
+
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn() {
                     items(listResponsavel.reversed()) {
                         CardResponsible(
+                            id = it.id,
                             nome = it.nome,
                             numero = it.numero,
-                            local = it.local
+                            local = it.local,
+                            onItemClick = { id ->
+                                selectedId = id
+                            },
+                            localStorage
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                     }
                 }
+                localStorage.salvarValor(context, selectedId.toString(), "id_responsible")
+                Log.e("resposible", "ResponsibleScreen: $selectedId")
             }
             FloatingActionButtonResponsible(navController)
         }
     }
-
-
 }

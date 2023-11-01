@@ -85,22 +85,20 @@ fun OptionEventCalendary() {
             .padding(start = 15.dp, end = 15.dp)
     ){
         Text(
-            text = "Rotina de hoje",
+            text = "Evento de hoje",
             fontSize = 24.sp,
             fontFamily = FontFamily(Font(R.font.poppins)),
             fontWeight = FontWeight(400),
             color = Color(0xFF35225F)
         )
         Spacer(modifier = Modifier.height(10.dp))
-        LazyColumn(){
-            items(listEvents){
-                CardCalendary(
-                    value = it.dia,
-                    title = it.dia,
-                    subtitle = it.nome
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-            }
+        for (event in listEvents) {
+            CardCalendary(
+                value = event.dia,
+                title = event.dia,
+                subtitle = event.nome
+            )
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }
