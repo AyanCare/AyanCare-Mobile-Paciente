@@ -63,7 +63,6 @@ fun ModalDeleteResponsable(
         )
     }
 
-    var call = id?.let { RetrofitFactory.getResponsible().deleteResponsible(it.toInt()) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -102,6 +101,8 @@ fun ModalDeleteResponsable(
                     ){
                         Button(
                             onClick = {
+                                var call = id?.let { RetrofitFactory.getResponsible().deleteResponsible(it.toInt()) }
+
                                 call?.enqueue(object : Callback<ResponsavelResponse> {
                                     override fun onResponse(
                                         call: Call<ResponsavelResponse>,
