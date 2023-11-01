@@ -109,9 +109,3 @@ fun CalendaryScreen() {
         }
     }
 }
-
-@Preview
-@Composable
-fun vsdv() {
-    CalendaryScreen()
-}

@@ -30,7 +30,11 @@ import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
-fun CardCalendary() {
+fun CardCalendary(
+    value: String,
+    title: String,
+    subtitle:String
+) {
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -54,7 +58,7 @@ fun CardCalendary() {
                 verticalArrangement = Arrangement.Center
             ){
                 Text(
-                    text = "08H",
+                    text = value,
                     fontSize = 24.sp,
                     lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
@@ -66,7 +70,7 @@ fun CardCalendary() {
             Spacer(modifier = Modifier.width(14.dp))
             Column {
                 Text(
-                    text = "Alarme",
+                    text = title,
                     fontSize = 22.sp,
                     lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
@@ -74,7 +78,7 @@ fun CardCalendary() {
                     color = Color(0xFFFFFFFF)
                 )
                 Text(
-                    text = "2x paracetamol, 2x dipirona",
+                    text = subtitle,
                     fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(700),
@@ -93,14 +97,6 @@ fun CardCalendary() {
                         .size(26.dp)
                 )
             }
-
         }
-
     }
-}
-
-@Preview
-@Composable
-fun sdfsd() {
-    CardCalendary()
 }

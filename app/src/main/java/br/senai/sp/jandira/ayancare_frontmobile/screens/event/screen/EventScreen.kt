@@ -47,10 +47,19 @@ import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.EventRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.DateEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.HeaderEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionDate
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionEvent
+import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.TimeTextField
+import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.toAmericanDateFormat
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @Composable
 fun EventScreen(
@@ -66,6 +75,12 @@ fun EventScreen(
     var localSelecionado by remember { mutableStateOf("") }
     var descricaoSelecionada by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("") }
+
+    var selectedTime by remember { mutableStateOf("") }
+
+    val array = PacienteRepository(context = context).findUsers()
+    val paciente = array[0]
+    var id = paciente.id.toLong()
 
 
     val cores = listOf(
@@ -85,8 +100,7 @@ fun EventScreen(
         local: String,
         hora: String,
         dia: String,
-        idPaciente: Int,
-        idCuidador: Int,
+        idPaciente: Int
     ) {
 
         val eventRepository = EventRepository()
@@ -98,8 +112,7 @@ fun EventScreen(
                 local,
                 hora,
                 dia,
-                idPaciente,
-                idCuidador
+                idPaciente
             )
 
             if (response.isSuccessful) {
@@ -114,7 +127,7 @@ fun EventScreen(
                 } else {
                     Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
 
-                    //navController.navigate("responsible_screen")
+                    navController.navigate("main_screen")
                 }
             } else {
                 val errorBody = response.errorBody()?.string()
@@ -158,7 +171,14 @@ fun EventScreen(
 
                 Button(
                     onClick = {
-                        navController.navigate("main_screen")
+                        event(
+                            nome = nameState,
+                            descricaoSelecionada,
+                            localSelecionado,
+                            selectedTime,
+                            selectedDate.toAmericanDateFormat(),
+                            idPaciente = id.toInt()
+                        )
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
                 ) {
@@ -189,11 +209,7 @@ fun EventScreen(
                 .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 80.dp)
                 .fillMaxSize()
         ) {
-
-            HeaderEvent(
-                navController
-            )
-
+            HeaderEvent(navController)
             Column(
                 modifier = Modifier
                     .verticalScroll(scrollState)
@@ -259,6 +275,7 @@ fun EventScreen(
                             .background(corFundo, CircleShape),
                     ) {}
                 }
+
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Row(
@@ -310,9 +327,7 @@ fun EventScreen(
                                 .background(if (selecionado == "dia") Color(0xFF047857) else Color.Transparent)
                         ) {}
                     }
-
                 }
-
                 if (selecionado == "evento") {
                     Column() {
                         Spacer(modifier = Modifier.height(40.dp))
@@ -328,20 +343,25 @@ fun EventScreen(
                 } else if (selecionado == "dia") {
                     Column {
                         Spacer(modifier = Modifier.height(40.dp))
-                        OptionDate(
-                            selectedDate,
-                            onValueChange = {
-                                selectedDate = it
-                            }
+                        Text(
+                            text = "Data",
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily(Font(R.font.poppins)),
+                            fontWeight = FontWeight(600),
+                            color = Color(0xFF191D23)
                         )
+                        DateEvent(
+                            context = context,
+                            selectedDate = selectedDate,
+                            onDateChange = { selectedDate = it }
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        TimeTextField { formattedTime ->
+                            selectedTime = formattedTime
+                        }
                     }
                 }
             }
         }
     }
-
-
-    Log.e("event", "EventScreen: ${nameState + localSelecionado + descricaoSelecionada + selectedDate}")
-
 }
-

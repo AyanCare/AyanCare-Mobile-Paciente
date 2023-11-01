@@ -16,9 +16,11 @@ import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun TimeTextField() {
+fun TimeTextField(
+    onTimeSelected: (String) -> Unit // Adicione um parâmetro de retorno de String
+) {
     var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
-    val formatter = remember { SimpleDateFormat("hh:mm a", Locale.getDefault()) }
+    val formatter = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
     var showTimePicker by remember { mutableStateOf(false) }
 
     Column(
@@ -64,14 +66,14 @@ fun TimeTextField() {
                     selectedTime.set(Calendar.MINUTE, minute)
 
                     showTimePicker = false
+                    val formattedTime = formatter.format(selectedTime.time)
+                    onTimeSelected(formattedTime) // Passa o valor formatado para onTimeSelected
                 },
                 selectedTime.get(Calendar.HOUR_OF_DAY),
                 selectedTime.get(Calendar.MINUTE),
-                false
+                true
             )
-
             timePickerDialog.show()
         }
     }
-
 }

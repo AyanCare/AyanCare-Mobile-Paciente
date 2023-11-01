@@ -16,7 +16,6 @@ class EventRepository {
         hora: String,
         dia: String,
         idPaciente: Int,
-        idCuidador: Int
     ): Response<JsonObject> {
         val requestBody = JsonObject().apply {
             addProperty("nome", nome)
@@ -25,19 +24,8 @@ class EventRepository {
             addProperty("hora", hora)
             addProperty("dia", dia)
             addProperty("idPaciente", idPaciente)
-            addProperty("idCuidador", idCuidador)
-
         }
         return apiService.createEvent(requestBody)
     }
 }
 
-//    {
-//        "nome":"Jhon Doe único 2",
-//        "descricao":"testes teste testes",
-//        "local":"no Postman",
-//        "hora":"12:00",
-//        "dia":"2005-01-21",
-//        "idPaciente":73,
-//        "idCuidador":6
-//    }

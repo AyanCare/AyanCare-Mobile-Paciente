@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,7 +51,7 @@ fun OptionEventCalendary() {
     }
 
     //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getEvent().getEventsByIdPaciente(73)
+    var call = RetrofitFactory.getEvent().getEventsByIdPaciente(id.toInt())
 
     call.enqueue(object : Callback<EventResponse> {
         override fun onResponse(
@@ -92,8 +93,12 @@ fun OptionEventCalendary() {
         )
         Spacer(modifier = Modifier.height(10.dp))
         LazyColumn(){
-            items(10){
-                CardCalendary()
+            items(listEvents){
+                CardCalendary(
+                    value = it.dia,
+                    title = it.dia,
+                    subtitle = it.nome
+                )
                 Spacer(modifier = Modifier.height(10.dp))
             }
         }

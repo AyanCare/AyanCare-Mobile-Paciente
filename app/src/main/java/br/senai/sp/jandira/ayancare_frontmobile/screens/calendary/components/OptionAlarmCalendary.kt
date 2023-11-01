@@ -34,7 +34,7 @@ fun OptionAlarmCalendary() {
         Spacer(modifier = Modifier.height(10.dp))
         LazyColumn(){
             items(10){
-                CardCalendary()
+                //CardCalendary()
                 Spacer(modifier = Modifier.height(10.dp))
             }
         }
