@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,7 +32,6 @@ import retrofit2.Response
 @Composable
 fun OptionEventCalendary() {
 
-
     val context = LocalContext.current
 
     val array = PacienteRepository(context = context).findUsers()
@@ -58,7 +55,6 @@ fun OptionEventCalendary() {
             call: Call<EventResponse>,
             response: Response<EventResponse>
         ) {
-
             Log.e("TAG", "onResponse: ${response.body()}")
 
             if (response.body()!!.status == 404) {
@@ -69,16 +65,11 @@ fun OptionEventCalendary() {
             }
 
             Log.e("TAG", "onResponse: $listEvents")
-
         }
-
         override fun onFailure(call: Call<EventResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
-
     })
-
-
     Column (
         modifier = Modifier
             .fillMaxWidth()

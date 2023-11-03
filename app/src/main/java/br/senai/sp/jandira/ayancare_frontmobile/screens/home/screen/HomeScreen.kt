@@ -53,29 +53,6 @@ fun HomeScreen(
         color = Color(248, 240, 236)
     ) {
         Column(
-            modifier = Modifier
-                .padding(end = 15.dp, bottom = 90.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.End
-        ) {
-            LargeFloatingActionButton(
-                onClick = {
-                    navRotasController.navigate("emergencia_screen")
-                },
-                shape = CircleShape,
-                containerColor = Color(0xFFE11010)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ReportProblem,
-                    contentDescription = "Emergencia",
-                    tint = Color.White,
-                    modifier = Modifier.size(50.dp)
-                )
-            }
-        }
-
-        Column(
             //verticalArrangement = Arrangement.SpaceBetween,
             //horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -159,7 +136,40 @@ fun HomeScreen(
                             navRotasController.navigate("event_screen")
                         }
                     )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    CardHome(
+                        text = "Teste do Evento",
+                        icon = Icons.Default.Alarm,
+                        color = Color.Magenta,
+                        color_icon = Color.White,
+                        color_text = Color.White,
+                        onClick = {
+                            navRotasController.navigate("event_screen")
+                        }
+                    )
                 }
+            }
+        }
+        Column(
+            modifier = Modifier
+                .padding(end = 15.dp, bottom = 90.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.End
+        ) {
+            LargeFloatingActionButton(
+                onClick = {
+                    navRotasController.navigate("emergencia_screen")
+                },
+                shape = CircleShape,
+                containerColor = Color(0xFFE11010)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.ReportProblem,
+                    contentDescription = "Emergencia",
+                    tint = Color.White,
+                    modifier = Modifier.size(50.dp)
+                )
             }
         }
     }
