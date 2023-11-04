@@ -25,7 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.service.Alarm
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.service.Alarme
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -110,8 +110,9 @@ private fun formatTime(calendar: Calendar): String {
 private fun configureNotification(context: Context) {
     val timeSec = System.currentTimeMillis()
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    val intent = Intent(context, Alarm::class.java)
+    val intent = Intent(context, Alarme::class.java)
     val pendingIntent = PendingIntent.getBroadcast(context,0,intent, PendingIntent.FLAG_IMMUTABLE)
     alarmManager.set(AlarmManager.RTC_WAKEUP,timeSec,pendingIntent)
+    alarmManager.cancel(pendingIntent)
 
 }

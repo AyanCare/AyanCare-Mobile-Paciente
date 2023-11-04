@@ -12,7 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
-class Alarm : BroadcastReceiver() {
+class Alarme : BroadcastReceiver() {
     companion object {
         var mediaPlayer: MediaPlayer? = null
     }
