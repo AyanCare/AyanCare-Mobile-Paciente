@@ -129,7 +129,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("responsible_screen"){
-                            ResponsibleScreen(navController = navController, navRotasController = navController)
+                            ResponsibleScreen(navController = navController, navRotasController = navController, localStorage = localStorage)
                         }
 
                         composable("add_responsible_screen"){
@@ -193,7 +193,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("event_screen"){
-                            EventScreen(navController = navController)
+                            EventScreen(navController = navController, lifecycleScope = lifecycleScope)
                         }
                     }
                 }

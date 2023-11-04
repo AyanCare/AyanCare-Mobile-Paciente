@@ -1,8 +1,9 @@
-package br.senai.sp.jandira.ayancare_frontmobile.components
+package br.senai.sp.jandira.ayancare_frontmobile.screens.event.components
 
 import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +27,7 @@ import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DateTextField(
+fun DateEvent(
     context: Context,
     selectedDate: String,
     onDateChange: (String) -> Unit
@@ -36,22 +37,19 @@ fun DateTextField(
     var showDatePickerDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
 
-    LaunchedEffect(showDatePickerDialog) {
-        if (!showDatePickerDialog) {
-            focusManager.clearFocus(force = true)
-        }
-    }
-
     if (showDatePickerDialog) {
         DatePickerDialog(
-            onDismissRequest = { showDatePickerDialog = false },
+            onDismissRequest = {
+                showDatePickerDialog = false
+                // Não é mais necessário limpar o foco aqui
+            },
             confirmButton = {
-                androidx.compose.material3.Button(
+                Button(
                     onClick = {
-                        datePickerState
-                            .selectedDateMillis?.let { millis ->
-                                onDateChange(millis.toBrazilianDateFormat())
-                            }
+                        datePickerState.selectedDateMillis?.let { millis ->
+                            val formattedDate = millis.toBrazilianDateFormat()
+                            onDateChange(formattedDate)
+                        }
                         showDatePickerDialog = false
                     }) {
                     Text(text = "Escolher data")
@@ -60,6 +58,7 @@ fun DateTextField(
             DatePicker(state = datePickerState)
         }
     }
+
     TextField(
         value = selectedDate,
         onValueChange = {},
@@ -68,17 +67,16 @@ fun DateTextField(
             .onFocusEvent {
                 if (it.isFocused) {
                     showDatePickerDialog = true
-                    focusManager.clearFocus(force = true)
                 }
-
             }
             .background(Color.White),
         label = {
-            Text("Data de Aniversário")
+            Text("Data")
         },
         readOnly = true
     )
 }
+
 
 fun Long.toBrazilianDateFormat(
     pattern: String = "dd/MM/yyyy" //"yyyy-MM-dd"

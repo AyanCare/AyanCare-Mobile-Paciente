@@ -138,7 +138,7 @@ fun HumorTestScreen(
                 val errorBody = response.errorBody()?.string()
 
                 Log.e(MainActivity::class.java.simpleName, "Erro durante o teste_humor: $errorBody")
-                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Já foi cadastrado um Teste de Humor hoje.", Toast.LENGTH_SHORT).show()
             }
         }
     }

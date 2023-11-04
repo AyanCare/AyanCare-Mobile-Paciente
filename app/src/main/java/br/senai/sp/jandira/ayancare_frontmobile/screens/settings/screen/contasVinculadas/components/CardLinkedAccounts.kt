@@ -1,7 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components
 
-import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,12 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -31,15 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import coil.compose.AsyncImage
 
 @Composable
 fun CardLinkedAccounts(
@@ -47,7 +43,7 @@ fun CardLinkedAccounts(
     onProfileClick: () -> Unit,
     nome: String,
     id: Int,
-    //foto: Painter
+    foto: String
 ) {
     var isExpanded by remember { mutableStateOf(false)}
 
@@ -64,9 +60,16 @@ fun CardLinkedAccounts(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.relogio),
-                    contentDescription = "User Image",
+//                Image(
+//                    painter = painterResource(id = R.drawable.relogio),
+//                    contentDescription = "User Image",
+//                    modifier = Modifier
+//                        .size(60.dp)
+//                        .clip(CircleShape)
+//                )
+                AsyncImage(
+                    model = "$foto",
+                    contentDescription = "",
                     modifier = Modifier
                         .size(60.dp)
                         .clip(CircleShape)

@@ -1,6 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,7 +7,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material3.Surface
@@ -25,21 +27,18 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.ButtonCalendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.Calendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionAlarmCalendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionEventCalendary
-import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionDate
-import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionEvent
 
 @Composable
 fun CalendaryScreen() {
 
     var selecionado by remember { mutableStateOf("evento") }
+    val scrollState = rememberScrollState()
 
     Surface (
         color = Color(248, 240, 236)
@@ -48,8 +47,9 @@ fun CalendaryScreen() {
             //verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                //.padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
+                .padding(bottom = 80.dp)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             Calendary()
             Spacer(modifier = Modifier.height(15.dp))
@@ -96,7 +96,7 @@ fun CalendaryScreen() {
                 }
             }
             if (selecionado == "evento") {
-                Column () {
+                Column (){
                     Spacer(modifier = Modifier.height(15.dp))
                     OptionEventCalendary()
                 }
@@ -108,10 +108,4 @@ fun CalendaryScreen() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun vsdv() {
-    CalendaryScreen()
 }

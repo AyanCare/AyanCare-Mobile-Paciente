@@ -25,7 +25,7 @@ fun OptionAlarmCalendary() {
             .padding(start = 15.dp, end = 15.dp)
     ){
         Text(
-            text = "Eventos de hoje",
+            text = "Rotina de hoje",
             fontSize = 24.sp,
             fontFamily = FontFamily(Font(R.font.poppins)),
             fontWeight = FontWeight(400),
@@ -34,7 +34,7 @@ fun OptionAlarmCalendary() {
         Spacer(modifier = Modifier.height(10.dp))
         LazyColumn(){
             items(10){
-                CardCalendary()
+                //CardCalendary()
                 Spacer(modifier = Modifier.height(10.dp))
             }
         }
