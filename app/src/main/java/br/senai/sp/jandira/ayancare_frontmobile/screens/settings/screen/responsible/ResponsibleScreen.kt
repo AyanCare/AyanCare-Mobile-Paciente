@@ -23,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -63,10 +64,10 @@ fun ResponsibleScreen(
     val paciente = array[0]
     var id = paciente.id.toLong()
 
-    var selectedId by remember { mutableStateOf(-1) }
+    var selectedId by remember { mutableIntStateOf(-1) }
 
     // Mantenha uma lista de responsáveis no estado da tela
-    var listResponsavel by remember {
+    var listResponsible by remember {
         mutableStateOf(
             listOf(
                 Responsavel(0, "", "", "", 0, 0)
@@ -87,20 +88,20 @@ fun ResponsibleScreen(
 
             if (response.body()!!.status == 404) {
                 Log.e("TAG", "a resposta está nula")
-                listResponsavel = emptyList()
+                listResponsible = emptyList()
             } else {
-                listResponsavel = response.body()!!.contatos
+                listResponsible = response.body()!!.contatos
             }
 
-            Log.e("TAG", "onResponse: $listResponsavel")
+            Log.e("list-responsible", "onResponse: $listResponsible")
         }
         override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
-            Log.i("ds3t", "onFailure: ${t.message}")
+            Log.i("list-responsible", "onFailure: ${t.message}")
         }
 
     })
 
-    if (listResponsavel.isEmpty()) {
+    if (listResponsible.isEmpty()) {
         Surface(
             color = Color(248, 240, 236)
         ) {
@@ -206,7 +207,7 @@ fun ResponsibleScreen(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 LazyColumn() {
-                    items(listResponsavel.reversed()) {
+                    items(listResponsible.reversed()) {
                         CardResponsible(
                             id = it.id,
                             nome = it.nome,
@@ -215,13 +216,14 @@ fun ResponsibleScreen(
                             onItemClick = { id ->
                                 selectedId = id
                             },
-                            localStorage
+                            localStorage = localStorage,
+                            navController
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                     }
                 }
                 localStorage.salvarValor(context, selectedId.toString(), "id_responsible")
-                Log.e("resposible", "ResponsibleScreen: $selectedId")
+                Log.e("list-responsible", "ResponsibleScreen: $selectedId")
             }
             FloatingActionButtonResponsible(navController)
         }

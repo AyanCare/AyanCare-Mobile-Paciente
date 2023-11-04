@@ -24,12 +24,11 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
-import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddComorbidity
 
 @Composable
 fun CardResponsible(
@@ -38,7 +37,8 @@ fun CardResponsible(
     numero: String,
     local: String,
     onItemClick: (Int) -> Unit,
-    localStorage: Storage
+    localStorage: Storage,
+    navController: NavController
 ) {
 
     var isDialogVisibleResponsible by remember { mutableStateOf(false) }
@@ -102,7 +102,8 @@ fun CardResponsible(
             if (isDialogVisibleResponsible) {
                 ModalDeleteResponsable(
                     isDialogVisibleResponsable = false,
-                    localStorage
+                    localStorage = localStorage,
+                    navController = navController
                 )
             }
         }

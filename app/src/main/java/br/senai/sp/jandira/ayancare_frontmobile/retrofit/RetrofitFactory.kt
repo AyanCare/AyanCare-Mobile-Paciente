@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.retrofit
 
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.service.ConectarService
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cor.service.CorService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cuidador.service.CuidadorService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.event.service.EventService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.service.GeneroService
@@ -66,4 +67,7 @@ object RetrofitFactory {
         return retrofitFactory.create(EventService::class.java)
     }
 
+    fun getCor(): CorService {
+        return retrofitFactory.create(CorService::class.java)
+    }
 }

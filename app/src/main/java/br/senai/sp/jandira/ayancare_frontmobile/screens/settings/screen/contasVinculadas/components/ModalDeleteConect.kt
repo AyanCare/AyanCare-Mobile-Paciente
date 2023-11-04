@@ -1,4 +1,4 @@
-package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components
+package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -37,8 +37,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun ModalDeleteResponsable(
-    isDialogVisibleResponsable: Boolean,
+fun ModalDeleteConect(
+    isDialogVisibleConect: Boolean,
     navController: NavController,
     localStorage: Storage
 ) {
@@ -54,7 +54,7 @@ fun ModalDeleteResponsable(
     ) {
         Dialog(
             onDismissRequest = {
-                isDialogVisibleResponsable
+                isDialogVisibleConect
             }
         ) {
             Surface(
@@ -68,7 +68,7 @@ fun ModalDeleteResponsable(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Tem certeza que deseja excluir o responsável?\nVocê não terá mais acesso aos dados dessa pessoa.",
+                        text = "Tem certeza que deseja desvincular?\nVocê não terá mais acesso aos dados dessa pessoa.",
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(600),
@@ -84,20 +84,20 @@ fun ModalDeleteResponsable(
                     ){
                         Button(
                             onClick = {
-                                var call = id?.let { RetrofitFactory.getResponsible().deleteResponsible(it.toInt()) }
-
-                                call?.enqueue(object : Callback<ResponsavelResponse> {
-                                    override fun onResponse(
-                                        call: Call<ResponsavelResponse>,
-                                        response: Response<ResponsavelResponse>
-                                    ) {
-                                        Log.e("deleteResponsible", "onResponse: ${response.body()}")
-                                    }
-                                    override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
-                                        Log.i("deleteResponsible", "onFailure: ${t.message}")
-                                    }
-                                })
-                                navController.navigate("responsible_screen")
+//                                var call = id?.let { RetrofitFactory.getResponsible().deleteResponsible(it.toInt()) }
+//
+//                                call?.enqueue(object : Callback<ResponsavelResponse> {
+//                                    override fun onResponse(
+//                                        call: Call<ResponsavelResponse>,
+//                                        response: Response<ResponsavelResponse>
+//                                    ) {
+//                                        Log.e("deleteResponsible", "onResponse: ${response.body()}")
+//                                    }
+//                                    override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
+//                                        Log.i("deleteResponsible", "onFailure: ${t.message}")
+//                                    }
+//                                })
+                                navController.navigate("linked_accounts_screen")
                             },
                             modifier = Modifier
                                 .width(90.dp)
@@ -115,7 +115,7 @@ fun ModalDeleteResponsable(
                         }
                         Button(
                             onClick = {
-                                navController.navigate("responsible_screen")
+                                navController.navigate("linked_accounts_screen")
                             },
                             modifier = Modifier
                                 .width(90.dp)

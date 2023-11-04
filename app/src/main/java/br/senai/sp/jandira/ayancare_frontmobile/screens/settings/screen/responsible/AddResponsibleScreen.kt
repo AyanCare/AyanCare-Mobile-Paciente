@@ -100,10 +100,10 @@ fun AddResponsibleScreen(
 
             if (response.isSuccessful) {
                 Log.e(MainActivity::class.java.simpleName, "responsible bem-sucedido")
-                Log.e("responsible", "responsible: ${response.body()}")
+                Log.e("add-responsible", "responsible: ${response.body()}")
                 val checagem = response.body()?.get("status")
 
-                Log.e("responsible", "responsible: ${checagem}")
+                Log.e("add-responsible", "responsible: ${checagem}")
 
                 if (checagem.toString() == "404") {
                     Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
@@ -115,7 +115,7 @@ fun AddResponsibleScreen(
             } else {
                 val errorBody = response.errorBody()?.string()
 
-                Log.e(MainActivity::class.java.simpleName, "Erro durante o responsible: $errorBody")
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o add-responsible: $errorBody")
                 Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
             }
         }
@@ -131,8 +131,6 @@ fun AddResponsibleScreen(
             isDialogVisibleSuccess = false // Fecha o modal
         }
     }
-
-
 
     Surface(
         color = Color(248, 240, 236)

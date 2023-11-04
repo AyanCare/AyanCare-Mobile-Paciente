@@ -41,25 +41,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cor.CorResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cor.service.Cor
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.EventRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.DateEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.HeaderEvent
-import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionDate
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.TimeTextField
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.toAmericanDateFormat
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import kotlin.math.log
 
 @Composable
 fun EventScreen(
@@ -78,21 +80,56 @@ fun EventScreen(
 
     var selectedTime by remember { mutableStateOf("") }
 
+    var selectedColorId by remember { mutableStateOf<Int?>(null) }
+    var selectedColorHex by remember { mutableStateOf<String?>(null) }
+
     val array = PacienteRepository(context = context).findUsers()
     val paciente = array[0]
     var id = paciente.id.toLong()
 
+//    val cores = listOf(
+//        Color(0xFFF7CE46),
+//        Color(0xFFEF4444),
+//        Color(0xFFFF8328),
+//        Color(0xFF10B981),
+//        Color(0xFF48A7FF),
+//        Color(0xFF6F00FD)
+//    )
+//
+//    var corFundo by remember { mutableStateOf(cores[0]) }
 
-    val cores = listOf(
-        Color(0xFFF7CE46),
-        Color(0xFFEF4444),
-        Color(0xFFFF8328),
-        Color(0xFF10B981),
-        Color(0xFF48A7FF),
-        Color(0xFF6F00FD)
-    )
+    var listCor by remember {
+        mutableStateOf(
+            listOf(
+                Cor(0, "")
+            )
+        )
+    }
 
-    var corFundo by remember { mutableStateOf(cores[0]) }
+    //Cria uma chamada para o endpoint
+    var call = RetrofitFactory.getCor().getCor()
+
+    call.enqueue(object : Callback<CorResponse> {
+        override fun onResponse(
+            call: Call<CorResponse>,
+            response: Response<CorResponse>
+        ) {
+            Log.e("TAG", "onResponse: ${response.body()}")
+
+            if (response.body()!!.status == 404) {
+                Log.e("TAG", "a resposta está nula")
+                listCor = emptyList()
+            } else {
+                listCor = response.body()!!.cores
+            }
+
+            Log.e("TAG", "onResponse: $listCor")
+        }
+
+        override fun onFailure(call: Call<CorResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+    })
 
     fun event(
         nome: String,
@@ -102,7 +139,6 @@ fun EventScreen(
         dia: String,
         idPaciente: Int
     ) {
-
         val eventRepository = EventRepository()
         lifecycleScope.launch {
 
@@ -114,7 +150,6 @@ fun EventScreen(
                 dia,
                 idPaciente
             )
-
             if (response.isSuccessful) {
                 Log.e(MainActivity::class.java.simpleName, "event bem-sucedido")
                 Log.e("event", "event: ${response.body()}")
@@ -137,7 +172,6 @@ fun EventScreen(
             }
         }
     }
-
 
     Surface(
         color = Color(248, 240, 236)
@@ -224,7 +258,7 @@ fun EventScreen(
                 DefaultTextField(
                     valor = nameState,
                     label = "Nome do Evento",
-                    onValueChange = { nameState = it},
+                    onValueChange = { nameState = it },
                     aoMudar = {}
                 )
                 Spacer(modifier = Modifier.height(5.dp))
@@ -254,26 +288,69 @@ fun EventScreen(
                             color = Color(0xFF64748B)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
-                        cores.forEach { cor ->
-                            Card(
-                                Modifier
-                                    .size(16.dp)
-                                    .background(cor, CircleShape)
-                                    .clickable {
-                                        corFundo = cor
-                                    },
-                                shape = CircleShape,
-                                backgroundColor = cor
-                            ) {}
-                            Spacer(modifier = Modifier.width(8.dp))
+                        listCor.forEach { cor ->
+                            val components = cor.hex.split(", ").map {
+                                if (it.isNotEmpty()) {
+                                    it.toInt()
+                                } else {
+                                    0
+                                }
+                            }
+                            if (components.size == 3) {
+                                val color = Color(
+                                    red = components[0] / 255f,
+                                    green = components[1] / 255f,
+                                    blue = components[2] / 255f,
+                                    alpha = 1f
+                                )
+                                Card(
+                                    Modifier
+                                        .size(16.dp)
+                                        .background(color, CircleShape)
+                                        .clickable {
+                                            selectedColorId = cor.id
+                                            selectedColorHex = cor.hex
+                                        },
+                                    shape = CircleShape,
+                                    backgroundColor = color
+                                ) {}
+
+                                Spacer(modifier = Modifier.width(8.dp))
+                            }
+
                         }
                     }
-                    Box(
-                        modifier = Modifier
-                            .width(40.dp)
-                            .height(20.dp)
-                            .background(corFundo, CircleShape),
-                    ) {}
+                    if (selectedColorHex?.isNotEmpty() == true) {
+                        Log.e("TAG", "EventScreen: $selectedColorId")
+                        Log.e("TAG", "EventScreen: $selectedColorHex")
+                        val components = selectedColorHex!!.split(", ").map {
+                            if (it.isNotEmpty()) {
+                                it.toInt()
+                            } else {
+                                0
+                            }
+                        }
+                        Log.e("TAG", "EventScreen: $components")
+                        if (components.size == 3) {
+                            val color = Color(
+                                red = components[0] / 255f,
+                                green = components[1] / 255f,
+                                blue = components[2] / 255f,
+                                alpha = 1f
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .width(40.dp)
+                                    .height(20.dp)
+                                    .background(
+                                        color = color,
+                                        shape = CircleShape
+                                    )
+                            ) {}
+                        }
+                    }
+
+
                 }
 
                 Spacer(modifier = Modifier.height(40.dp))
