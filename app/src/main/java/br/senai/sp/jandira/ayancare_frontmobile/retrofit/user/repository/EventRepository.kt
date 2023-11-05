@@ -16,6 +16,7 @@ class EventRepository {
         hora: String,
         dia: String,
         idPaciente: Int,
+        idCor: Int
     ): Response<JsonObject> {
         val requestBody = JsonObject().apply {
             addProperty("nome", nome)
@@ -24,6 +25,7 @@ class EventRepository {
             addProperty("hora", hora)
             addProperty("dia", dia)
             addProperty("idPaciente", idPaciente)
+            addProperty("id_cor", idCor)
         }
         return apiService.createEvent(requestBody)
     }

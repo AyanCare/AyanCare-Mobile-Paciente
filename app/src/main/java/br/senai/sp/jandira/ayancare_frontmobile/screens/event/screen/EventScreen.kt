@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -24,29 +26,35 @@ import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
+import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextFieldValidate
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cor.CorResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cor.service.Cor
@@ -61,8 +69,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.log
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventScreen(
     navController: NavController,
@@ -70,6 +78,7 @@ fun EventScreen(
 ) {
 
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
 
     var selecionado by remember { mutableStateOf("evento") }
@@ -77,26 +86,52 @@ fun EventScreen(
     var localSelecionado by remember { mutableStateOf("") }
     var descricaoSelecionada by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("") }
-
     var selectedTime by remember { mutableStateOf("") }
-
     var selectedColorId by remember { mutableStateOf<Int?>(null) }
     var selectedColorHex by remember { mutableStateOf<String?>(null) }
+    val datePickerState = rememberDatePickerState()
+
+    //VALIDAÇÕES
+    var validateName by rememberSaveable {
+        mutableStateOf(true)
+    }
+    var validateLocal by rememberSaveable {
+        mutableStateOf(true)
+    }
+    var validateDescricao by rememberSaveable {
+        mutableStateOf(true)
+    }
+    var validateDate by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    val validateNameError = "Nome do Evento está em branco"
+    val validateLocalError = "Local está em branco"
+    val validateDescricaoError = "Descrição está em branco"
+    val validateDateError = "Data está em branco"
+
+    Log.e("TAG", "validateDate: $validateDate")
+    fun validateData(
+        name: String,
+        local: String,
+        descricao: String,
+        date: String
+    ): Boolean {
+        Log.d("TAG", "Data recebida: $date")
+
+        validateName = name.isNotBlank()
+        validateLocal = local.isNotBlank()
+        validateDescricao = descricao.isNotBlank()
+        validateDate = date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
+
+        Log.d("TAG", "validateDate: $validateDate")
+
+        return validateName && validateLocal && validateDescricao && validateDate
+    }
 
     val array = PacienteRepository(context = context).findUsers()
     val paciente = array[0]
     var id = paciente.id.toLong()
-
-//    val cores = listOf(
-//        Color(0xFFF7CE46),
-//        Color(0xFFEF4444),
-//        Color(0xFFFF8328),
-//        Color(0xFF10B981),
-//        Color(0xFF48A7FF),
-//        Color(0xFF6F00FD)
-//    )
-//
-//    var corFundo by remember { mutableStateOf(cores[0]) }
 
     var listCor by remember {
         mutableStateOf(
@@ -114,7 +149,7 @@ fun EventScreen(
             call: Call<CorResponse>,
             response: Response<CorResponse>
         ) {
-            Log.e("TAG", "onResponse: ${response.body()}")
+            //Log.e("TAG", "onResponse: ${response.body()}")
 
             if (response.body()!!.status == 404) {
                 Log.e("TAG", "a resposta está nula")
@@ -123,7 +158,7 @@ fun EventScreen(
                 listCor = response.body()!!.cores
             }
 
-            Log.e("TAG", "onResponse: $listCor")
+            //Log.e("TAG", "onResponse: $listCor")
         }
 
         override fun onFailure(call: Call<CorResponse>, t: Throwable) {
@@ -131,45 +166,53 @@ fun EventScreen(
         }
     })
 
+
     fun event(
         nome: String,
         descricao: String,
         local: String,
         hora: String,
         dia: String,
-        idPaciente: Int
+        idPaciente: Int,
+        idCor: Int
     ) {
-        val eventRepository = EventRepository()
-        lifecycleScope.launch {
+        if (validateData(nome, local, descricao, dia)) {
+            val eventRepository = EventRepository()
+            lifecycleScope.launch {
+                val response = eventRepository.registerEvent(
+                    nome,
+                    descricao,
+                    local,
+                    hora,
+                    dia,
+                    idPaciente,
+                    idCor
+                )
+                if (response.isSuccessful) {
+                    Log.e(MainActivity::class.java.simpleName, "event bem-sucedido")
+                    Log.e("event", "event: ${response.body()}")
+                    val checagem = response.body()?.get("status")
 
-            val response = eventRepository.registerEvent(
-                nome,
-                descricao,
-                local,
-                hora,
-                dia,
-                idPaciente
-            )
-            if (response.isSuccessful) {
-                Log.e(MainActivity::class.java.simpleName, "event bem-sucedido")
-                Log.e("event", "event: ${response.body()}")
-                val checagem = response.body()?.get("status")
+                    Log.e("event", "event: ${checagem}")
 
-                Log.e("event", "event: ${checagem}")
+                    if (checagem.toString() == "404") {
+                        Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
 
-                if (checagem.toString() == "404") {
-                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                        navController.navigate("main_screen")
+                    }
                 } else {
-                    Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+                    val errorBody = response.errorBody()?.string()
 
-                    navController.navigate("main_screen")
+                    Log.e(MainActivity::class.java.simpleName, "Erro durante o event: $errorBody")
+                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                val errorBody = response.errorBody()?.string()
-
-                Log.e(MainActivity::class.java.simpleName, "Erro durante o event: $errorBody")
-                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
             }
+        }else{
+            //Log.e("TAG", "EventScreen: $validateName = $validateLocal = $validateDescricao = $validateDate = $selectedDate", )
+            //Log.e("TAG", "EventScreen: ${validateData(nome, local, descricao, dia)}", )
+            Toast.makeText(context, "Por favor, reolhe suas caixas de texto", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -211,7 +254,8 @@ fun EventScreen(
                             localSelecionado,
                             selectedTime,
                             selectedDate.toAmericanDateFormat(),
-                            idPaciente = id.toInt()
+                            idPaciente = id.toInt(),
+                            idCor = selectedColorId!!
                         )
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
@@ -255,11 +299,22 @@ fun EventScreen(
                     fontWeight = FontWeight(600),
                     color = Color(0xFF191D23)
                 )
-                DefaultTextField(
-                    valor = nameState,
-                    label = "Nome do Evento",
+                CustomTextFieldValidate(
+                    value = nameState,
                     onValueChange = { nameState = it },
-                    aoMudar = {}
+                    label = "Nome do Evento",
+                    showError = !validateName,
+                    errorMessage = validateNameError,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Next
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                    unfocusedBorderColor = Color(0xFF64748B),
+                    focusedBorderColor = Color(0xFF6650A4),
+                    textColor = Color(0xFF64748B)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
 //                Text(
@@ -349,8 +404,6 @@ fun EventScreen(
                             ) {}
                         }
                     }
-
-
                 }
 
                 Spacer(modifier = Modifier.height(40.dp))
@@ -409,10 +462,17 @@ fun EventScreen(
                     Column() {
                         Spacer(modifier = Modifier.height(40.dp))
                         OptionEvent(
-                            localSelecionado,
-                            descricaoSelecionada,
+                            localState = localSelecionado,
+                            descricaoState = descricaoSelecionada,
+                            validateLocal = validateLocal,
+                            validateLocalError = validateLocalError,
+                            validateDescricao = validateDescricao,
+                            validateDescricaoError = validateDescricaoError,
+                            focusManager = focusManager,
                             onValueChange = {
                                 localSelecionado = it
+                            },
+                            aoMudar = {
                                 descricaoSelecionada = it
                             }
                         )
@@ -427,10 +487,22 @@ fun EventScreen(
                             fontWeight = FontWeight(600),
                             color = Color(0xFF191D23)
                         )
+//                        DateEvent(
+//                            context = context,
+//                            selectedDate = selectedDate,
+//                            onDateChange = { selectedDate = it },
+//                            selectedDateError = selectedDateError
+//                        )
                         DateEvent(
                             context = context,
                             selectedDate = selectedDate,
-                            onDateChange = { selectedDate = it }
+                            onDateChange = {
+                                selectedDate = it
+                            },
+                            focusManager = focusManager,
+                            datePickerState = datePickerState,
+                            validateDate = validateDate,
+                            validateDateError = validateDateError
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         TimeTextField { formattedTime ->

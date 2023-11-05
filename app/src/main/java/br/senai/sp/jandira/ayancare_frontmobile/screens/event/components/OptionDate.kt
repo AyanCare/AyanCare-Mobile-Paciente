@@ -3,8 +3,6 @@ package br.senai.sp.jandira.ayancare_frontmobile.screens.event.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.Switch
-import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,11 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.components.DateTextField
 
 @Composable
 fun OptionDate(
@@ -74,11 +70,11 @@ fun OptionDate(
                 fontWeight = FontWeight(600),
                 color = Color(0xFF191D23)
             )
-            DateEvent(
-                context = context,
-                selectedDate = selectedDate,
-                onDateChange = { onValueChange(it) }
-            )
+//            DateEvent(
+//                context = context,
+//                selectedDate = selectedDate,
+//                onDateChange = { onValueChange(it) }
+//            )
             Spacer(modifier = Modifier.height(12.dp))
             //TimeTextField()
         //}
