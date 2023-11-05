@@ -8,5 +8,8 @@ data class Event(
     val descricao: String,
     val local: String,
     val horario: String,
-    val dia: String
+    val dia: String,
+    val dia_unico: String,
+    val mes: String,
+    val cor: String
 )

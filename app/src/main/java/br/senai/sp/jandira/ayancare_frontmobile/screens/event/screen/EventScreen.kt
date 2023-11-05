@@ -150,14 +150,12 @@ fun EventScreen(
             response: Response<CorResponse>
         ) {
             //Log.e("TAG", "onResponse: ${response.body()}")
-
             if (response.body()!!.status == 404) {
                 Log.e("TAG", "a resposta está nula")
                 listCor = emptyList()
             } else {
                 listCor = response.body()!!.cores
             }
-
             //Log.e("TAG", "onResponse: $listCor")
         }
 
@@ -487,12 +485,6 @@ fun EventScreen(
                             fontWeight = FontWeight(600),
                             color = Color(0xFF191D23)
                         )
-//                        DateEvent(
-//                            context = context,
-//                            selectedDate = selectedDate,
-//                            onDateChange = { selectedDate = it },
-//                            selectedDateError = selectedDateError
-//                        )
                         DateEvent(
                             context = context,
                             selectedDate = selectedDate,

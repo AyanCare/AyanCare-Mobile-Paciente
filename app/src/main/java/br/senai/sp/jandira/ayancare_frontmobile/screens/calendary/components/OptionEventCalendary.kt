@@ -42,7 +42,7 @@ fun OptionEventCalendary() {
     var listEvents by remember {
         mutableStateOf(
             listOf(
-                Event(0, "", "", "", "", "", "", "")
+                Event(0, "", "", "", "", "", "", "", "", "", "")
             )
         )
     }
@@ -85,8 +85,8 @@ fun OptionEventCalendary() {
         Spacer(modifier = Modifier.height(10.dp))
         for (event in listEvents) {
             CardCalendary(
-                value = event.dia,
-                title = event.dia,
+                value = event.dia_unico,
+                title = "${event.dia_unico} de ${event.mes}",
                 subtitle = event.nome
             )
             Spacer(modifier = Modifier.height(10.dp))

@@ -1,7 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components
 
-//SelectOptionMedicationFrequency
-
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,8 +15,6 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.HideImage
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
@@ -33,16 +30,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldNumber
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
 
 @Composable
 fun SelectOptionMedicationFrequency(
@@ -56,6 +48,9 @@ fun SelectOptionMedicationFrequency(
     var context = LocalContext.current
 
     var selectedValue by rememberSaveable { mutableStateOf("") }
+    var isSelectStateDrop by remember {
+        mutableStateOf("")
+    }
 
     var number by rememberSaveable { mutableStateOf("") }
 
@@ -63,7 +58,7 @@ fun SelectOptionMedicationFrequency(
 
     val scrollState = rememberScrollState()
 
-    val isSelect = localStorage.lerValor(context, "jeito_medicamento")
+    val isSelectIdDrop = localStorage.lerValor(context, "id_intervalo")
 
     Column(
         modifier = Modifier
@@ -104,7 +99,14 @@ fun SelectOptionMedicationFrequency(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                DropdownGender(context = context, gender = "", onValueChange = {})
+                DropdownInterval(
+                    selectValue = isSelectStateDrop,
+                    onValueChange = {
+                        isSelectStateDrop = it
+                    },
+                    localStorage
+                )
+                Log.e("TAG", "SelectOptionMedicationFrequency: $isSelectStateDrop = $isSelectIdDrop", )
                 Row(
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.Center

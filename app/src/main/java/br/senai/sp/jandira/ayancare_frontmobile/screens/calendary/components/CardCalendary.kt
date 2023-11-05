@@ -55,7 +55,8 @@ fun CardCalendary(
                 modifier = Modifier
                     .size(50.dp)
                     .background(Color.White, shape = RoundedCornerShape(5.dp)),
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ){
                 Text(
                     text = value,
