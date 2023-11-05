@@ -4,12 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.DAO.AlarmeDao.AlarmeDao
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.Paciente
 
-@Database(entities = [Paciente::class], version = 1)
+@Database(entities = [Paciente::class, AlarmeTbl::class], version = 1)
 abstract class AyanCareDb : RoomDatabase() {
 
     abstract fun pacienteDao() : PacienteDao
+    abstract fun alarmeDao(): AlarmeDao
 
     companion object {
 
