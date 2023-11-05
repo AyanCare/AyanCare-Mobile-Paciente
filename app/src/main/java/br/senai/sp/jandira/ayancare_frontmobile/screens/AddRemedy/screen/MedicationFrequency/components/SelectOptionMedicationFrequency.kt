@@ -109,7 +109,7 @@ fun SelectOptionMedicationFrequency(
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    TimeMedication(width = 150)
+                    TimeMedication(width = 150, localStorage)
                     Spacer(modifier = Modifier.width(60.dp))
                     TextFieldNumber(
                         valor = number,
@@ -154,7 +154,7 @@ fun SelectOptionMedicationFrequency(
         if (selectedValue == options[1]) {
             if (1 + 1 <= additionalRows) {
                 repeat(additionalRows) {
-                    AddNewRow(1)
+                    AddNewRow(1,localStorage)
                 }
             }
             Text(
@@ -202,7 +202,7 @@ fun SelectOptionMedicationFrequency(
 }
 
 @Composable
-fun AddNewRow(index: Int) {
+fun AddNewRow(index: Int, localStorage: Storage) {
     var isRowVisible by remember { mutableStateOf(true) }
 
     if (isRowVisible) {
@@ -233,7 +233,7 @@ fun AddNewRow(index: Int) {
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.Center
             ) {
-                TimeMedication(width = 150)
+                TimeInterval(width = 150, localStorage)
                 Spacer(modifier = Modifier.width(60.dp))
                 TextFieldNumber(
                     valor = "number",
@@ -243,10 +243,4 @@ fun AddNewRow(index: Int) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun fsdfs() {
-    AddNewRow(index = 1)
 }

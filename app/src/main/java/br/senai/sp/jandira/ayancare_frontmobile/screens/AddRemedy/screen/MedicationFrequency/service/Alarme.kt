@@ -18,13 +18,16 @@ class Alarme : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
+
         try {
+
             // Iniciar a reprodução de som
             mediaPlayer = MediaPlayer.create(context, R.raw.lofi_study_112191)
             mediaPlayer?.isLooping = true
             mediaPlayer?.start()
 
-            showNotification(context, "AyanCare", "paracetamol")
+            showNotification(context, "AyanCare", "Agua")
+
         } catch (e: Exception) {
             Log.d("Receive Exception", e.printStackTrace().toString())
         }
@@ -73,6 +76,7 @@ class Alarme : BroadcastReceiver() {
     }
 
 }
+
 
 
 
