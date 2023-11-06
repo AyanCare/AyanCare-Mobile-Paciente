@@ -69,6 +69,10 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -119,10 +123,11 @@ fun EventScreen(
     ): Boolean {
         Log.d("TAG", "Data recebida: $date")
 
+
         validateName = name.isNotBlank()
         validateLocal = local.isNotBlank()
         validateDescricao = descricao.isNotBlank()
-        validateDate = date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))
+        validateDate = date.matches(Regex("\\d{2}/\\d{2}/\\d{4}"))
 
         Log.d("TAG", "validateDate: $validateDate")
 
@@ -251,10 +256,11 @@ fun EventScreen(
                             descricaoSelecionada,
                             localSelecionado,
                             selectedTime,
-                            selectedDate.toAmericanDateFormat(),
+                            selectedDate,
                             idPaciente = id.toInt(),
                             idCor = selectedColorId!!
                         )
+                        Log.e("TAG", "EventScreen: $selectedDate", )
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
                 ) {
