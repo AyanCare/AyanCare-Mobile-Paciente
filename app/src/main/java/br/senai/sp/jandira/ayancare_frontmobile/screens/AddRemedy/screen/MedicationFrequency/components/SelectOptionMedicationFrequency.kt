@@ -235,7 +235,7 @@ fun AddNewRow(index: Int, localStorage: Storage) {
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.Center
             ) {
-                TimeInterval(width = 150, localStorage)
+                TimeInterval(width = 150,localStorage)
                 Spacer(modifier = Modifier.width(60.dp))
                 TextFieldNumber(
                     valor = "number",

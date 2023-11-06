@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components
 
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.TimePickerDialog
@@ -45,6 +46,7 @@ fun TimeInterval(
     val currentTime = selectedTime
     val hourOfDay = currentTime.get(Calendar.HOUR_OF_DAY)
     val minute = currentTime.get(Calendar.MINUTE)
+    val time = localStorage.lerValor(context, "id_intervalo")
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -86,7 +88,6 @@ fun TimeInterval(
                     horario = formatTime(selectedTime)
                 )
 
-                localStorage.lerValor(context, "id_medicamento")
                 val alarmeId = alarmeRepository(context).saveAlarm(alarme)
 
                 Log.d("Alarme", "ID do alarme: $alarmeId")
@@ -100,7 +101,10 @@ fun TimeInterval(
 
                     // Usar um Handler para agendar a notificação após o atraso.
                     Handler(Looper.getMainLooper()).postDelayed({
-                        configureRepeatingNotification(context, selectedTime)
+                        if (time != null) {
+                            configureRepeatingNotification(context, selectedTime, time.toInt() )
+                        }
+
                     }, delayMillis)
                 }
             }
@@ -117,12 +121,14 @@ fun TimeInterval(
     }
 }
 
+
+@SuppressLint("SimpleDateFormat")
 private fun formatTime(calendar: Calendar): String {
     val sdf = SimpleDateFormat("HH:mm")
     return sdf.format(calendar.time)
 }
 
-private fun configureRepeatingNotification(context: Context, selectedTime: Calendar) {
+private fun configureRepeatingNotification(context: Context, selectedTime: Calendar, time: Int) {
     val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, Alarme::class.java)
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
@@ -131,7 +137,8 @@ private fun configureRepeatingNotification(context: Context, selectedTime: Calen
     val startTime = selectedTime.timeInMillis
 
     // Calcula o intervalo em que a notificação será repetida (a cada 2 minutos)
-    val intervalMillis = 2 * 60 * 1000
+    val intervalMillis = time * 60 * 1000
+
 
     // Agenda a notificação repetida, começando no horário selecionado
     alarmMgr.setRepeating(
