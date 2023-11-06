@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
@@ -25,14 +27,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -41,6 +48,8 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextAreaValidate
+import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextFieldValidate
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.ModalSuccess
@@ -58,6 +67,7 @@ fun AddContactScreen(
 
     val context = LocalContext.current
     val array = PacienteRepository(context = context).findUsers()
+    val focusManager = LocalFocusManager.current
 
     val paciente = array[0]
     var id = paciente.id.toLong()
@@ -74,6 +84,33 @@ fun AddContactScreen(
         mutableStateOf("")
     }
 
+    var validateName by rememberSaveable {
+        mutableStateOf(true)
+    }
+    var validateTelefone by rememberSaveable {
+        mutableStateOf(true)
+    }
+    var validateLocal by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    val validateNameError = "Nome está em branco"
+    val validateTelefoneError = "Telefone está em branco"
+    val validateLocalError = "Local está em branco"
+
+    fun validateData(
+        name: String,
+        local: String,
+        numero: String
+    ): Boolean {
+
+        validateName = name.isNotBlank()
+        validateLocal = local.isNotBlank()
+        validateTelefone = numero.isNotBlank()
+
+        return validateName && validateLocal && validateTelefone
+    }
+
     fun responsible(
         nome: String,
         numero: String,
@@ -81,34 +118,39 @@ fun AddContactScreen(
         id_paciente: Int,
         id_status_contato: Int
     ) {
-        val responsibleRepository = ResponsibleRepository()
-        lifecycleScope.launch {
-            val response = responsibleRepository.registerResponsible(
-                nome,
-                numero,
-                local,
-                id_paciente,
-                id_status_contato
-            )
-            if (response.isSuccessful) {
-                Log.e(MainActivity::class.java.simpleName, "contact bem-sucedido")
-                Log.e("contact", "contact: ${response.body()}")
-                val checagem = response.body()?.get("status")
+        if (validateData(nome, local, numero)) {
+            val responsibleRepository = ResponsibleRepository()
+            lifecycleScope.launch {
+                val response = responsibleRepository.registerResponsible(
+                    nome,
+                    numero,
+                    local,
+                    id_paciente,
+                    id_status_contato
+                )
+                if (response.isSuccessful) {
+                    Log.e(MainActivity::class.java.simpleName, "contact bem-sucedido")
+                    Log.e("contact", "contact: ${response.body()}")
+                    val checagem = response.body()?.get("status")
 
-                Log.e("contact", "contact: ${checagem}")
+                    Log.e("contact", "contact: ${checagem}")
 
-                if (checagem.toString() == "404") {
-                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                    if (checagem.toString() == "404") {
+                        Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+                        //isDialogVisibleSuccess = true
+                        navController.navigate("emergencia_screen")
+                    }
                 } else {
-                    //Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
-                    navController.navigate("emergencia_screen")
-                }
-            } else {
-                val errorBody = response.errorBody()?.string()
+                    val errorBody = response.errorBody()?.string()
 
-                Log.e(MainActivity::class.java.simpleName, "Erro durante o contact: $errorBody")
-                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+                    Log.e(MainActivity::class.java.simpleName, "Erro durante o contact: $errorBody")
+                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+                }
             }
+        }else{
+            Toast.makeText(context, "Por favor, reolhe suas caixas de texto", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -149,25 +191,47 @@ fun AddContactScreen(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
-            DefaultTextField(
-                valor = nomeState,
-                label = "Nome",
+            CustomTextFieldValidate(
+                value = nomeState,
                 onValueChange = { nomeState = it },
-                aoMudar = {}
+                label = "Nome:",
+                showError = !validateName,
+                errorMessage = validateNameError,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
+                unfocusedBorderColor = Color(0xFF64748B),
+                focusedBorderColor = Color(0xFF6650A4),
+                textColor = Color(0xFF64748B)
             )
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
-            DefaultTextField(
-                valor = telefoneState,
-                label = "Telefone",
+            CustomTextFieldValidate(
+                value = telefoneState,
                 onValueChange = { telefoneState = it },
-                aoMudar = {}
+                label = "Telefone:",
+                showError = !validateTelefone,
+                errorMessage = validateTelefoneError,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                ),
+                unfocusedBorderColor = Color(0xFF64748B),
+                focusedBorderColor = Color(0xFF6650A4),
+                textColor = Color(0xFF64748B)
             )
 
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Column {
                 Text(
@@ -176,20 +240,23 @@ fun AddContactScreen(
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     color = Color(0xFF191D23)
                 )
-                TextField(
+                CustomTextAreaValidate(
                     value = localState,
                     onValueChange = { localState = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(140.dp)
-                        .border(
-                            width = 1.dp,
-                            color = Color(167, 165, 164),
-                            shape = RoundedCornerShape(4.dp)
-                        ),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color(248, 240, 236)
-                    )
+                    label = "",
+                    showError = !validateLocal,
+                    errorMessage = validateLocalError,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.clearFocus() }
+                    ),
+                    unfocusedBorderColor = Color(0xFF64748B),
+                    focusedBorderColor = Color(0xFF6650A4),
+                    textColor = Color(0xFF64748B),
+                    height = 140
                 )
             }
             Column(
@@ -205,9 +272,8 @@ fun AddContactScreen(
                             numero = telefoneState,
                             local = localState,
                             id_paciente = id.toInt(),
-                            id_status_contato = 1
+                            id_status_contato = 2
                         )
-                        isDialogVisibleSuccess = true
                     },
                     text = "Adicionar"
                 )
@@ -231,3 +297,4 @@ fun AddContactScreen(
         }
     }
 }
+
