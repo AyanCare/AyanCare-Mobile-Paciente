@@ -27,26 +27,34 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.data.EmptyGroup.data
 import androidx.compose.ui.unit.dp
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.service.Alarme
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
 
 @Composable
 fun TimeInterval(
     width: Int,
-    localStorage: Storage
+    id_intervalo: Int,
+    localStorage: Storage,
+    selectedTime: Calendar
 ) {
+    Log.i("teste", "TIME: cheguei")
     val context = LocalContext.current
-    var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
+    //var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
     var showTimePicker by remember { mutableStateOf(false) }
     val currentTime = selectedTime
     val hourOfDay = currentTime.get(Calendar.HOUR_OF_DAY)
     val minute = currentTime.get(Calendar.MINUTE)
-    val time = localStorage.lerValor(context, "id_intervalo")
+    val data = LocalDate.now()
+    //val time = localStorage.lerValor(context, "id_intervalo")
+
+    //Log.d("time", "$time")
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -72,25 +80,30 @@ fun TimeInterval(
                 }
             }
         )
-
+        Log.i("teste", "TIME: cheguei")
         BackHandler(enabled = showTimePicker) {
             showTimePicker = false
         }
-
+        Log.i("teste", "$showTimePicker")
         if (showTimePicker) {
             val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
                 selectedTime.set(Calendar.HOUR_OF_DAY, hour)
                 selectedTime.set(Calendar.MINUTE, min)
                 showTimePicker = false
+                val hora = selectedTime.get(Calendar.HOUR_OF_DAY)
+                val minutos = selectedTime.get(Calendar.MINUTE)
 
-                val alarme = AlarmeTbl(
-                    dia = "Segunda",
-                    horario = formatTime(selectedTime)
-                )
+//                val alarme = AlarmeTbl(
+//                    dia = data.toString(),
+//                    horario = formatTime(selectedTime),
+//                    intervalo = id_intervalo,
+//                    selectedHour = hora,
+//                    selectedMinute = minutos
+//                )
+//
+//                val alarmeId = alarmeRepository(context).saveAlarm(alarme)
 
-                val alarmeId = alarmeRepository(context).saveAlarm(alarme)
-
-                Log.d("Alarme", "ID do alarme: $alarmeId")
+               // Log.d("Alarme", "ID do alarme: $alarmeId")
 
                 // Comparar o horário atual com o horário selecionado.
                 val currentCalendar = Calendar.getInstance()
@@ -101,10 +114,8 @@ fun TimeInterval(
 
                     // Usar um Handler para agendar a notificação após o atraso.
                     Handler(Looper.getMainLooper()).postDelayed({
-                        if (time != null) {
-                            configureRepeatingNotification(context, selectedTime, time.toInt() )
-                        }
-
+                        //configureRepeatingNotification(context, selectedTime, id_intervalo )
+                        //Log.e("teste teste", "TimeInterval: ${configureRepeatingNotification(context, selectedTime, id_intervalo )} ")
                     }, delayMillis)
                 }
             }
@@ -128,7 +139,7 @@ private fun formatTime(calendar: Calendar): String {
     return sdf.format(calendar.time)
 }
 
-private fun configureRepeatingNotification(context: Context, selectedTime: Calendar, time: Int) {
+fun configureRepeatingNotification(context: Context, selectedTime: Calendar, time: Int) {
     val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, Alarme::class.java)
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
@@ -138,6 +149,19 @@ private fun configureRepeatingNotification(context: Context, selectedTime: Calen
 
     // Calcula o intervalo em que a notificação será repetida (a cada 2 minutos)
     val intervalMillis = time * 60 * 1000
+
+//    val alarme = AlarmeTbl(
+//                    dia = data.toString(),
+//                    horario = formatTime(selectedTime),
+//                    intervalo = id_intervalo,
+//                    selectedHour = hora,
+//                    selectedMinute = minutos
+//                )
+//
+//                val alarmeId = alarmeRepository(context).saveAlarm(alarme)
+
+
+
 
 
     // Agenda a notificação repetida, começando no horário selecionado

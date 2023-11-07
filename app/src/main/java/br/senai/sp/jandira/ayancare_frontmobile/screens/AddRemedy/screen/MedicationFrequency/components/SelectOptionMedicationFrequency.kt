@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldNumber
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import java.util.Calendar
 
 @Composable
 fun SelectOptionMedicationFrequency(
@@ -43,7 +44,9 @@ fun SelectOptionMedicationFrequency(
     onCancelButtonClicked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier,
-    localStorage: Storage
+    localStorage: Storage,
+    selectedTime: Calendar,
+    id_intervalo: Int
 ) {
     var context = LocalContext.current
 
@@ -52,13 +55,15 @@ fun SelectOptionMedicationFrequency(
         mutableStateOf("")
     }
 
+    //var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
+
     var number by rememberSaveable { mutableStateOf("") }
 
     var additionalRows by remember { mutableIntStateOf(0) }
 
     val scrollState = rememberScrollState()
 
-    val isSelectIdDrop = localStorage.lerValor(context, "id_intervalo")
+    //val id_intervalo = localStorage.lerValor(context, "id_intervalo")
 
     Column(
         modifier = Modifier
@@ -106,12 +111,12 @@ fun SelectOptionMedicationFrequency(
                     },
                     localStorage
                 )
-                Log.e("TAG", "SelectOptionMedicationFrequency: $isSelectStateDrop = $isSelectIdDrop", )
+                Log.e("TAG", "SelectOptionMedicationFrequency: $isSelectStateDrop = $id_intervalo", )
                 Row(
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    TimeMedication(width = 150, localStorage)
+                    TimeInterval(width = 150,localStorage = localStorage, id_intervalo = id_intervalo!!.toInt(), selectedTime = selectedTime)
                     Spacer(modifier = Modifier.width(60.dp))
                     TextFieldNumber(
                         valor = number,
@@ -205,6 +210,7 @@ fun SelectOptionMedicationFrequency(
 
 @Composable
 fun AddNewRow(index: Int, localStorage: Storage) {
+    var context = LocalContext.current
     var isRowVisible by remember { mutableStateOf(true) }
 
     if (isRowVisible) {
@@ -235,7 +241,6 @@ fun AddNewRow(index: Int, localStorage: Storage) {
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.Center
             ) {
-                TimeInterval(width = 150,localStorage)
                 Spacer(modifier = Modifier.width(60.dp))
                 TextFieldNumber(
                     valor = "number",

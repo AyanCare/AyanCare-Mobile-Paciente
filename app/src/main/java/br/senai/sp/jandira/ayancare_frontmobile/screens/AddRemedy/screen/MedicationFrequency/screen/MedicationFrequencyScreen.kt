@@ -38,19 +38,23 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.SelectOptionMedicationFrequency
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureRepeatingNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import java.util.Calendar
 
 @Composable
 fun MedicationFrequencyScreen(
     navController: NavController,
     localStorage: Storage
 ) {
-
     var context = LocalContext.current
+    val id_intervalo = localStorage.lerValor(context, "id_intervalo")
 
     var isSelectState by remember {
         mutableStateOf("")
     }
+
+    var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
 
     val options = listOf(
         "Intervalos fixos (8 em 8h, 6 em 6h...)",
@@ -131,7 +135,10 @@ fun MedicationFrequencyScreen(
                     onSelectionChanged = {
                         isSelectState = it
                     },
-                    localStorage = localStorage
+                    localStorage = localStorage,
+                    selectedTime = selectedTime,
+                    id_intervalo = id_intervalo!!.toInt()
+
                 )
                 localStorage.salvarValor(context, isSelectState, "jeito_medicamento")
                 Log.e("tag", "MedicationFrequencyScreen: $isSelectState")
@@ -147,7 +154,8 @@ fun MedicationFrequencyScreen(
         ){
             DefaultButton(
                 onClick = {
-                    navController.navigate("add_stock_screen")
+                    configureRepeatingNotification(context, selectedTime, id_intervalo!!.toInt() )
+                    //navController.navigate("add_stock_screen")
                 },
                 text = "Proximo"
             )
