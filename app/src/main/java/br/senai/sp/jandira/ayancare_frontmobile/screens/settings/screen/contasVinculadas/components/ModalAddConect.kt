@@ -66,10 +66,6 @@ fun ModalAddConect(
         mutableStateOf("")
     }
 
-    var listCuidadores by remember {
-        mutableStateOf<List<Conectar>>(emptyList())
-    }
-
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -86,7 +82,7 @@ fun ModalAddConect(
                 shape = RoundedCornerShape(5.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(30.dp),
+                    modifier = Modifier.padding(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
@@ -97,12 +93,20 @@ fun ModalAddConect(
                         color = Color(0xFF000000),
                         textAlign = TextAlign.Center
                     )
+                    Text(
+                        text = "Caso esteja com duvida onde está o vá no APP do cuidador e procure por código do cuidador",
+                        fontSize = 12.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins)),
+                        fontWeight = FontWeight(600),
+                        color = Color(0xFF929292),
+                        textAlign = TextAlign.Center
+                    )
 
                     Spacer(modifier = Modifier.height(32.dp))
 
                     TextFieldNumber(
                         valor = idState,
-                        label = "ID do paciente",
+                        label = "Código do Cuidador",
                         onValueChange = { idState = it }
                     )
 
@@ -113,7 +117,7 @@ fun ModalAddConect(
                             //Cria uma chamada para o endpoint
                             var call = RetrofitFactory.getConectar().createConect(id.toInt(), idState.toInt())
 
-                            Log.e("TAG", "ModalAddConect: $id + $idState", )
+                            Log.e("TAG", "ModalAddConect: $id + $idState")
 
                             call.enqueue(object : Callback<ConectarResponse> {
                                 override fun onResponse(
