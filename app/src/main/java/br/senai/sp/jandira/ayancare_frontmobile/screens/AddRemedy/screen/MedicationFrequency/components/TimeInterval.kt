@@ -27,12 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.data.EmptyGroup.data
 import androidx.compose.ui.unit.dp
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.service.Alarme
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
-import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
-import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
@@ -51,7 +48,6 @@ fun TimeInterval(
     val currentTime = selectedTime
     val hourOfDay = currentTime.get(Calendar.HOUR_OF_DAY)
     val minute = currentTime.get(Calendar.MINUTE)
-    val data = LocalDate.now()
     //val time = localStorage.lerValor(context, "id_intervalo")
 
     //Log.d("time", "$time")
@@ -90,8 +86,7 @@ fun TimeInterval(
                 selectedTime.set(Calendar.HOUR_OF_DAY, hour)
                 selectedTime.set(Calendar.MINUTE, min)
                 showTimePicker = false
-                val hora = selectedTime.get(Calendar.HOUR_OF_DAY)
-                val minutos = selectedTime.get(Calendar.MINUTE)
+
 
 //                val alarme = AlarmeTbl(
 //                    dia = data.toString(),
@@ -149,19 +144,6 @@ fun configureRepeatingNotification(context: Context, selectedTime: Calendar, tim
 
     // Calcula o intervalo em que a notificação será repetida (a cada 2 minutos)
     val intervalMillis = time * 60 * 1000
-
-//    val alarme = AlarmeTbl(
-//                    dia = data.toString(),
-//                    horario = formatTime(selectedTime),
-//                    intervalo = id_intervalo,
-//                    selectedHour = hora,
-//                    selectedMinute = minutos
-//                )
-//
-//                val alarmeId = alarmeRepository(context).saveAlarm(alarme)
-
-
-
 
 
     // Agenda a notificação repetida, começando no horário selecionado

@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.screen
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -40,6 +41,10 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.SelectOptionMedicationFrequency
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureRepeatingNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
 
 @Composable
@@ -49,10 +54,12 @@ fun MedicationFrequencyScreen(
 ) {
     var context = LocalContext.current
     val id_intervalo = localStorage.lerValor(context, "id_intervalo")
+    val data = LocalDate.now()
 
     var isSelectState by remember {
         mutableStateOf("")
     }
+
 
     var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
 
@@ -89,9 +96,9 @@ fun MedicationFrequencyScreen(
                 .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 60.dp)
                 .fillMaxSize()
         ) {
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.calendario),
                     contentDescription = "calendario",
@@ -138,27 +145,48 @@ fun MedicationFrequencyScreen(
                     localStorage = localStorage,
                     selectedTime = selectedTime,
                     id_intervalo = id_intervalo!!.toInt()
-
                 )
                 localStorage.salvarValor(context, isSelectState, "jeito_medicamento")
                 Log.e("tag", "MedicationFrequencyScreen: $isSelectState")
+                Log.e("tag", "Not: $id_intervalo")
 
             }
         }
-        Column (
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = 20.dp),
             verticalArrangement = Arrangement.Bottom,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             DefaultButton(
                 onClick = {
-                    configureRepeatingNotification(context, selectedTime, id_intervalo!!.toInt() )
+                    configureRepeatingNotification(context, selectedTime, id_intervalo!!.toInt())
+
+                    val hora = selectedTime.get(Calendar.HOUR_OF_DAY)
+                    val minutos = selectedTime.get(Calendar.MINUTE)
+
+                    val alarme = AlarmeTbl(
+                        dia = data.toString(),
+                        horario = formatTime(selectedTime),
+                        intervalo = id_intervalo.toInt(),
+                        selectedHour = hora,
+                        selectedMinute = minutos
+                    )
+
+                    val alarmeId = alarmeRepository(context).saveAlarm(alarme)
+
+
                     //navController.navigate("add_stock_screen")
                 },
                 text = "Proximo"
             )
         }
     }
+}
+
+@SuppressLint("SimpleDateFormat")
+private fun formatTime(calendar: Calendar): String {
+    val sdf = SimpleDateFormat("HH:mm")
+    return sdf.format(calendar.time)
 }
