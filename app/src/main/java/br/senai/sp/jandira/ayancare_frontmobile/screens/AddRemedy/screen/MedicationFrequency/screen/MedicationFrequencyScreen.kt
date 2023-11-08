@@ -53,13 +53,11 @@ fun MedicationFrequencyScreen(
     localStorage: Storage
 ) {
     var context = LocalContext.current
-    val id_intervalo = localStorage.lerValor(context, "id_intervalo")
     val data = LocalDate.now()
 
     var isSelectState by remember {
         mutableStateOf("")
     }
-
 
     var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
 
@@ -143,13 +141,10 @@ fun MedicationFrequencyScreen(
                         isSelectState = it
                     },
                     localStorage = localStorage,
-                    selectedTime = selectedTime,
-                    id_intervalo = id_intervalo!!.toInt()
+                    selectedTime = selectedTime
                 )
                 localStorage.salvarValor(context, isSelectState, "jeito_medicamento")
                 Log.e("tag", "MedicationFrequencyScreen: $isSelectState")
-                Log.e("tag", "Not: $id_intervalo")
-
             }
         }
         Column(
@@ -161,6 +156,9 @@ fun MedicationFrequencyScreen(
         ) {
             DefaultButton(
                 onClick = {
+
+                    val id_intervalo = localStorage.lerValor(context, "id_intervalo")
+
                     configureRepeatingNotification(context, selectedTime, id_intervalo!!.toInt())
 
                     val hora = selectedTime.get(Calendar.HOUR_OF_DAY)
@@ -174,10 +172,11 @@ fun MedicationFrequencyScreen(
                         selectedMinute = minutos
                     )
 
+                    Log.e("TAG", "MedicationFrequencyScreen: $alarme", )
+
                     val alarmeId = alarmeRepository(context).saveAlarm(alarme)
 
-
-                    //navController.navigate("add_stock_screen")
+                    navController.navigate("add_stock_screen")
                 },
                 text = "Proximo"
             )

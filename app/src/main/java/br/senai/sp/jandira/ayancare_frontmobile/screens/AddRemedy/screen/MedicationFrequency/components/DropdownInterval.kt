@@ -1,6 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components
 
-import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem
@@ -52,11 +51,10 @@ fun DropdownInterval(
             expanded = isExpanded,
             onExpandedChange = { isExpanded = it}
         ) {
-
             TextField(
                 value = value,
                 onValueChange = {
-                                value = it
+                    value = it
                 },
                 readOnly = true,
                 trailingIcon = {
@@ -67,7 +65,6 @@ fun DropdownInterval(
                     .menuAnchor()
                     .fillMaxWidth()
             )
-
             ExposedDropdownMenu(
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false }

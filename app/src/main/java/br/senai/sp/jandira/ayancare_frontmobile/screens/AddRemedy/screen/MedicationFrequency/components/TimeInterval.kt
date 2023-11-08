@@ -37,20 +37,14 @@ import java.util.Calendar
 @Composable
 fun TimeInterval(
     width: Int,
-    id_intervalo: Int,
-    localStorage: Storage,
     selectedTime: Calendar
 ) {
     Log.i("teste", "TIME: cheguei")
     val context = LocalContext.current
-    //var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
     var showTimePicker by remember { mutableStateOf(false) }
     val currentTime = selectedTime
     val hourOfDay = currentTime.get(Calendar.HOUR_OF_DAY)
     val minute = currentTime.get(Calendar.MINUTE)
-    //val time = localStorage.lerValor(context, "id_intervalo")
-
-    //Log.d("time", "$time")
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -87,19 +81,6 @@ fun TimeInterval(
                 selectedTime.set(Calendar.MINUTE, min)
                 showTimePicker = false
 
-
-//                val alarme = AlarmeTbl(
-//                    dia = data.toString(),
-//                    horario = formatTime(selectedTime),
-//                    intervalo = id_intervalo,
-//                    selectedHour = hora,
-//                    selectedMinute = minutos
-//                )
-//
-//                val alarmeId = alarmeRepository(context).saveAlarm(alarme)
-
-               // Log.d("Alarme", "ID do alarme: $alarmeId")
-
                 // Comparar o horário atual com o horário selecionado.
                 val currentCalendar = Calendar.getInstance()
                 if (selectedTime.after(currentCalendar)) {
@@ -127,7 +108,6 @@ fun TimeInterval(
     }
 }
 
-
 @SuppressLint("SimpleDateFormat")
 private fun formatTime(calendar: Calendar): String {
     val sdf = SimpleDateFormat("HH:mm")
@@ -139,7 +119,6 @@ fun configureRepeatingNotification(context: Context, selectedTime: Calendar, tim
     val intent = Intent(context, Alarme::class.java)
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
-    val currentTime = Calendar.getInstance()
     val startTime = selectedTime.timeInMillis
 
     // Calcula o intervalo em que a notificação será repetida (a cada 2 minutos)
