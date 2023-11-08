@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components
 
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.TimePickerDialog
@@ -29,18 +30,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.service.Alarme
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
-import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
-import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
 
 @Composable
 fun TimeInterval(
     width: Int,
-    localStorage: Storage
+    selectedTime: Calendar
 ) {
+    Log.i("teste", "TIME: cheguei")
     val context = LocalContext.current
-    var selectedTime by remember { mutableStateOf(Calendar.getInstance()) }
     var showTimePicker by remember { mutableStateOf(false) }
     val currentTime = selectedTime
     val hourOfDay = currentTime.get(Calendar.HOUR_OF_DAY)
@@ -70,26 +70,16 @@ fun TimeInterval(
                 }
             }
         )
-
+        Log.i("teste", "TIME: cheguei")
         BackHandler(enabled = showTimePicker) {
             showTimePicker = false
         }
-
+        Log.i("teste", "$showTimePicker")
         if (showTimePicker) {
             val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
                 selectedTime.set(Calendar.HOUR_OF_DAY, hour)
                 selectedTime.set(Calendar.MINUTE, min)
                 showTimePicker = false
-
-                val alarme = AlarmeTbl(
-                    dia = "Segunda",
-                    horario = formatTime(selectedTime)
-                )
-
-                localStorage.lerValor(context, "id_medicamento")
-                val alarmeId = alarmeRepository(context).saveAlarm(alarme)
-
-                Log.d("Alarme", "ID do alarme: $alarmeId")
 
                 // Comparar o horário atual com o horário selecionado.
                 val currentCalendar = Calendar.getInstance()
@@ -100,7 +90,8 @@ fun TimeInterval(
 
                     // Usar um Handler para agendar a notificação após o atraso.
                     Handler(Looper.getMainLooper()).postDelayed({
-                        configureRepeatingNotification(context, selectedTime)
+                        //configureRepeatingNotification(context, selectedTime, id_intervalo )
+                        //Log.e("teste teste", "TimeInterval: ${configureRepeatingNotification(context, selectedTime, id_intervalo )} ")
                     }, delayMillis)
                 }
             }
@@ -117,21 +108,22 @@ fun TimeInterval(
     }
 }
 
+@SuppressLint("SimpleDateFormat")
 private fun formatTime(calendar: Calendar): String {
     val sdf = SimpleDateFormat("HH:mm")
     return sdf.format(calendar.time)
 }
 
-private fun configureRepeatingNotification(context: Context, selectedTime: Calendar) {
+fun configureRepeatingNotification(context: Context, selectedTime: Calendar, time: Int) {
     val alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, Alarme::class.java)
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
-    val currentTime = Calendar.getInstance()
     val startTime = selectedTime.timeInMillis
 
     // Calcula o intervalo em que a notificação será repetida (a cada 2 minutos)
-    val intervalMillis = 2 * 60 * 1000
+    val intervalMillis = time * 60 * 1000
+
 
     // Agenda a notificação repetida, começando no horário selecionado
     alarmMgr.setRepeating(

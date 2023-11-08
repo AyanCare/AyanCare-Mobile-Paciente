@@ -1,6 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,12 +28,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldNumber
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import java.util.Calendar
 
 @Composable
 fun SelectOptionMedicationFrequency(
@@ -43,22 +42,16 @@ fun SelectOptionMedicationFrequency(
     onCancelButtonClicked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier,
-    localStorage: Storage
+    localStorage: Storage,
+    selectedTime: Calendar
 ) {
-    var context = LocalContext.current
-
     var selectedValue by rememberSaveable { mutableStateOf("") }
     var isSelectStateDrop by remember {
         mutableStateOf("")
     }
-
     var number by rememberSaveable { mutableStateOf("") }
-
     var additionalRows by remember { mutableIntStateOf(0) }
-
     val scrollState = rememberScrollState()
-
-    val isSelectIdDrop = localStorage.lerValor(context, "id_intervalo")
 
     Column(
         modifier = Modifier
@@ -106,12 +99,14 @@ fun SelectOptionMedicationFrequency(
                     },
                     localStorage
                 )
-                Log.e("TAG", "SelectOptionMedicationFrequency: $isSelectStateDrop = $isSelectIdDrop", )
                 Row(
                     verticalAlignment = Alignment.Bottom,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    TimeMedication(width = 150, localStorage)
+                    TimeInterval(
+                        width = 150,
+                        selectedTime = selectedTime
+                    )
                     Spacer(modifier = Modifier.width(60.dp))
                     TextFieldNumber(
                         valor = number,
@@ -120,7 +115,6 @@ fun SelectOptionMedicationFrequency(
                     )
                 }
             }
-
         }
 
         Spacer(modifier = Modifier.height(50.dp))
@@ -138,6 +132,7 @@ fun SelectOptionMedicationFrequency(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+
             Text(
                 text = options[1],
                 fontSize = 15.sp,
@@ -156,7 +151,7 @@ fun SelectOptionMedicationFrequency(
         if (selectedValue == options[1]) {
             if (1 + 1 <= additionalRows) {
                 repeat(additionalRows) {
-                    AddNewRow(1,localStorage)
+                    AddNewRow()
                 }
             }
             Text(
@@ -204,7 +199,7 @@ fun SelectOptionMedicationFrequency(
 }
 
 @Composable
-fun AddNewRow(index: Int, localStorage: Storage) {
+fun AddNewRow() {
     var isRowVisible by remember { mutableStateOf(true) }
 
     if (isRowVisible) {
@@ -212,10 +207,10 @@ fun AddNewRow(index: Int, localStorage: Storage) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.Start
         ) {
-            Row (
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
-            ){
+            ) {
                 Text(
                     text = "Novo horário",
                     fontSize = 14.sp,
@@ -230,12 +225,10 @@ fun AddNewRow(index: Int, localStorage: Storage) {
                     Icon(imageVector = Icons.Default.Close, contentDescription = "")
                 }
             }
-
             Row(
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.Center
             ) {
-                TimeInterval(width = 150, localStorage)
                 Spacer(modifier = Modifier.width(60.dp))
                 TextFieldNumber(
                     valor = "number",
