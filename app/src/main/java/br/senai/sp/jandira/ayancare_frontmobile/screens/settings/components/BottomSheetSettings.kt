@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ExperimentalMaterialApi
@@ -19,38 +21,60 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.Paciente
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.deleteUserSQLite
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MyBottomSheet(
     isOpen: Boolean,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    navController: NavController
 ) {
+
+    val context = LocalContext.current
+
+    val dados = PacienteRepository(context = context).findUsers()
+
+    var id = 0
+
+    var array = Paciente()
+
+    if(dados.isNotEmpty()){
+        array = dados[0]
+
+        id = array.id.toInt()
+    }
+
     ModalBottomSheetLayout(
         sheetContent = {
             Column(
                 modifier = Modifier
                     .padding(16.dp)
-                    .fillMaxWidth(),
-                verticalArrangement = Arrangement.Center,
+                    .fillMaxWidth()
+                    .height(150.dp)
+                ,
+                verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("Deseja realmente sair do APP?")
-//                Text(
-//                    text = "Deseja realmente sair do APP?",
-//                    fontSize = 18.sp,
-//                    fontFamily = FontFamily(Font(R.font.poppins)),
-//                    fontWeight = FontWeight(600),
-//                    color = Color.White
-//                )
-                Spacer(modifier = Modifier.height(16.dp))
+                //Text("Deseja realmente sair do APP?")
+                Text(
+                    text = "Deseja realmente sair do APP?",
+                    fontSize = 18.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins)),
+                    fontWeight = FontWeight(600),
+                    color = Color.Black
+                )
                 Row (
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
@@ -58,6 +82,8 @@ fun MyBottomSheet(
                     Button(
                         onClick = {
                                   onDismiss
+                            deleteUserSQLite(context = context, id.toInt())
+                            navController.navigate("login_screen")
                         },
                         modifier = Modifier
                             .width(180.dp)
@@ -75,6 +101,7 @@ fun MyBottomSheet(
                     Button(
                         onClick = {
                             onDismiss
+                            navController.navigate("setting_screen")
                         },
                         modifier = Modifier
                             .width(180.dp)
@@ -96,8 +123,9 @@ fun MyBottomSheet(
             ModalBottomSheetState(ModalBottomSheetValue.Expanded)
         } else {
             ModalBottomSheetState(ModalBottomSheetValue.HalfExpanded)
-        }
+        },
+        sheetShape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
     ) {
-        // Conteúdo principal da tela
+
     }
 }

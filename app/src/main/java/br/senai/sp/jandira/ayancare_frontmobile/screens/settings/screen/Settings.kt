@@ -183,8 +183,6 @@ fun SettingsScreen(
                         .fillMaxWidth()
                         .clickable {
                             isBottomSheetVisible = true
-                            //deleteUserSQLite(context = context, id.toInt())
-                            //navController.navigate("login_screen")
                         },
                     fontSize = 16.sp,
                     lineHeight = 16.sp,
@@ -198,7 +196,8 @@ fun SettingsScreen(
         if (isBottomSheetVisible) {
             MyBottomSheet(
                 isOpen = isBottomSheetVisible,
-                onDismiss = { isBottomSheetVisible = false }
+                onDismiss = { isBottomSheetVisible = false },
+                navController
             )
         }
     }
