@@ -64,6 +64,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.HeaderE
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.TimeTextField
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.toAmericanDateFormat
+import br.senai.sp.jandira.ayancare_frontmobile.screens.login.components.Line
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -91,7 +92,7 @@ fun EventScreen(
     var descricaoSelecionada by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("") }
     var selectedTime by remember { mutableStateOf("") }
-    var selectedColorId by remember { mutableStateOf<Int?>(null) }
+    var selectedColorId by remember { mutableStateOf<Int?>(0) }
     var selectedColorHex by remember { mutableStateOf<String?>(null) }
     val datePickerState = rememberDatePickerState()
 
@@ -114,22 +115,21 @@ fun EventScreen(
     val validateDescricaoError = "Descrição está em branco"
     val validateDateError = "Data está em branco"
 
-    Log.e("TAG", "validateDate: $validateDate")
+    //Log.e("TAG", "validateDate: $validateDate")
     fun validateData(
         name: String,
         local: String,
         descricao: String,
         date: String
     ): Boolean {
-        Log.d("TAG", "Data recebida: $date")
-
+        //Log.d("TAG", "Data recebida: $date")
 
         validateName = name.isNotBlank()
         validateLocal = local.isNotBlank()
         validateDescricao = descricao.isNotBlank()
         validateDate = date.matches(Regex("\\d{2}/\\d{2}/\\d{4}"))
 
-        Log.d("TAG", "validateDate: $validateDate")
+        //Log.d("TAG", "validateDate: $validateDate")
 
         return validateName && validateLocal && validateDescricao && validateDate
     }
@@ -251,6 +251,11 @@ fun EventScreen(
 
                 Button(
                     onClick = {
+                        if (selectedColorId!! == 0){
+                            Toast.makeText(context, "escolha sua cor", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(context, "sua cor foi escolhida", Toast.LENGTH_SHORT).show()
+                        }
                         event(
                             nome = nameState,
                             descricaoSelecionada,

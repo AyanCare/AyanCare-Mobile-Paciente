@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -22,14 +24,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -38,6 +44,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextAreaValidate
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.TesteHumorResponse
@@ -62,10 +69,18 @@ fun HumorTestScreen(
 ) {
 
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+    val data = LocalDate.now()
 
     var descricaoState by remember {
         mutableStateOf("")
     }
+
+    var validateDescricao by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    val validateDescricaoError = "Descrição está em branco"
 
     var listTesteHumor_Humor by remember {
         mutableStateOf<List<Humor>>(emptyList())
@@ -79,9 +94,10 @@ fun HumorTestScreen(
         mutableStateOf<List<Exercicio>>(emptyList())
     }
 
-    val data = LocalDate.now()
 
-    Log.i("TAG", "HumorTestScreen: $data")
+
+    //Log.i("TAG", "HumorTestScreen: $data")
+
 
 
     //Cria uma chamada para o endpoint
@@ -314,19 +330,23 @@ fun HumorTestScreen(
                         color = Color(0xFF191D23)
 
                     )
-
-                    OutlinedTextField(
+                    CustomTextAreaValidate(
                         value = descricaoState,
                         onValueChange = { descricaoState = it },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(140.dp)
-                            .border(
-                                width = 1.dp,
-                                color = Color(100, 116, 139),
-                                shape = RoundedCornerShape(8.dp)
-                            )
-
+                        label = "",
+                        showError = !validateDescricao,
+                        errorMessage = validateDescricaoError,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onNext = { focusManager.clearFocus() }
+                        ),
+                        unfocusedBorderColor = Color(0xFF64748B),
+                        focusedBorderColor = Color(0xFF6650A4),
+                        textColor = Color(0xFF64748B),
+                        height = 140
                     )
                 }
 
