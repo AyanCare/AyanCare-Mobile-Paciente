@@ -92,7 +92,7 @@ fun EventScreen(
     var descricaoSelecionada by remember { mutableStateOf("") }
     var selectedDate by remember { mutableStateOf("") }
     var selectedTime by remember { mutableStateOf("") }
-    var selectedColorId by remember { mutableStateOf<Int?>(0) }
+    var selectedColorId by remember { mutableStateOf<Int?>(1) }
     var selectedColorHex by remember { mutableStateOf<String?>(null) }
     val datePickerState = rememberDatePickerState()
 
@@ -251,6 +251,7 @@ fun EventScreen(
 
                 Button(
                     onClick = {
+                        selectedColorId = 0
                         if (selectedColorId!! == 0){
                             Toast.makeText(context, "escolha sua cor", Toast.LENGTH_SHORT).show()
                         }else{
@@ -265,7 +266,7 @@ fun EventScreen(
                             idPaciente = id.toInt(),
                             idCor = selectedColorId!!
                         )
-                        Log.e("TAG", "EventScreen: $selectedDate", )
+                        Log.e("TAG", "EventScreen: $selectedDate")
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
                 ) {
@@ -349,7 +350,7 @@ fun EventScreen(
                             fontSize = 16.sp,
                             fontFamily = FontFamily(Font(R.font.poppins)),
                             fontWeight = FontWeight(400),
-                            color = Color(0xFF64748B)
+                            color = if (selectedColorId == 0) Color.Red else Color(0xFF64748B)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         listCor.forEach { cor ->
