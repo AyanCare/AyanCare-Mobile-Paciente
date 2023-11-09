@@ -8,11 +8,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ReportProblem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeFloatingActionButton
+import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,13 +37,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.Calendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionAlarmCalendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionEventCalendary
+import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.FloatingActionButtonResponsible
 
 @Composable
-fun CalendaryScreen() {
+fun CalendaryScreen(
+    navController: NavController,
+    navRotasController: NavController,
+) {
 
     var selecionado by remember { mutableStateOf("evento") }
     val scrollState = rememberScrollState()
@@ -107,5 +120,57 @@ fun CalendaryScreen() {
                 }
             }
         }
+        if (selecionado == "evento"){
+            Column(
+                modifier = Modifier
+                    .padding(end = 15.dp, bottom = 90.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.End
+            ) {
+                SmallFloatingActionButton(
+                    onClick = {
+                        navRotasController.navigate("event_screen")
+                    },
+                    shape = CircleShape,
+                    containerColor = Color(0xFF9986BD),
+                    modifier = Modifier.size(65.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Adicionar Evento",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .size(50.dp)
+                    )
+                }
+            }
+        }else{
+            Column(
+                modifier = Modifier
+                    .padding(end = 15.dp, bottom = 90.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.End
+            ) {
+                SmallFloatingActionButton(
+                    onClick = {
+                        navRotasController.navigate("add_remedy_screen")
+                    },
+                    shape = CircleShape,
+                    containerColor = Color(0xFF9986BD),
+                    modifier = Modifier.size(65.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = "Adicionar Alarme",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .size(50.dp)
+                    )
+                }
+            }
+        }
+
     }
 }

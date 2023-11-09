@@ -115,38 +115,6 @@ fun HomeScreen(
                         }
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    CardHome(
-                        text = "Teste do Remédio",
-                        icon = Icons.Default.Alarm,
-                        color = Color.Magenta,
-                        color_icon = Color.White,
-                        color_text = Color.White,
-                        onClick = {
-                            navRotasController.navigate("add_remedy_screen")
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardHome(
-                        text = "Teste do Evento",
-                        icon = Icons.Default.Alarm,
-                        color = Color.Magenta,
-                        color_icon = Color.White,
-                        color_text = Color.White,
-                        onClick = {
-                            navRotasController.navigate("event_screen")
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardHome(
-                        text = "Teste do Evento",
-                        icon = Icons.Default.Alarm,
-                        color = Color.Magenta,
-                        color_icon = Color.White,
-                        color_text = Color.White,
-                        onClick = {
-                            navRotasController.navigate("event_screen")
-                        }
-                    )
                 }
             }
         }

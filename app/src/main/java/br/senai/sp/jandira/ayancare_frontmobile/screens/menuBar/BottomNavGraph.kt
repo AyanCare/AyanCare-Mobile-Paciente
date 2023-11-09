@@ -29,7 +29,7 @@ fun BottomNavGraph(
             EstoqueScreen(navRotasController = navRotasController, navController = navController)
         }
         composable(route = BottomBarScreen.Cadendary.route){
-            CalendaryScreen()
+            CalendaryScreen(navController = navController, navRotasController = navRotasController)
         }
         composable(route = BottomBarScreen.Home.route){
             HomeScreen(navController, navRotasController)
