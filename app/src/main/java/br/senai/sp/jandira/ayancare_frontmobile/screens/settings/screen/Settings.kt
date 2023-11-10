@@ -139,7 +139,9 @@ fun SettingsScreen(
             CardSettings(
                 imageVector = Icons.Default.NotificationsNone,
                 text = "Notificações",
-                onClick = {}
+                onClick = {
+                    navRotasController.navigate("notification_screen")
+                }
             )
 
             //MAIS

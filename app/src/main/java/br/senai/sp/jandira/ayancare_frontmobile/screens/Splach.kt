@@ -35,6 +35,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.Settings
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.codigoPaciente.screen.PatientCodeScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.screen.LinkedAccountsScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.screen.profileCaregiver.screen.ProfileCaregiverScreen
+import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.notificacoes.screen.NotificationScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.AddResponsibleScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.ResponsibleScreen
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.sugestao.SuggestionScreen
@@ -126,6 +127,10 @@ class SplashActivity : ComponentActivity() {
 
                         composable("setting_screen"){
                             SettingsScreen(navController = navController, navRotasController = navController)
+                        }
+
+                        composable("notification_screen"){
+                            NotificationScreen(navController)
                         }
 
                         composable("responsible_screen"){
