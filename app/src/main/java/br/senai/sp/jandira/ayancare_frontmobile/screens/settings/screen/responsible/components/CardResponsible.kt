@@ -3,9 +3,12 @@ package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.respons
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -49,13 +52,13 @@ fun CardResponsible(
         backgroundColor = Color(0xFF35225F)
     ){
         Row (
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
         ){
-            Column(
-                modifier = Modifier
-                    .padding(12.dp)
-            ) {
+            Column {
                 Text(
                     text = "Nome: $nome",
                     fontSize = 16.sp,
@@ -63,7 +66,7 @@ fun CardResponsible(
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFFFFFFFF),
-                    textAlign = TextAlign.Center
+                    modifier = Modifier.width(300.dp)
                 )
                 Text(
                     text = "Telefone: $numero",
@@ -71,17 +74,16 @@ fun CardResponsible(
                     lineHeight = 18.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(400),
-                    color = Color(0xFFFFFFFF),
-                    textAlign = TextAlign.Center
+                    color = Color(0xFFFFFFFF)
                 )
                 Text(
-                    text = "Local: $local",
+                    text = "Local: \n$local",
                     fontSize = 14.sp,
                     lineHeight = 18.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(400),
                     color = Color(0xFFFFFFFF),
-                    textAlign = TextAlign.Center
+                    modifier = Modifier.width(250.dp)
                 )
             }
             IconButton(
@@ -94,8 +96,7 @@ fun CardResponsible(
                     imageVector = Icons.Default.RestoreFromTrash,
                     contentDescription = "",
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp),
+                        .size(50.dp),
                     tint = Color.White
                 )
             }
