@@ -24,21 +24,26 @@ import androidx.navigation.NavController
 
 @Composable
 fun HeaderHome(
-    navController: NavController,
     navRotasController: NavController
 ) {
-    Row (
+    Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
-    ){
-        Icon(
-            imageVector = Icons.Default.Notifications,
-            contentDescription = "leadingIconDescription",
-            tint = Color(0xFF35225F),
-            modifier = Modifier
-                .size(35.dp)
-        )
+    ) {
+        IconButton(
+            onClick = {
+                navRotasController.navigate("notification_screen")
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Notifications,
+                contentDescription = "leadingIconDescription",
+                tint = Color(0xFF35225F),
+                modifier = Modifier
+                    .size(35.dp)
+            )
+        }
         IconButton(
             onClick = {
                 navRotasController.navigate("setting_screen")
@@ -55,9 +60,3 @@ fun HeaderHome(
 
     }
 }
-
-//@Preview
-//@Composable
-//fun HeaderHomePreview() {
-//    HeaderHome()
-//}

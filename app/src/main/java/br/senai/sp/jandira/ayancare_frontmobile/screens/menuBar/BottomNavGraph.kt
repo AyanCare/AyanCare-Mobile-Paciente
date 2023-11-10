@@ -32,10 +32,10 @@ fun BottomNavGraph(
             CalendaryScreen(navController = navController, navRotasController = navRotasController)
         }
         composable(route = BottomBarScreen.Home.route){
-            HomeScreen(navController, navRotasController)
+            HomeScreen(navRotasController = navRotasController)
         }
         composable(route = BottomBarScreen.Profile.route){
-            ProfileScreen(navController = navController, navRotasController)
+            ProfileScreen(navController = navController, navRotasController = navRotasController)
         }
     }
 }

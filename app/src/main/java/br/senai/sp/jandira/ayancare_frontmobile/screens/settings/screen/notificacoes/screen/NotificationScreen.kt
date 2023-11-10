@@ -53,7 +53,7 @@ fun NotificationScreen(
             ) {
                 IconButton(
                     onClick = {
-                        navController.navigate("setting_screen")
+                        navController.popBackStack()
                     }
                 ) {
                     Icon(

@@ -36,7 +36,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteReposi
 
 @Composable
 fun HomeScreen(
-    navController: NavController,
     navRotasController: NavController
 ) {
 
@@ -59,7 +58,7 @@ fun HomeScreen(
                 .padding(top = 30.dp, start = 15.dp, end = 15.dp, bottom = 80.dp)
                 .fillMaxSize()
         ) {
-            HeaderHome(navController, navRotasController)
+            HeaderHome(navRotasController)
 
             Spacer(modifier = Modifier.height(5.dp))
 
