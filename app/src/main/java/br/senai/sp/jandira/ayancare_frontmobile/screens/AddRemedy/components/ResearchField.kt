@@ -91,9 +91,6 @@ fun ResearchField(
 
     })
 
-    //categories = listOf(listRemedy.toString())
-
-    // Category Field
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -202,7 +199,6 @@ fun CategoryItems(
     title: String,
     onSelect: (String) -> Unit
 ) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -213,5 +209,4 @@ fun CategoryItems(
     ) {
         Text(text = title, fontSize = 16.sp)
     }
-
 }

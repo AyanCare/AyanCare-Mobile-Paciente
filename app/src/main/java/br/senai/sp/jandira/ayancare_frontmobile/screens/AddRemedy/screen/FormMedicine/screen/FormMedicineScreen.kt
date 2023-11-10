@@ -1,7 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.screen
 
-import android.app.PendingIntent
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -41,7 +39,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.MedidasResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.service.Medidas
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.FormMedicine.components.SelectOptionFormMedicine
-import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.service.Alarme
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import retrofit2.Call
 import retrofit2.Callback

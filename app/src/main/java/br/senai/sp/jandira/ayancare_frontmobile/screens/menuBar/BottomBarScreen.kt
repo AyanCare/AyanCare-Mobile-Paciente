@@ -12,7 +12,6 @@ sealed class BottomBarScreen(
     val  title : String,
     val icon : ImageVector,
 ){
-
     object  Stock : BottomBarScreen(
         route = "stock",
         title = "Estoque",

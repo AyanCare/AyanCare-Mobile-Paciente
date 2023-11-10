@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,7 +28,6 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -37,14 +35,16 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
-import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResetPasswordRepository
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecuperacaoEmailScreen(navController: NavController, onEmailEntered: (String) -> Unit,  lifecycleScope: LifecycleCoroutineScope) {
+fun RecuperacaoEmailScreen(
+    navController: NavController,
+    onEmailEntered: (String) -> Unit,
+    lifecycleScope: LifecycleCoroutineScope
+) {
 
     var textstate2 by remember { mutableStateOf("") }
 
@@ -160,9 +160,3 @@ fun RecuperacaoEmailScreen(navController: NavController, onEmailEntered: (String
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun RecuperacaoEmailPreview() {
-//    RecuperacaoEmailScreen()
-//}

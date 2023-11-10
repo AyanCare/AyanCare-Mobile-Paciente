@@ -1,6 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,7 +30,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components.Prog
 fun PatientAddressScreen(
     navController: NavController
 ){
-
     Surface (
         color = Color(248, 240, 236)
     ) {

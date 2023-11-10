@@ -259,7 +259,7 @@ fun ViewEmergencyScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                LazyColumn() {
+                LazyColumn{
                     items(listResponsavel) {
                         CustomSwitchWithLabel(
                             text = it.nome,

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -51,10 +50,8 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.LoginRe
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.deleteUserSQLite
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
-import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 import kotlinx.coroutines.launch
 import org.json.JSONObject
-
 
 @Composable
 fun LoginScreen(
@@ -86,7 +83,8 @@ fun LoginScreen(
     }
 
     val validateEmailError = "O formato do e-mail não é válido"
-    val validatePasswordError = "Deve misturar letras maiúsculas e minúsculas, pelo menos um número, caracter especial e mínimo de 8 caracteres"
+    val validatePasswordError =
+        "Deve misturar letras maiúsculas e minúsculas, pelo menos um número, caracter especial e mínimo de 8 caracteres"
 
     fun validateData(email: String, password: String): Boolean {
         val passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#\$%^&+=!]).{8,}\$".toRegex()
@@ -97,11 +95,11 @@ fun LoginScreen(
         return validateEmail && validatePassword
     }
 
-    fun login (
+    fun login(
         email: String,
         password: String
     ) {
-        if(validateData(email, password)){
+        if (validateData(email, password)) {
             val loginRepository = LoginRepository()
             lifecycleScope.launch {
                 Log.e("TA", "login: $email e $password")
@@ -110,8 +108,8 @@ fun LoginScreen(
 
                 Log.e("TAG", "login: ${response.body()}")
 
-                if(response.isSuccessful){
-                    Log.e(MainActivity::class.java.simpleName, "Login bem-sucedido" )
+                if (response.isSuccessful) {
+                    Log.e(MainActivity::class.java.simpleName, "Login bem-sucedido")
                     Log.e("login", "login: ${response.body()}")
                     val checagem = response.body()?.get("status")
                     if (checagem.toString() == "404") {
@@ -145,10 +143,10 @@ fun LoginScreen(
                                 tipo = tipo_usuario
                             )
 
-                             navController.navigate("main_screen")
+                            navController.navigate("main_screen")
 
                         } else {
-                            deleteUserSQLite(context = context , id)
+                            deleteUserSQLite(context = context, id)
                             saveLogin(
                                 context = context,
                                 id = id.toLong(),
@@ -166,7 +164,7 @@ fun LoginScreen(
 
                         Toast.makeText(context, "Seja bem-vindo", Toast.LENGTH_SHORT).show()
                     }
-                }else{
+                } else {
                     val errorBody = response.errorBody()?.string()
 
                     Log.e(MainActivity::class.java.simpleName, "Erro durante o login: $errorBody")
@@ -179,18 +177,17 @@ fun LoginScreen(
     }
 
 
-    Surface (
+    Surface(
         color = Color(248, 240, 236)
-    ){
+    ) {
         Wave()
-
-        Column (
+        Column(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .padding(top = 40.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
                 .fillMaxSize()
-        ){
+        ) {
 
             Text(
                 text = "Olá!",
@@ -199,9 +196,9 @@ fun LoginScreen(
                 fontWeight = FontWeight(600),
                 color = Color(0xFF000000)
             )
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(
                     text = "Bem-vindo de volta!",
                     fontSize = 18.sp,
@@ -221,11 +218,11 @@ fun LoginScreen(
             }
             Spacer(modifier = Modifier.height(20.dp))
 
-            Column (
+            Column(
                 horizontalAlignment = Alignment.End,
                 modifier = Modifier
                     .padding(start = 20.dp, end = 20.dp)
-            ){
+            ) {
                 CustomOutlinedTextField(
                     value = emailState,
                     onValueChange = { emailState = it },
@@ -279,8 +276,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-
-            Column (
+            Column(
                 modifier = Modifier.width(190.dp)
             ) {
                 DefaultButton(
@@ -293,7 +289,7 @@ fun LoginScreen(
                     })
             }
 
-           // Line()
+            // Line()
 
 //            Row {
 //                SocialMedia {}
@@ -303,9 +299,9 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(50.dp))
 
-            Column (
+            Column(
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 Text(
                     text = "Não tem conta?",
                     fontSize = 15.sp,
@@ -328,6 +324,5 @@ fun LoginScreen(
             }
 
         }
-
     }
 }

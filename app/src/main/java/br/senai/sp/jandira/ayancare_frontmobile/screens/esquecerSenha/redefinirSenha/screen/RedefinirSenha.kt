@@ -29,7 +29,6 @@ fun RedefinirSenhaScreen(navController: NavController) {
         color = Color(248, 240, 236)
     ) {
         Wave()
-
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -77,9 +76,3 @@ fun RedefinirSenhaScreen(navController: NavController) {
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun RedefinirSenhaPreview() {
-//    RedefinirSenhaScreen()
-//}

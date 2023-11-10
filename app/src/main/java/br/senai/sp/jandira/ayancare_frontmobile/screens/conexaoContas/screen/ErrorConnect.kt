@@ -80,13 +80,6 @@ fun ErrorConnect() {
                     textDecoration = TextDecoration.Underline
                 )
             }
-
         }
     }
-}
-
-@Preview
-@Composable
-fun ErrorConnectPreview() {
-    ErrorConnect()
 }

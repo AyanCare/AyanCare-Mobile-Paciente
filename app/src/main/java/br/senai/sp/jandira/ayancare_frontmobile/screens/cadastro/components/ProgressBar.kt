@@ -1,7 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -15,14 +14,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
-fun ProgressBar(text: String, valor: Int) {
-
+fun ProgressBar(
+    text: String,
+    valor: Int
+) {
     Column (
         horizontalAlignment = Alignment.CenterHorizontally
     ){
@@ -49,13 +49,5 @@ fun ProgressBar(text: String, valor: Int) {
                     .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 5.dp))
             ){}
         }
-
     }
-
-}
-
-@Preview
-@Composable
-fun BarraProgressoPreview() {
-    ProgressBar(text = "1 / 3", valor = 110)
 }

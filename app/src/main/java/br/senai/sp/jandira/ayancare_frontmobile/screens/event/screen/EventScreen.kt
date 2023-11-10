@@ -63,17 +63,11 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.DateEve
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.HeaderEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.OptionEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.TimeTextField
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.toAmericanDateFormat
-import br.senai.sp.jandira.ayancare_frontmobile.screens.login.components.Line
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

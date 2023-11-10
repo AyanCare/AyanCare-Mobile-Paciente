@@ -24,12 +24,13 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 
 @Composable
-fun CodigoRecuperacaoScreen(navController: NavController) {
+fun CodigoRecuperacaoScreen(
+    navController: NavController
+) {
     Surface(
         color = Color(248, 240, 236)
     ) {
         Wave()
-
         Column (
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -74,9 +75,3 @@ fun CodigoRecuperacaoScreen(navController: NavController) {
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun CodigoRecuperacaoPreview() {
-//    CodigoRecuperacaoScreen()
-//}

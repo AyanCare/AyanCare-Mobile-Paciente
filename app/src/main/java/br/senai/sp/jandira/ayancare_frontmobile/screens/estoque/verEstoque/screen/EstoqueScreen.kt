@@ -40,7 +40,6 @@ fun EstoqueScreen(
                 .padding(top = 30.dp, start = 15.dp, end = 15.dp, bottom = 80.dp)
                 .fillMaxSize()
         ) {
-
             Text(
                 text = "Estoque de \nRemédio",
                 fontSize = 36.sp,
@@ -49,7 +48,6 @@ fun EstoqueScreen(
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center
             )
-
             Row (
                 modifier = Modifier.padding(start = 15.dp, end = 15.dp)
             ){
@@ -78,13 +76,6 @@ fun EstoqueScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                 }
             }
-
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun EstoquePreview() {
-//    EstoqueScreen()
-//}

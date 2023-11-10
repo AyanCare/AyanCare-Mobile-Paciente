@@ -1,16 +1,11 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.event.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -26,7 +21,6 @@ import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextAreaValidate
 import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextFieldValidate
-import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 
 @Composable
 fun OptionEvent(

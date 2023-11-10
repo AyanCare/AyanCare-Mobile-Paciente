@@ -1,7 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
@@ -10,7 +9,6 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentColor
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -21,7 +19,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -29,7 +26,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar.components.IconDefault
-import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.CreateAccountView
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -57,24 +53,19 @@ fun BottomBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentdestination = navBackStackEntry?.destination
 
-    var viewModel = viewModel<CreateAccountView>()
-
-    //Log.e("View", "MenuScreenA: ${viewModel.id}")
-
-
-
     BottomNavigation(
         modifier =  Modifier
             .height(80.dp),
         elevation = 0.dp,
     ){
         screen.forEach{screen ->
-            AddItem(screen = screen, currentDestination = currentdestination, navController = navController)
-            //Log.e("View", "MenuScreenB: ${viewModel.id}")
+            AddItem(
+                screen = screen,
+                currentDestination = currentdestination,
+                navController = navController
+            )
         }
     }
-    //Log.e("View", "MenuScreenC ${viewModel.id}")
-
 }
 
 
@@ -84,7 +75,6 @@ fun RowScope.AddItem(
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
-
     val currentRoute = currentDestination?.route
     val selected = currentRoute == screen.route
 

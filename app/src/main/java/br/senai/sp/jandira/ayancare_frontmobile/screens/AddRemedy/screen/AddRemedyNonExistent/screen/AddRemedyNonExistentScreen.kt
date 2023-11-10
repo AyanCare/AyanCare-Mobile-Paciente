@@ -124,5 +124,4 @@ fun AddRemedyNonExistentScreen(
             )
         }
     }
-
 }

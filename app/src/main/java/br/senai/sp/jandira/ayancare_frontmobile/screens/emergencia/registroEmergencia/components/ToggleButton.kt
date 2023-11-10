@@ -51,10 +51,3 @@ fun SwitchWithPhoneNumber(
         )
     }
 }
-
-
-@Preview
-@Composable
-fun ToggleButtonPreview() {
-    SwitchWithPhoneNumber()
-}

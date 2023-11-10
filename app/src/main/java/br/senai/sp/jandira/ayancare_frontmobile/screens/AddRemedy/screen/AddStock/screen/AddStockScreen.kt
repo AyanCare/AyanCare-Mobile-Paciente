@@ -35,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -46,7 +45,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 fun AddStockScreen(
     navController: NavController
 ) {
-
     var quantidadeState by remember {
         mutableStateOf("")
     }
@@ -54,7 +52,6 @@ fun AddStockScreen(
     var limiteState by remember {
         mutableStateOf("")
     }
-
 
     Surface(
         color = Color(248, 240, 236)
@@ -169,11 +166,8 @@ fun AddStockScreen(
                             keyboardType = KeyboardType.Number
                         )
                     )
-
                 }
-
             }
-
             Column (
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
@@ -197,14 +191,6 @@ fun AddStockScreen(
                     }
                 )
             }
-
-
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun aaa() {
-//    AddStockScreen()
-//}
