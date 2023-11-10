@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "52650776374",
-    "project_id": "ayancare-frontmobile",
-    "storage_bucket": "ayancare-frontmobile.appspot.com"
+    "project_number": "517071211400",
+    "project_id": "ayancare-mobilepaciente",
+    "storage_bucket": "ayancare-mobilepaciente.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:52650776374:android:614a8d5b76f82b9c6b0597",
+        "mobilesdk_app_id": "1:517071211400:android:059d3c48ed1c1ea7dfc83d",
         "android_client_info": {
           "package_name": "br.senai.sp.jandira.ayancare_frontmobile"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBJ_9IvmPut9mW3A1gwmGA4Uo1iuAm04KU"
+          "current_key": "AIzaSyDUvFrkhS2J7tv8PgoTUSgdGmnK5JF1NnY"
         }
       ],
       "services": {
