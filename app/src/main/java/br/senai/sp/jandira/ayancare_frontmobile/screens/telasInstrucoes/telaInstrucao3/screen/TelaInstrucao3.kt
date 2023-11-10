@@ -1,7 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInstrucao3.screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,8 +28,9 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Header
 
 @Composable
-fun TelaInstrucao3Screen(navController: NavController) {
-
+fun TelaInstrucao3Screen(
+    navController: NavController
+) {
     Column (
         modifier = Modifier
             .padding(15.dp)
@@ -77,7 +76,7 @@ fun TelaInstrucao3Screen(navController: NavController) {
             color = Color(0xFF35225F),
             textAlign = TextAlign.Center
         )
-        Row (){
+        Row {
             Card(
                 Modifier
                     .width(10.dp)
@@ -100,18 +99,14 @@ fun TelaInstrucao3Screen(navController: NavController) {
             ) {}
 
         }
-        DefaultButton(text = "Ir para o app", onClick = {navController.navigate("main_screen")})
+        DefaultButton(
+            text = "Ir para o app",
+            onClick = { navController.navigate("main_screen") }
+        )
         Text(
             text = "Pular",
             fontSize = 14.sp,
             color = Color.Transparent,
         )
     }
-
 }
-
-//@Preview(showBackground = true, showSystemUi = true)
-//@Composable
-//fun TelaHome3Preview() {
-//    TelaHome3Screen()
-//}

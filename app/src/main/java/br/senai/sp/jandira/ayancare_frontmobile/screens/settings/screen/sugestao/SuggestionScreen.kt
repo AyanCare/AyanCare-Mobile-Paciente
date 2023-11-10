@@ -43,7 +43,6 @@ fun SuggestionScreen(
     navController: NavController,
     navRotasController: NavController
 ) {
-
     var nomeState by remember {
         mutableStateOf("")
     }
@@ -51,7 +50,6 @@ fun SuggestionScreen(
     var descricaoState by remember {
         mutableStateOf("")
     }
-
 
     Surface(
         color = Color(248, 240, 236)
@@ -148,16 +146,6 @@ fun SuggestionScreen(
                     )
                 }
             }
-
-
         }
     }
-
 }
-
-//@Preview
-//@Composable
-//fun SuggestionScreenPreview() {
-//    SuggestionScreen()
-//}
-

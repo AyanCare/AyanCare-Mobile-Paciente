@@ -60,13 +60,6 @@ fun CardLinkedAccounts(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-//                Image(
-//                    painter = painterResource(id = R.drawable.relogio),
-//                    contentDescription = "User Image",
-//                    modifier = Modifier
-//                        .size(60.dp)
-//                        .clip(CircleShape)
-//                )
                 AsyncImage(
                     model = "$foto",
                     contentDescription = "",

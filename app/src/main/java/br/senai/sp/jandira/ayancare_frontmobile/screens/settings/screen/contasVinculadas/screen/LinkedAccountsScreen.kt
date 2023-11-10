@@ -46,7 +46,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components.CardLinkedAccounts
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components.FloatingActionButtonConectarContas
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.components.ModalDeleteConect
-import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.responsible.components.ModalDeleteResponsable
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -229,6 +228,4 @@ fun LinkedAccountsScreen(
             FloatingActionButtonConectarContas(navController, lifecycleScope)
         }
     }
-
-
 }

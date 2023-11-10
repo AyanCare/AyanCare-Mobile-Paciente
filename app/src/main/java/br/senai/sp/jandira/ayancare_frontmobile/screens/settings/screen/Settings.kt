@@ -49,20 +49,6 @@ fun SettingsScreen(
     navRotasController: NavController
 ) {
 
-    val context = LocalContext.current
-
-    val dados = PacienteRepository(context = context).findUsers()
-
-    var id = 0
-
-    var array = Paciente()
-
-    if(dados.isNotEmpty()){
-        array = dados[0]
-
-        id = array.id.toInt()
-    }
-
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     Surface(
@@ -113,7 +99,6 @@ fun SettingsScreen(
             )
 
             Spacer(modifier = Modifier.height(30.dp))
-
 
             CardSettings(
                 imageVector = Icons.Default.SupervisedUserCircle,
@@ -172,8 +157,6 @@ fun SettingsScreen(
                     navRotasController.navigate("sugestoes_screen")
                 }
             )
-
-
             Row (
                 modifier = Modifier
                     .fillMaxSize(),
@@ -204,9 +187,3 @@ fun SettingsScreen(
         }
     }
 }
-
-//@Preview
-//@Composable
-//fun SettingsScreenPreview() {
-//    SettingsScreen()
-//}

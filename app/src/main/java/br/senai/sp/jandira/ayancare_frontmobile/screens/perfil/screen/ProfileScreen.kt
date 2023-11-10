@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,10 +34,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CardMedicine
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CircleProfile
@@ -61,7 +60,7 @@ fun ProfileScreen(
     val array = PacienteRepository(context = context).findUsers()
 
     val paciente = array[0]
-    var id = paciente.id.toLong()
+    var id = paciente.id
     var foto = paciente.foto
 
     // Mantenha uma lista de  patients no estado da tela
@@ -167,7 +166,7 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                LazyRow() {
+                LazyRow{
                     items(listPaciente.doencas_cronicas.reversed()) {
 
                         var text = if (listPaciente.doencas_cronicas[0].nome == null){
@@ -196,7 +195,7 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                LazyRow() {
+                LazyRow{
                     items(listPaciente.comorbidades.reversed()) {
 
                         var text = if (listPaciente.comorbidades[0].nome == null){

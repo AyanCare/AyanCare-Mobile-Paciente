@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
-import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 
 @Composable
 fun FloatingActionButtonConectarContas(
@@ -79,7 +78,6 @@ fun FloatingActionButtonConectarContas(
                 ModalAddConect(
                     isDialogVisibleConect = false,
                     navController = navController,
-                    lifecycleScope = lifecycleScope,
                     nav = "linked_accounts_screen"
                 )
             }

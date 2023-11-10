@@ -28,7 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -47,9 +47,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
-import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
-
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -175,7 +172,7 @@ fun PatientCodeScreen(
                     DefaultButton(
                         onClick = {
                             // Copiar o valor do TextField para a área de transferência
-                            clipboardManager.setText(AnnotatedString("${id.toString()}"))
+                            clipboardManager.setText(AnnotatedString("$id"))
                             copiadoComSucesso = true
                         },
                         text = if(copiadoComSucesso){

@@ -1,10 +1,8 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.settings.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.Paciente
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.deleteUserSQLite
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
@@ -41,13 +38,9 @@ fun MyBottomSheet(
     onDismiss: () -> Unit,
     navController: NavController
 ) {
-
     val context = LocalContext.current
-
     val dados = PacienteRepository(context = context).findUsers()
-
     var id = 0
-
     var array = Paciente()
 
     if(dados.isNotEmpty()){
@@ -67,7 +60,6 @@ fun MyBottomSheet(
                 verticalArrangement = Arrangement.SpaceAround,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                //Text("Deseja realmente sair do APP?")
                 Text(
                     text = "Deseja realmente sair do APP?",
                     fontSize = 18.sp,

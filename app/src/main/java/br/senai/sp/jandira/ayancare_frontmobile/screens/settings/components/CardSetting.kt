@@ -31,7 +31,6 @@ fun CardSettings(
     text: String,
     onClick: () -> Unit
 ) {
-
     Row (
         modifier = Modifier
             .fillMaxWidth()
@@ -67,9 +66,3 @@ fun CardSettings(
     }
     Spacer(modifier = Modifier.height(10.dp))
 }
-
-//@Preview
-//@Composable
-//fun CardSettingsPreview() {
-//    CardSettings()
-//}

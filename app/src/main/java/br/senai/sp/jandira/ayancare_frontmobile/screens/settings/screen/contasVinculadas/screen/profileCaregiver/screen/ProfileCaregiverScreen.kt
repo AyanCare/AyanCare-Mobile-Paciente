@@ -53,7 +53,6 @@ fun ProfileCaregiverScreen(
     //navRotasController: NavController,
     localStorage: Storage
 ) {
-
     val context = LocalContext.current
 
     val scrollState = rememberScrollState()

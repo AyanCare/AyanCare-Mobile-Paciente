@@ -2,22 +2,18 @@ package br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen
 
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -60,7 +56,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
-import java.util.Date
 
 @Composable
 fun HumorTestScreen(
@@ -94,12 +89,6 @@ fun HumorTestScreen(
         mutableStateOf<List<Exercicio>>(emptyList())
     }
 
-
-
-    //Log.i("TAG", "HumorTestScreen: $data")
-
-
-
     //Cria uma chamada para o endpoint
     var call = RetrofitFactory.getTesteHumor().getTesteHumor()
 
@@ -116,7 +105,6 @@ fun HumorTestScreen(
         override fun onFailure(call: Call<TesteHumorResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
-
     })
 
     fun testeHumor(

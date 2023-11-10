@@ -54,7 +54,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.components.DateTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
@@ -291,7 +290,7 @@ fun EditProfileScreen(
                         nav = "edit_profile_screen"
                     )
                 }
-                LazyRow() {
+                LazyRow{
                     items(listPaciente.doencas_cronicas.reversed()) {
 
                         var text = if (listPaciente.doencas_cronicas[0].nome == null){
@@ -344,7 +343,7 @@ fun EditProfileScreen(
                     )
                 }
 
-                LazyRow() {
+                LazyRow{
                     items(listPaciente.comorbidades.reversed()) {
 
                         var text = if (listPaciente.comorbidades[0].nome == null){

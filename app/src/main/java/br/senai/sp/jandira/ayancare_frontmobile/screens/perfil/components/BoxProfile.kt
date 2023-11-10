@@ -8,12 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun BoxProfile() {
-    Box (
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
@@ -27,13 +26,5 @@ fun BoxProfile() {
                         )
                     )
             )
-    ) {
-
-    }
-}
-
-@Preview
-@Composable
-fun BoxProfilePreview() {
-    BoxProfile()
+    )
 }

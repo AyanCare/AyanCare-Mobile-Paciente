@@ -32,17 +32,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
-import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
-import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldNumber
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.ConectarResponse
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.service.Conectar
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ComorbidityRepository
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -51,7 +46,6 @@ import retrofit2.Response
 fun ModalAddConect(
     isDialogVisibleConect: Boolean,
     navController: NavController,
-    lifecycleScope: LifecycleCoroutineScope,
     nav: String
 ) {
 

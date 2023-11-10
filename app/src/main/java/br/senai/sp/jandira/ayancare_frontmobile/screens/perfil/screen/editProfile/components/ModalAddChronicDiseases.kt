@@ -156,7 +156,6 @@ fun ModalAddChronicDiseases(
                                 grauState,
                                 id_paciente = id.toInt()
                             )
-
                             //navController.navigate("edit_profile_screen")
                         },
                         text = "Salvar"

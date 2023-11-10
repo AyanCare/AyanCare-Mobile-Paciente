@@ -140,8 +140,6 @@ fun ModalAddComorbidity(
                                 nome = nomeState,
                                 id_paciente = id.toInt()
                             )
-
-
                         },
                         text = "Salvar"
                     )

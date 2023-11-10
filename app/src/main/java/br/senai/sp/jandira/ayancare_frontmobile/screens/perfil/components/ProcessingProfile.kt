@@ -28,41 +28,32 @@ fun ProcessingProfile(
     text: String,
     width: Int
 ) {
-        Card (
+    Card(
+        modifier = Modifier
+            .padding(0.dp)
+            .width(width.dp)
+            .height(50.dp),
+        shape = RoundedCornerShape(size = 16.dp),
+        backgroundColor = Color(0xFF35225F)
+    ) {
+        Row(
             modifier = Modifier
-                .padding(0.dp)
-                .width(width.dp)
-                .height(50.dp),
-            shape = RoundedCornerShape(size = 16.dp),
-            backgroundColor = Color(0xFF35225F)
-        ){
-            Row (
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 5.dp, end = 5.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                .fillMaxSize()
+                .padding(start = 5.dp, end = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        )
+        {
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                lineHeight = 20.sp,
+                fontFamily = FontFamily(Font(R.font.poppins)),
+                fontWeight = FontWeight(500),
+                color = Color(0xFFFFFFFF),
+                textAlign = TextAlign.Center
             )
-            {
-                Text(
-                    text = text,
-                    fontSize = 16.sp,
-                    lineHeight = 20.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins)),
-                    fontWeight = FontWeight(500),
-                    color = Color(0xFFFFFFFF),
-                    textAlign = TextAlign.Center
-                )
-            }
-            Spacer(modifier = Modifier.size(10.dp))
         }
-
-
-
+        Spacer(modifier = Modifier.size(10.dp))
+    }
 }
-
-//@Preview
-//@Composable
-//fun ProcessingProfilePreview() {
-//    ProcessingProfile()
-//}
