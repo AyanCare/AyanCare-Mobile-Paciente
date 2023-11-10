@@ -151,7 +151,7 @@ fun SelectOptionMedicationFrequency(
         if (selectedValue == options[1]) {
             if (1 + 1 <= additionalRows) {
                 repeat(additionalRows) {
-                    AddNewRow()
+                    AddNewRow(localStorage)
                 }
             }
             Text(
@@ -199,7 +199,9 @@ fun SelectOptionMedicationFrequency(
 }
 
 @Composable
-fun AddNewRow() {
+fun AddNewRow(
+    localStorage: Storage
+) {
     var isRowVisible by remember { mutableStateOf(true) }
 
     if (isRowVisible) {
@@ -229,6 +231,10 @@ fun AddNewRow() {
                 verticalAlignment = Alignment.Bottom,
                 horizontalArrangement = Arrangement.Center
             ) {
+                TimeMedication(
+                    width = 150,
+                    localStorage = localStorage
+                )
                 Spacer(modifier = Modifier.width(60.dp))
                 TextFieldNumber(
                     valor = "number",
