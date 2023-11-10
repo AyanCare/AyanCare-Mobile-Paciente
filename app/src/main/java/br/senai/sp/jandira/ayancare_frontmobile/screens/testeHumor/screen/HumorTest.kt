@@ -165,7 +165,7 @@ fun HumorTestScreen(
             //verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 20.dp)
+                .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 10.dp)
                 .fillMaxSize()
         ) {
             Text(
@@ -185,7 +185,7 @@ fun HumorTestScreen(
                 textAlign = TextAlign.Center
             )
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Column(
                 verticalArrangement = Arrangement.SpaceBetween
@@ -198,7 +198,7 @@ fun HumorTestScreen(
                     color = Color(0xFF000000),
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(5.dp))
 
                 //val items = listOf(listTesteHumor_Humor[0].resposta)
                 var selectedItems by remember {
@@ -226,7 +226,8 @@ fun HumorTestScreen(
                                     selected = false
                                 }
                                 Log.e("TAG", "HumorTestScreen: $selectedItems")
-                            }
+                            },
+                            foto = it.imagem
                         )
 
                         Spacer(modifier = Modifier.width(5.dp))
@@ -245,7 +246,7 @@ fun HumorTestScreen(
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(5.dp))
 
                     LazyRow() {
                         items(listTesteHumor_Exercicio) {
@@ -269,7 +270,8 @@ fun HumorTestScreen(
                                         selected = false
                                     }
                                     Log.e("TAG", "HumorTestScreen: $selectedItems")
-                                }
+                                },
+                                foto = it.imagem
                             )
 
                             Spacer(modifier = Modifier.width(10.dp))
@@ -288,7 +290,7 @@ fun HumorTestScreen(
                     textAlign = TextAlign.Center
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(5.dp))
 
                 LazyRow() {
                     items(listTesteHumor_Sintoma) {

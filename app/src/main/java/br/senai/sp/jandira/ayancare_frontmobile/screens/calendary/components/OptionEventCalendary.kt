@@ -9,11 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ReportProblem
+import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
@@ -51,7 +50,19 @@ fun OptionEventCalendary() {
     var listEvents by remember {
         mutableStateOf(
             listOf(
-                Event(0, "", "", "", "", "", "", "", "", "", "")
+                Event(
+                    id = 0,
+                    paciente = "",
+                    cuidador = "",
+                    nome = "",
+                    descricao = "",
+                    local = "",
+                    horario = "",
+                    dia = "",
+                    dia_unico = "",
+                    mes = "",
+                    cor = ""
+                )
             )
         )
     }
@@ -79,26 +90,65 @@ fun OptionEventCalendary() {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
     })
-    Column (
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 15.dp, end = 15.dp)
-    ){
-        Text(
-            text = "Evento de hoje",
-            fontSize = 24.sp,
-            fontFamily = FontFamily(Font(R.font.poppins)),
-            fontWeight = FontWeight(400),
-            color = Color(0xFF35225F)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        for (event in listEvents) {
-            CardCalendary(
-                value = event.dia_unico,
-                title = "${event.dia_unico} de ${event.mes}",
-                subtitle = event.nome
+
+    if (listEvents.isEmpty()){
+        Column (
+            modifier = Modifier
+                .height(300.dp)
+                .padding(start = 15.dp, end = 15.dp)
+        ){
+            Text(
+                text = "Rotina de hoje",
+                fontSize = 24.sp,
+                fontFamily = FontFamily(Font(R.font.poppins)),
+                fontWeight = FontWeight(400),
+                color = Color(0xFF35225F)
             )
             Spacer(modifier = Modifier.height(10.dp))
+            Column (
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Icon(
+                    imageVector = Icons.Default.DeveloperMode,
+                    contentDescription = "",
+                    modifier = Modifier.size(50.dp)
+                )
+                Text(
+                    text = "Não existe nenhum\n evento no momento",
+                    fontSize = 16.sp,
+                    lineHeight = 18.sp,
+                    fontFamily = FontFamily(Font(R.font.poppins)),
+                    fontWeight = FontWeight(500),
+                    color = Color(0xFF000000),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }else {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 15.dp, end = 15.dp)
+        ) {
+            Text(
+                text = "Evento de hoje",
+                fontSize = 24.sp,
+                fontFamily = FontFamily(Font(R.font.poppins)),
+                fontWeight = FontWeight(400),
+                color = Color(0xFF35225F)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            for (event in listEvents) {
+                CardCalendary(
+                    value = event.dia_unico,
+                    title = "${event.dia_unico} de ${event.mes}",
+                    subtitle = event.nome,
+                    width = 60
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
         }
     }
 }

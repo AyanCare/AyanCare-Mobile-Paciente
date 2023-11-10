@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.retrofit
 
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.AlarmeService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.service.ConectarService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cor.service.CorService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cuidador.service.CuidadorService
@@ -15,9 +16,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitFactory {
 
-    //private const val BASE_URL = "http://10.107.144.17:8080"
+    private const val BASE_URL = "http://10.107.144.17:8080"
     //private const val BASE_URL = "https://ayancare-api.cyclic.cloud"
-    private const val BASE_URL = "http://192.168.0.112:8080" //192.168.0.120
+    //private const val BASE_URL = "http://192.168.0.112:8080" //192.168.0.120
 
     fun getInstance(): Retrofit{
         return Retrofit.Builder()
@@ -70,6 +71,10 @@ object RetrofitFactory {
 
     fun getCor(): CorService {
         return retrofitFactory.create(CorService::class.java)
+    }
+
+    fun getAlarme(): AlarmeService {
+        return retrofitFactory.create(AlarmeService::class.java)
     }
 
 }

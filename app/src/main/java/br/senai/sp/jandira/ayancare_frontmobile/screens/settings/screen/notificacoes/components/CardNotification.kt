@@ -34,7 +34,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 fun CardNotification() {
     Card(
         onClick = { /*TODO*/ },
-        backgroundColor = Color(0x80FF0000),
+        backgroundColor = Color(0xFFFF0000),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
