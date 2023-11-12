@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.SelectOptionMedicationFrequency
+import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureRepeatingNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
@@ -160,7 +161,6 @@ fun MedicationFrequencyScreen(
                     val id_intervalo = localStorage.lerValor(context, "id_intervalo")
 
                     configureRepeatingNotification(context, selectedTime, id_intervalo!!.toInt())
-
                     val hora = selectedTime.get(Calendar.HOUR_OF_DAY)
                     val minutos = selectedTime.get(Calendar.MINUTE)
 

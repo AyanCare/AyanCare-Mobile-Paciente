@@ -42,6 +42,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextAreaValidate
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
+import br.senai.sp.jandira.ayancare_frontmobile.components.NotificationService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.TesteHumorResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.Exercicio
@@ -353,6 +354,11 @@ fun HumorTestScreen(
                                 id_paciente = 44,
                                 escolhas = selectedItems,
                                 data = data.toString()
+                            )
+                            NotificationService().showNotification(context = context,
+                                "Teste de Humor",
+                                "Teste de humor realizado com sucesso",
+                                Icon =R.drawable.test_humor_notification
                             )
                             Log.e("TAG", "HumorTestScreen: ${
                                 testeHumor(

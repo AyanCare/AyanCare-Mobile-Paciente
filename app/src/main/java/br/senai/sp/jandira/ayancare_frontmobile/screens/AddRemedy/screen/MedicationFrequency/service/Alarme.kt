@@ -71,6 +71,8 @@ class Alarme : BroadcastReceiver() {
             .setSmallIcon(R.drawable.logo)
             .addAction(0, "Mais 5 minutos", delayPendingIntent)
             .addAction(0, "cancelar", cancelSoundPendingIntent)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
         manager.notify(1, builder.build())
     }

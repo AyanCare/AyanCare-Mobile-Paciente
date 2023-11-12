@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.service.Alarme
-import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
 import java.text.SimpleDateFormat
@@ -36,7 +35,6 @@ import java.util.Calendar
 @Composable
 fun TimeMedication(
     width: Int,
-    localStorage: Storage
 ) {
     val context = LocalContext.current
     var selectedTime = remember { mutableStateOf(Calendar.getInstance()) }
@@ -88,7 +86,6 @@ fun TimeMedication(
                     horario = formatTime(selectedTime.value)
                 )
 
-                localStorage.lerValor(context,"id_medicamento")
                 val  alarmeId = alarmeRepository(context).saveAlarm(alarme)
 
 
@@ -127,7 +124,7 @@ private fun formatTime(calendar: Calendar): String {
     return sdf.format(calendar.time)
 }
 
-private fun configureNotification(context: Context) {
+fun configureNotification(context: Context) {
     val timeSec = System.currentTimeMillis()
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, Alarme::class.java)

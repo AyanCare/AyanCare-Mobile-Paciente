@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextFieldValidate
+import br.senai.sp.jandira.ayancare_frontmobile.components.NotificationService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cor.CorResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cor.service.Cor
@@ -251,6 +252,8 @@ fun EventScreen(
                         }else{
                             Toast.makeText(context, "sua cor foi escolhida", Toast.LENGTH_SHORT).show()
                         }
+
+
                         event(
                             nome = nameState,
                             descricaoSelecionada,
@@ -260,6 +263,14 @@ fun EventScreen(
                             idPaciente = id.toInt(),
                             idCor = selectedColorId!!
                         )
+
+                        NotificationService().showNotification(
+                            context = context,
+                            title = "Evendo criado",
+                            description = "Seu Evento foi criado com sucesso com o pasciente",
+                            Icon = R.drawable.calendario
+                        )
+
                         Log.e("TAG", "EventScreen: $selectedDate")
                     },
                     colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
