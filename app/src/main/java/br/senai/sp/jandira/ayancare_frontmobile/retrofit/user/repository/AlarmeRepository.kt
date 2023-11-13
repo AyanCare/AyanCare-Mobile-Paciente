@@ -24,12 +24,24 @@ class AlarmeRepository {
         return apiService.createAlarme(requestBody)
     }
 
+    suspend fun registerAlarmeUnitario(
+        quantidade: Int,
+        id_alarme_medicamento: Int
+    ): Response<JsonObject> {
+        val requestBody = JsonObject().apply {
+            addProperty("quantidade", quantidade)
+            addProperty("id_alarme_medicamento", id_alarme_medicamento)
+        }
+        return apiService.createAlarme(requestBody)
+    }
+
+    suspend fun updateAlarmeUnitario(
+        id_status_alarme: Int
+    ): Response<JsonObject> {
+        val requestBody = JsonObject().apply {
+            addProperty("id_status_alarme", id_status_alarme)
+        }
+        return apiService.createAlarme(requestBody)
+    }
 
 }
-
-//{
-//    "dia":"2023-09-12",
-//    "intervalo": 20000,
-//    "horario": "17:30:00",
-//    "id_medicamento": 10
-//}

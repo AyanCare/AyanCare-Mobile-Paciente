@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service
 
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeUnitariosResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmesResponse
 import com.google.gson.JsonObject
 import retrofit2.Call
 import retrofit2.Response
@@ -13,7 +14,10 @@ import retrofit2.http.Query
 interface AlarmeService {
 
     @GET("/v1/ayan/alarmes/unitario")
-    fun getAlarmesByIdPaciente(@Query("idPaciente") idPaciente: Int): Call<AlarmeResponse>
+    fun getAlarmesUnitariosByIdPaciente(@Query("idPaciente") idPaciente: Int): Call<AlarmeUnitariosResponse>
+
+    @GET("/v1/ayan/alarmes")
+    fun getAlarmesByIdPaciente(@Query("idPaciente") idPaciente: Int): Call<AlarmesResponse>
 
     @Headers("Content-Type: application/json")
     @POST("/v1/ayan/medicamento")

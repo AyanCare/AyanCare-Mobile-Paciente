@@ -30,8 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeUnitariosResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmesResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.Alarme
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.AlarmeUnitario
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,10 +49,10 @@ fun OptionAlarmCalendary() {
     val paciente = array[0]
     var id = paciente.id.toLong()
 
-    var listAlarme by remember {
+    var listAlarmeUnitario by remember {
         mutableStateOf(
             listOf(
-                Alarme(
+                AlarmeUnitario(
                     id_alarme_unitario = 0,
                     id_medicamento = 0,
                     medicamento = "",
@@ -71,31 +73,73 @@ fun OptionAlarmCalendary() {
         )
     }
 
-    //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getAlarme().getAlarmesByIdPaciente(id.toInt())
+    var listAlarme by remember {
+        mutableStateOf(
+            listOf(
+                Alarme(
+                    paciente = "",
+                    id = 0,
+                    dia = "",
+                    intervalo = 0,
+                    horario = "",
+                    id_medicamento = 0,
+                    medicamento = ""
+                )
+            )
+        )
+    }
 
-    call.enqueue(object : Callback<AlarmeResponse> {
+
+
+    //Cria uma chamada para o endpoint
+    var call = RetrofitFactory.getAlarme().getAlarmesUnitariosByIdPaciente(2)
+
+    call.enqueue(object : Callback<AlarmeUnitariosResponse> {
         override fun onResponse(
-            call: Call<AlarmeResponse>,
-            response: Response<AlarmeResponse>
+            call: Call<AlarmeUnitariosResponse>,
+            response: Response<AlarmeUnitariosResponse>
         ) {
-            Log.e("TAG", "onResponse: ${response.body()}")
+            Log.e("listAlarmeUnitario", "onResponse: ${response.body()}")
 
             if (response.body()!!.status == 404) {
-                Log.e("TAG", "a resposta está nula")
+                Log.e("listAlarmeUnitario", "a resposta está nula")
+                listAlarmeUnitario = emptyList()
+            } else {
+                listAlarmeUnitario = response.body()!!.alarme
+            }
+
+            Log.e("listAlarmeUnitario", "onResponse: $listAlarmeUnitario")
+        }
+        override fun onFailure(call: Call<AlarmeUnitariosResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+    })
+
+    //Cria uma chamada para o endpoint
+    var call1 = RetrofitFactory.getAlarme().getAlarmesByIdPaciente(id.toInt())
+
+    call1.enqueue(object : Callback<AlarmesResponse> {
+        override fun onResponse(
+            call: Call<AlarmesResponse>,
+            response: Response<AlarmesResponse>
+        ) {
+            Log.e("listAlarme", "onResponse: ${response.body()}")
+
+            if (response.body()!!.status == 404) {
+                Log.e("listAlarme", "a resposta está nula")
                 listAlarme = emptyList()
             } else {
                 listAlarme = response.body()!!.alarme
             }
 
-            Log.e("TAG", "onResponse: $listAlarme")
+            Log.e("listAlarme", "onResponse: $listAlarme")
         }
-        override fun onFailure(call: Call<AlarmeResponse>, t: Throwable) {
+        override fun onFailure(call: Call<AlarmesResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
     })
 
-    if (listAlarme.isEmpty()){
+    if (listAlarme.isEmpty() || listAlarmeUnitario.isEmpty()){
         Column (
             modifier = Modifier
                 .height(300.dp)
@@ -144,11 +188,20 @@ fun OptionAlarmCalendary() {
                 color = Color(0xFF35225F)
             )
             Spacer(modifier = Modifier.height(10.dp))
-            for (alarme in listAlarme) {
+            for (alarme in listAlarmeUnitario) {
                 CardCalendary(
                     value = alarme.horario_inicial,
                     title = "Alarme",
                     subtitle = "${alarme.quantidade_retirada}${alarme.medida_sigla} x ${alarme.medicamento}",
+                    width = 75
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+            for (alarme in listAlarme) {
+                CardCalendary(
+                    value = alarme.horario,
+                    title = "Alarme",
+                    subtitle = " x ${alarme.medicamento}", //${alarme.quantidade_retirada}${alarme.medida_sigla}
                     width = 75
                 )
                 Spacer(modifier = Modifier.height(10.dp))
