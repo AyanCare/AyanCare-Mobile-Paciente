@@ -21,11 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.service.Medidas
 
 @Composable
 fun SelectOptionFormMedicine(
-    options: List<String>,
-    onSelectionChanged: (String) -> Unit = {},
+    options: Map<String, Medidas>,
+    onSelectionChanged: (String, Int) -> Unit = { _, _ ->},
     onCancelButtonClicked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -35,14 +36,14 @@ fun SelectOptionFormMedicine(
     Column(
         modifier = Modifier.padding(10.dp)
     ) {
-        options.forEach { item ->
+        options.forEach { (item, id) ->
             Row(
                 modifier = Modifier
                     .selectable(
                         selected = selectedValue == item,
                         onClick = {
                             selectedValue = item
-                            onSelectionChanged(item)
+                            onSelectionChanged(item, id.id)
                         }
                     )
                     .fillMaxWidth(),
@@ -60,7 +61,7 @@ fun SelectOptionFormMedicine(
                     selected = selectedValue == item,
                     onClick = {
                         selectedValue = item
-                        onSelectionChanged(item)
+                        onSelectionChanged(item, id.id)
                     }
                 )
             }

@@ -178,11 +178,11 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("form_medicine_screen"){
-                            FormMedicineScreen(navController = navController, localStorage = localStorage)
+                            FormMedicineScreen(navController = navController, localStorage = localStorage,lifecycleScope = lifecycleScope)
                         }
 
                         composable("medication_frenquency_screen"){
-                            MedicationFrequencyScreen(navController = navController,  localStorage = localStorage)
+                            MedicationFrequencyScreen(navController = navController,  localStorage = localStorage,  lifecycleScope = lifecycleScope)
                         }
 
                         composable("add_stock_screen"){

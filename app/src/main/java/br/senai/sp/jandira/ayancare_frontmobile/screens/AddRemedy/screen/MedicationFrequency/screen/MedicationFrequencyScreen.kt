@@ -2,6 +2,7 @@ package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.Medica
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,15 +36,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.AlarmeRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.SelectOptionMedicationFrequency
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureRepeatingNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
@@ -51,7 +56,8 @@ import java.util.Calendar
 @Composable
 fun MedicationFrequencyScreen(
     navController: NavController,
-    localStorage: Storage
+    localStorage: Storage,
+    lifecycleScope: LifecycleCoroutineScope
 ) {
     var context = LocalContext.current
     val data = LocalDate.now()
@@ -72,6 +78,43 @@ fun MedicationFrequencyScreen(
 
     val nome = localStorage.lerValor(context, "nome_medicamento")
     val medida = localStorage.lerValor(context, "medida_medicamento")
+    val id_medicamento = localStorage.lerValor(context, "id_medicamento")
+
+    fun alarme(
+        dia: String,
+        intervalo: Int,
+        horario: String,
+        id_medicamento: Int
+    ) {
+        val medicamentoRepository = AlarmeRepository()
+        lifecycleScope.launch {
+
+            val response = medicamentoRepository.registerAlarme(
+                dia,
+                intervalo,
+                horario,
+                id_medicamento
+            )
+
+            if (response.isSuccessful) {
+                Log.e(MainActivity::class.java.simpleName, "alarme bem-sucedido")
+                Log.e("alarme", "alarme: ${response.body()}")
+                val checagem = response.body()?.get("status")
+
+                if (checagem.toString() == "404") {
+                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+                    //navController.navigate("add_stock_screen")
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o alarme: $errorBody")
+                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     Surface(
         color = Color(248, 240, 236)
@@ -163,6 +206,13 @@ fun MedicationFrequencyScreen(
                     configureRepeatingNotification(context, selectedTime, id_intervalo!!.toInt())
                     val hora = selectedTime.get(Calendar.HOUR_OF_DAY)
                     val minutos = selectedTime.get(Calendar.MINUTE)
+
+                    alarme(
+                        dia = data.toString(),
+                        intervalo = id_intervalo.toInt(),
+                        horario = "$hora:$minutos",
+                        id_medicamento = id_medicamento!!.toInt()
+                    )
 
                     val alarme = AlarmeTbl(
                         dia = data.toString(),

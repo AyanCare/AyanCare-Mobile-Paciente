@@ -76,7 +76,7 @@ fun ResearchField(
     }
 
     //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getRemedy().getRemedy(2)
+    var call = RetrofitFactory.getRemedy().getRemedy(73)
 
     call.enqueue(object : Callback<RemedyResponse> {
         override fun onResponse(

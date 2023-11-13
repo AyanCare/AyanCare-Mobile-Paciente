@@ -31,7 +31,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.components.ResearchField
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 
-
 @Composable
 fun AddRemedyScreen(
     navController: NavController,
