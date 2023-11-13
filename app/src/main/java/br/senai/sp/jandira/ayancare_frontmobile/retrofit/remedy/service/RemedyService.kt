@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface RemedyService {
 
-    @GET("/v1/ayan/medicamentos")
+    @GET("/v2/ayan/medicamentos")
     fun getRemedy(@Query("idPaciente") idPaciente: Int): retrofit2.Call<RemedyResponse>
 
 }

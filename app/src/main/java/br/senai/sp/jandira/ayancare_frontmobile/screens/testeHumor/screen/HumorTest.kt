@@ -137,6 +137,12 @@ fun HumorTestScreen(
                 } else {
                     Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
 
+                    NotificationService().showNotification(context = context,
+                        "Teste de Humor",
+                        "Teste de humor realizado com sucesso",
+                        Icon = R.drawable.test_humor_notification
+                    )
+
                     navController.navigate("main_screen")
                 }
             } else {
@@ -354,11 +360,6 @@ fun HumorTestScreen(
                                 id_paciente = 44,
                                 escolhas = selectedItems,
                                 data = data.toString()
-                            )
-                            NotificationService().showNotification(context = context,
-                                "Teste de Humor",
-                                "Teste de humor realizado com sucesso",
-                                Icon =R.drawable.test_humor_notification
                             )
                             Log.e("TAG", "HumorTestScreen: ${
                                 testeHumor(

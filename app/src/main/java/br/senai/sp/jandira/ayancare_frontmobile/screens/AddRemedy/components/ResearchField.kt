@@ -45,6 +45,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.RemedyResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.service.Remedy
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -75,15 +76,21 @@ fun ResearchField(
         mutableStateOf<List<Remedy>>(emptyList())
     }
 
+    val array = PacienteRepository(context = context).findUsers()
+    val paciente = array[0]
+    var id = paciente.id.toLong()
+
     //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getRemedy().getRemedy(73)
+    var call = RetrofitFactory.getRemedy().getRemedy(id.toInt())
 
     call.enqueue(object : Callback<RemedyResponse> {
         override fun onResponse(
             call: Call<RemedyResponse>,
             response: Response<RemedyResponse>
         ) {
-            listRemedy = response.body()!!.medicamento
+            Log.e("TAG", "onResponse:${response.body()} ")
+            listRemedy = response.body()!!.medicamentos
+            Log.e("TAG", "onResponse:$listRemedy")
         }
         override fun onFailure(call: Call<RemedyResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
