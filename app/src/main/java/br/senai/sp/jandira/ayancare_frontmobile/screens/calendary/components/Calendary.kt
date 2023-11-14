@@ -30,16 +30,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.CalendarioResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Alarmes
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Calendario
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosSemanais
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosUnicos
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 @Composable
-fun Calendary() {
+fun Calendary(
+    localStorage: Storage
+) {
+    var context = LocalContext.current
     var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
     val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
 
@@ -50,6 +66,83 @@ fun Calendary() {
 
     // Define um Locale para o idioma português
     val ptBrLocale = Locale("pt", "BR")
+
+    var lista by remember {
+        mutableStateOf(
+            Calendario(
+            listOf(
+                EventosUnicos(
+                    0,
+                    0,
+                    "",
+                    0,
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                )
+            ),
+            listOf(
+                EventosSemanais(
+                    0,
+                    0,
+                    "",
+                    0,
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                )
+            ),
+            listOf(
+                Alarmes(
+                    0,
+                    0,
+                    "",
+                    0,
+                    "",
+                    "",
+                    "",
+                    0,
+                    ""
+                )
+            )
+        )
+        )
+    }
+
+    val array = PacienteRepository(context = context).findUsers()
+    val paciente = array[0]
+    var id = paciente.id.toLong()
+
+    var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(73, "2023-11-10", "Sexta-feira")
+
+    call.enqueue(object : Callback<CalendarioResponse> {
+        override fun onResponse(
+            call: Call<CalendarioResponse>,
+            response: Response<CalendarioResponse>
+        ) {
+            Log.e("TAG", "onResponse: ${response.body()}")
+
+            if (response.body()!!.status == 404) {
+                Log.e("TAG", "a resposta está nula")
+            } else {
+                Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
+
+                lista = response.body()!!.calendario
+            }
+
+            Log.e("list-responsible", "onResponse: $lista")
+        }
+        override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
+            Log.i("list-responsible", "onFailure: ${t.message}")
+        }
+
+    })
 
     Column(
         modifier = Modifier
@@ -188,7 +281,7 @@ fun Calendary() {
                                         selectedMonth = selectedDate.get(Calendar.MONTH) + 1
                                         selectedDayOfWeek =
                                             SimpleDateFormat(
-                                                "E",
+                                                "EEEE",
                                                 ptBrLocale
                                             ).format(selectedDate.time)
                                     }
@@ -217,6 +310,7 @@ fun Calendary() {
                     "Mês: $selectedMonth\n" +
                     "Dia da semana: $selectedDayOfWeek"
         )
+        localStorage.salvarValor(context, lista.alarmes, "lista_alarmes")
     }
 
 }

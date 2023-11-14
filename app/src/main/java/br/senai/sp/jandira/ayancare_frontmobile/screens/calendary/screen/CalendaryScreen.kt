@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -37,18 +39,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Calendario
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.Calendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionAlarmCalendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionEventCalendary
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun CalendaryScreen(
     navController: NavController,
     navRotasController: NavController,
+    localStorage: Storage
 ) {
-
     var selecionado by remember { mutableStateOf("evento") }
     val scrollState = rememberScrollState()
+    var context = LocalContext.current
+
+    val lista_alarme = localStorage.lerValor(context, "lista_alarmes")
+    Log.i("dddd", "CalendaryScreen: $lista_alarme")
 
     Surface (
         color = Color(248, 240, 236)
@@ -61,7 +75,7 @@ fun CalendaryScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Calendary()
+            Calendary(localStorage)
             Spacer(modifier = Modifier.height(15.dp))
             Row (
                 horizontalArrangement = Arrangement.SpaceAround,
