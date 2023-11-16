@@ -1,6 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.screen
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,17 +38,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Calendario
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.Calendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionAlarmCalendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionEventCalendary
-import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @Composable
 fun CalendaryScreen(
@@ -60,9 +52,6 @@ fun CalendaryScreen(
     var selecionado by remember { mutableStateOf("evento") }
     val scrollState = rememberScrollState()
     var context = LocalContext.current
-
-    val lista_alarme = localStorage.lerValor(context, "lista_alarmes")
-    Log.i("dddd", "CalendaryScreen: $lista_alarme")
 
     Surface (
         color = Color(248, 240, 236)
@@ -122,12 +111,12 @@ fun CalendaryScreen(
             if (selecionado == "evento") {
                 Column (){
                     Spacer(modifier = Modifier.height(15.dp))
-                    OptionEventCalendary()
+                    OptionEventCalendary(localStorage)
                 }
             } else if (selecionado == "alarme") {
                 Column {
                     Spacer(modifier = Modifier.height(15.dp))
-                    OptionAlarmCalendary()
+                    OptionAlarmCalendary(localStorage)
                 }
             }
         }

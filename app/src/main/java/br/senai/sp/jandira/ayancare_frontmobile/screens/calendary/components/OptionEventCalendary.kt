@@ -32,13 +32,16 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.event.EventResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.event.service.Event
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun OptionEventCalendary() {
+fun OptionEventCalendary(
+    localStorage: Storage
+) {
 
     val context = LocalContext.current
 

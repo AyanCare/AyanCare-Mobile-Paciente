@@ -65,7 +65,19 @@ fun LinkedAccountsScreen(
     var id = paciente.id.toLong()
 
     var listCuidadores by remember {
-        mutableStateOf<List<Conectar>>(emptyList())
+        mutableStateOf(
+            listOf(
+                Conectar(
+                    0,
+                    "",
+                    0,
+                    "",
+                    "",
+                    0,
+                    ""
+                )
+            )
+        )
     }
 
     var isDialogVisibleConect by remember { mutableStateOf(false) }
@@ -78,11 +90,12 @@ fun LinkedAccountsScreen(
             call: Call<ConectarResponse>,
             response: Response<ConectarResponse>
         ) {
+            Log.i("teste de conexao", "onResponse: ${response.body()}")
             if (response.body()!!.status == 404) {
                 Log.e("TAG", "a resposta está nula")
                 listCuidadores = emptyList()
             } else {
-                listCuidadores = response.body()!!.cuidadores
+                listCuidadores = response.body()!!.conexao
             }
         }
         override fun onFailure(call: Call<ConectarResponse>, t: Throwable) {
@@ -206,12 +219,12 @@ fun LinkedAccountsScreen(
                                     isDialogVisibleConect = true
                                 },
                                 onProfileClick = {
+                                    localStorage.salvarValor(context, it.id_cuidador.toString(), "id_cuidador_conexao")
                                     navController.navigate("profile_caregiver_screen")
-                                    localStorage.salvarValor( context, it.id.toString(), "id_cuidador" )
                                                  },
-                                nome = it.nome,
-                                id = it.id,
-                                foto = it.foto
+                                nome = it.cuidador,
+                                id = it.id_cuidador,
+                                foto = it.foto_cuidador
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                         }

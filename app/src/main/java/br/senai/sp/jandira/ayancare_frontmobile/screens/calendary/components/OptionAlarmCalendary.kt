@@ -34,13 +34,16 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeUnitarios
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmesResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.Alarme
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.AlarmeUnitario
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun OptionAlarmCalendary() {
+fun OptionAlarmCalendary(
+    localStorage: Storage
+) {
 
     val context = LocalContext.current
 
@@ -90,7 +93,6 @@ fun OptionAlarmCalendary() {
     }
 
 
-
     //Cria uma chamada para o endpoint
     var call = RetrofitFactory.getAlarme().getAlarmesUnitariosByIdPaciente(2)
 
@@ -138,6 +140,9 @@ fun OptionAlarmCalendary() {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
     })
+
+//    val lista_alarme = localStorage.lerValorArray(context, "lista_alarmes")
+//    Log.i("dddd", "CalendaryScreen: $lista_alarme")
 
     if (listAlarme.isEmpty() || listAlarmeUnitario.isEmpty()){
         Column (
@@ -206,6 +211,16 @@ fun OptionAlarmCalendary() {
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }
+//            if (lista_alarme != null) {
+//                for(alarme in lista_alarme){
+//                    CardCalendary(
+//                        value = "",
+//                        title = "Alarme",
+//                        subtitle = "",
+//                        width = 75
+//                    )
+//                }
+//            }
         }
     }
 }

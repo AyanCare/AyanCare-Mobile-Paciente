@@ -57,7 +57,7 @@ fun ProfileCaregiverScreen(
 
     val scrollState = rememberScrollState()
 
-    var id = localStorage.lerValor(context, "id_cuidador")
+    var id = localStorage.lerValor(context, "id_cuidador_conexao")
     val token = localStorage.lerValor(context, "token_paciente")
 
     Log.e("TAG", "ProfileCaregiverScreen: $id")

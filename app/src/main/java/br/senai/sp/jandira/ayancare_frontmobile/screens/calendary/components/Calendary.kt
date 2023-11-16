@@ -41,7 +41,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Alar
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Calendario
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosSemanais
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosUnicos
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
@@ -118,31 +117,6 @@ fun Calendary(
     val array = PacienteRepository(context = context).findUsers()
     val paciente = array[0]
     var id = paciente.id.toLong()
-
-    var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(73, "2023-11-10", "Sexta-feira")
-
-    call.enqueue(object : Callback<CalendarioResponse> {
-        override fun onResponse(
-            call: Call<CalendarioResponse>,
-            response: Response<CalendarioResponse>
-        ) {
-            Log.e("TAG", "onResponse: ${response.body()}")
-
-            if (response.body()!!.status == 404) {
-                Log.e("TAG", "a resposta está nula")
-            } else {
-                Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
-
-                lista = response.body()!!.calendario
-            }
-
-            Log.e("list-responsible", "onResponse: $lista")
-        }
-        override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
-            Log.i("list-responsible", "onFailure: ${t.message}")
-        }
-
-    })
 
     Column(
         modifier = Modifier
@@ -262,6 +236,34 @@ fun Calendary(
                                                     "E",
                                                     ptBrLocale
                                                 ).format(selectedDate.time)
+
+
+                                            var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(73, "2023-11-10", "Sexta-feira")
+
+                                            call.enqueue(object : Callback<CalendarioResponse> {
+                                                override fun onResponse(
+                                                    call: Call<CalendarioResponse>,
+                                                    response: Response<CalendarioResponse>
+                                                ) {
+                                                    Log.e("TAG", "onResponse: ${response.body()}")
+
+                                                    if (response.body()!!.status == 404) {
+                                                        Log.e("TAG", "a resposta está nula")
+                                                    } else {
+                                                        Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
+
+                                                        lista = response.body()!!.calendario
+                                                        localStorage.salvarValor(context, lista.alarmes, "lista_alarmes")
+                                                    }
+
+                                                    Log.e("list-calendario", "onResponse: $lista")
+                                                }
+                                                override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
+                                                    Log.i("list-calendario", "onFailure: ${t.message}")
+                                                }
+
+                                            })
+
                                         },
                                     textAlign = TextAlign.Center,
                                     color = if (isSelected) Color(0xFF35225F) else Color(0xFFF9F1ED)
@@ -284,6 +286,34 @@ fun Calendary(
                                                 "EEEE",
                                                 ptBrLocale
                                             ).format(selectedDate.time)
+
+
+                                        var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(73, "2023-11-10", "Sexta-feira")
+
+                                        call.enqueue(object : Callback<CalendarioResponse> {
+                                            override fun onResponse(
+                                                call: Call<CalendarioResponse>,
+                                                response: Response<CalendarioResponse>
+                                            ) {
+                                                Log.e("TAG", "onResponse: ${response.body()}")
+
+                                                if (response.body()!!.status == 404) {
+                                                    Log.e("TAG", "a resposta está nula")
+                                                } else {
+                                                    Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
+
+                                                    lista = response.body()!!.calendario
+                                                    localStorage.salvarValor(context, lista.alarmes, "lista_alarmes")
+                                                }
+
+                                                Log.e("list-calendario", "onResponse: $lista")
+                                            }
+                                            override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
+                                                Log.i("list-calendario", "onFailure: ${t.message}")
+                                            }
+
+                                        })
+
                                     }
                                     .background(
                                         shape = CircleShape,
@@ -310,7 +340,6 @@ fun Calendary(
                     "Mês: $selectedMonth\n" +
                     "Dia da semana: $selectedDayOfWeek"
         )
-        localStorage.salvarValor(context, lista.alarmes, "lista_alarmes")
     }
 
 }

@@ -246,13 +246,14 @@ fun EventScreen(
 
                 Button(
                     onClick = {
-                        selectedColorId = 0
-                        if (selectedColorId!! == 0){
-                            Toast.makeText(context, "escolha sua cor", Toast.LENGTH_SHORT).show()
-                        }else{
-                            Toast.makeText(context, "sua cor foi escolhida", Toast.LENGTH_SHORT).show()
-                        }
+//                        selectedColorId = 0
+//                        if (selectedColorId!! == 0){
+//                            Toast.makeText(context, "escolha sua cor", Toast.LENGTH_SHORT).show()
+//                        }else{
+//                            Toast.makeText(context, "sua cor foi escolhida", Toast.LENGTH_SHORT).show()
+//                        }
 
+                        Log.e("uysgfjh", "EventScreen: $selectedColorId")
 
                         event(
                             nome = nameState,
@@ -263,6 +264,19 @@ fun EventScreen(
                             idPaciente = id.toInt(),
                             idCor = selectedColorId!!
                         )
+
+                        Log.e("teste de evento", "EventScreen: " +
+                                "${
+                                    event(
+                                        nome = nameState,
+                                        descricaoSelecionada,
+                                        localSelecionado,
+                                        selectedTime,
+                                        selectedDate,
+                                        idPaciente = id.toInt(),
+                                        idCor = selectedColorId!!
+                                    )
+                                }", )
 
                         NotificationService().showNotification(
                             context = context,
