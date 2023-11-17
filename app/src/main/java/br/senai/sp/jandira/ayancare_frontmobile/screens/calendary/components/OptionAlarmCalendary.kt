@@ -36,6 +36,8 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.Alarme
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.AlarmeUnitario
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.ViewModelMedicamentos
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.ViewModelMestreMedicamentos
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,99 +54,17 @@ fun OptionAlarmCalendary(
     val paciente = array[0]
     var id = paciente.id.toLong()
 
-    var listAlarmeUnitario by remember {
-        mutableStateOf(
-            listOf(
-                AlarmeUnitario(
-                    id_alarme_unitario = 0,
-                    id_medicamento = 0,
-                    medicamento = "",
-                    foto = "",
-                    id_alarme = 0,
-                    data_criacao = "",
-                    intervalo = 0,
-                    horario_inicial = "",
-                    quantidade_retirada = 0,
-                    id_medida = 0,
-                    medida = "",
-                    medida_sigla = "",
-                    status = "",
-                    id_paciente = 0,
-                    paciente = ""
-                )
-            )
-        )
-    }
-
-    var listAlarme by remember {
-        mutableStateOf(
-            listOf(
-                Alarme(
-                    paciente = "",
-                    id = 0,
-                    dia = "",
-                    intervalo = 0,
-                    horario = "",
-                    id_medicamento = 0,
-                    medicamento = ""
-                )
-            )
-        )
-    }
-
-
-    //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getAlarme().getAlarmesUnitariosByIdPaciente(2)
-
-    call.enqueue(object : Callback<AlarmeUnitariosResponse> {
-        override fun onResponse(
-            call: Call<AlarmeUnitariosResponse>,
-            response: Response<AlarmeUnitariosResponse>
-        ) {
-            Log.e("listAlarmeUnitario", "onResponse: ${response.body()}")
-
-            if (response.body()!!.status == 404) {
-                Log.e("listAlarmeUnitario", "a resposta está nula")
-                listAlarmeUnitario = emptyList()
-            } else {
-                listAlarmeUnitario = response.body()!!.alarme
-            }
-
-            Log.e("listAlarmeUnitario", "onResponse: $listAlarmeUnitario")
-        }
-        override fun onFailure(call: Call<AlarmeUnitariosResponse>, t: Throwable) {
-            Log.i("ds3t", "onFailure: ${t.message}")
-        }
-    })
-
-    //Cria uma chamada para o endpoint
-    var call1 = RetrofitFactory.getAlarme().getAlarmesByIdPaciente(id.toInt())
-
-    call1.enqueue(object : Callback<AlarmesResponse> {
-        override fun onResponse(
-            call: Call<AlarmesResponse>,
-            response: Response<AlarmesResponse>
-        ) {
-            Log.e("listAlarme", "onResponse: ${response.body()}")
-
-            if (response.body()!!.status == 404) {
-                Log.e("listAlarme", "a resposta está nula")
-                listAlarme = emptyList()
-            } else {
-                listAlarme = response.body()!!.alarme
-            }
-
-            Log.e("listAlarme", "onResponse: $listAlarme")
-        }
-        override fun onFailure(call: Call<AlarmesResponse>, t: Throwable) {
-            Log.i("ds3t", "onFailure: ${t.message}")
-        }
-    })
-
-//    val lista_alarme = localStorage.lerValorArray(context, "lista_alarmes")
+//    val lista_alarme = localStorage.lerValor(context, "lista_alarmes")
 //    Log.i("dddd", "CalendaryScreen: $lista_alarme")
+//    val listaAlarmes = lista_alarme?.split(",")?.toList()
 
-    if (listAlarme.isEmpty() || listAlarmeUnitario.isEmpty()){
+    var listaAlarmes = ViewModelMestreMedicamentos().lista
+
+    Log.i("ddde", "CalendaryScreen: ${listaAlarmes}")
+    Log.i("ddde", "CalendaryScreen: ${listaAlarmes}")
+    Log.i("Tag", "O tipo da variável é: ${listaAlarmes!!.javaClass}")
+
+    if (listaAlarmes.isEmpty()){
         Column (
             modifier = Modifier
                 .height(300.dp)
@@ -193,34 +113,21 @@ fun OptionAlarmCalendary(
                 color = Color(0xFF35225F)
             )
             Spacer(modifier = Modifier.height(10.dp))
-            for (alarme in listAlarmeUnitario) {
-                CardCalendary(
-                    value = alarme.horario_inicial,
-                    title = "Alarme",
-                    subtitle = "${alarme.quantidade_retirada}${alarme.medida_sigla} x ${alarme.medicamento}",
-                    width = 75
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-            for (alarme in listAlarme) {
-                CardCalendary(
-                    value = alarme.horario,
-                    title = "Alarme",
-                    subtitle = " x ${alarme.medicamento}", //${alarme.quantidade_retirada}${alarme.medida_sigla}
-                    width = 75
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-            }
-//            if (lista_alarme != null) {
-//                for(alarme in lista_alarme){
-//                    CardCalendary(
-//                        value = "",
-//                        title = "Alarme",
-//                        subtitle = "",
-//                        width = 75
-//                    )
-//                }
-//            }
+
+                for (alarme in listaAlarmes) {
+                    val medication = alarme.medicamento
+                    val time = alarme.horario
+                    val status = alarme.status
+                    CardCalendary(
+                        value = time,
+                        title = "Alarme",
+                        subtitle = " x ${medication}", //${alarme.quantidade_retirada}${alarme.medida_sigla}
+                        status = status,
+                        width = 75
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+
         }
     }
 }

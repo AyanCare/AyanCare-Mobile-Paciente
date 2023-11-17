@@ -6,6 +6,6 @@ data class Conectar(
     val id_paciente: Int,
     val paciente: String,
     val foto_cuidador: String,
-    val id_cuidador: Int,
+    var id_cuidador: Int,
     val cuidador: String,
 )

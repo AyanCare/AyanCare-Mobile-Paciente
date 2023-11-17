@@ -28,7 +28,7 @@ import androidx.navigation.NavController
 @Composable
 fun FloatingActionButtonConectarContas(
     navController: NavController,
-    lifecycleScope: LifecycleCoroutineScope,
+    lifecycleScope: LifecycleCoroutineScope
 ) {
     var expanded by remember { mutableStateOf(false) }
 

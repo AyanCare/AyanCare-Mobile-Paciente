@@ -90,7 +90,7 @@ fun ModalDeleteConect(
                         Button(
                             onClick = {
 
-                                Log.e("dsdsfa", "ModalDeleteConect: $id + $id_cuidador", )
+                                Log.e("dsdsfa", "ModalDeleteConect: $id + $id_cuidador")
 
                                 var call = RetrofitFactory.getConectar().updateConect(id.toInt(), id_cuidador!!.toInt())
 

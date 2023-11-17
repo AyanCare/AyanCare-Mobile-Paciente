@@ -43,6 +43,8 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Even
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosUnicos
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.ViewModelMedicamentos
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.ViewModelMestreMedicamentos
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,6 +59,9 @@ fun Calendary(
     var context = LocalContext.current
     var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
     val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+
+    var listaMestre = ViewModelMestreMedicamentos()
+    var listaAlarmes = listaMestre.lista
 
     // Variáveis para rastrear a data selecionada
     var selectedYear by remember { mutableIntStateOf(selectedDate.get(Calendar.YEAR)) }
@@ -238,7 +243,13 @@ fun Calendary(
                                                 ).format(selectedDate.time)
 
 
-                                            var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(73, "2023-11-10", "Sexta-feira")
+                                            var call = RetrofitFactory
+                                                .getCalendario()
+                                                .getCalendarioByIDPacienteDia_DiaSemana(
+                                                    73,
+                                                    "2023-11-10",
+                                                    "Sexta-feira"
+                                                )
 
                                             call.enqueue(object : Callback<CalendarioResponse> {
                                                 override fun onResponse(
@@ -247,19 +258,75 @@ fun Calendary(
                                                 ) {
                                                     Log.e("TAG", "onResponse: ${response.body()}")
 
+                                                    Log.i("lista", "lista mestre: $listaMestre")
+                                                    Log.i("lista", "lista filha: $listaAlarmes")
+                                                    Log.i("lista", "lista calendario: $lista")
+                                                    Log.i("lista", "lista entruda: ${listaMestre.lista[0].id}")
+                                                    Log.i("lista", "lista entruda: ${listaMestre.lista[0].medicamento}")
+
                                                     if (response.body()!!.status == 404) {
                                                         Log.e("TAG", "a resposta está nula")
                                                     } else {
-                                                        Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
+                                                        Log.e(
+                                                            "Teste Luiz",
+                                                            "onResponse: ${response.body()!!.calendario}"
+                                                        )
 
-                                                        lista = response.body()!!.calendario
-                                                        localStorage.salvarValor(context, lista.alarmes, "lista_alarmes")
+                                                        Log.i("lista", "lista mestre: $listaMestre")
+                                                        Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes}")
+                                                        Log.i("lista", "lista filha: $listaAlarmes")
+                                                        Log.i("lista", "lista calendario: $lista")
+                                                        Log.i("lista", "lista entruda: ${listaMestre.lista[0].id}")
+                                                        Log.i("lista", "lista entruda: ${listaMestre.lista[0].medicamento}")
+
+                                                        listaMestre.lista[0].id = listaAlarmes[0].id
+                                                        listaMestre.lista[0].horario =
+                                                            listaAlarmes[0].horario
+                                                        listaMestre.lista[0].id_medicamente =
+                                                            listaAlarmes[0].id_medicamente
+                                                        listaMestre.lista[0].paciente =
+                                                            listaAlarmes[0].paciente
+                                                        listaMestre.lista[0].id_status =
+                                                            listaAlarmes[0].id_status
+                                                        listaMestre.lista[0].id_paciente =
+                                                            listaAlarmes[0].id_paciente
+                                                        listaMestre.lista[0].intervalo =
+                                                            listaAlarmes[0].intervalo
+                                                        listaMestre.lista[0].horario =
+                                                            listaAlarmes[0].horario
+                                                        listaMestre.lista[0].status =
+                                                            listaAlarmes[0].status
+
+                                                        Log.i("lista", "lista mestre: $listaMestre")
+                                                        Log.i("lista", "lista filha: $listaAlarmes")
+                                                        Log.i("lista", "lista calendario: $lista")
+                                                        Log.i("lista", "lista entruda com valor: ${listaMestre.lista[0].id}")
+                                                        Log.i("lista", "lista entruda com valor: ${listaMestre.lista[0].medicamento}")
+
+                                                        localStorage.salvarValor(
+                                                            context,
+                                                            listaAlarmes.toString(),
+                                                            "lista_alarmes"
+                                                        )
+                                                        localStorage.salvarValor(
+                                                            context,
+                                                            lista.eventos_unicos.toString(),
+                                                            "lista_eventos_unitarios"
+                                                        )
+
                                                     }
 
                                                     Log.e("list-calendario", "onResponse: $lista")
                                                 }
-                                                override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
-                                                    Log.i("list-calendario", "onFailure: ${t.message}")
+
+                                                override fun onFailure(
+                                                    call: Call<CalendarioResponse>,
+                                                    t: Throwable
+                                                ) {
+                                                    Log.i(
+                                                        "list-calendario",
+                                                        "onFailure: ${t.message}"
+                                                    )
                                                 }
 
                                             })
@@ -288,7 +355,13 @@ fun Calendary(
                                             ).format(selectedDate.time)
 
 
-                                        var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(73, "2023-11-10", "Sexta-feira")
+                                        var call = RetrofitFactory
+                                            .getCalendario()
+                                            .getCalendarioByIDPacienteDia_DiaSemana(
+                                                73,
+                                                "2023-11-10",
+                                                "Sexta-feira"
+                                            )
 
                                         call.enqueue(object : Callback<CalendarioResponse> {
                                             override fun onResponse(
@@ -300,15 +373,60 @@ fun Calendary(
                                                 if (response.body()!!.status == 404) {
                                                     Log.e("TAG", "a resposta está nula")
                                                 } else {
-                                                    Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
+                                                    Log.e(
+                                                        "Teste Luiz",
+                                                        "onResponse: ${response.body()!!.calendario}"
+                                                    )
+
+                                                    Log.i("lista", "lista mestre: $listaMestre")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].id}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].id_paciente}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].paciente}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].id_medicamento}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].medicamento}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].horario}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].id_status}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].intervalo}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes[0].status}")
+                                                    Log.i("lista", "lista alarme: ${response.body()!!.calendario.alarmes}")
+                                                    //Log.i("lista", "lista filha: $listaAlarmes")
+
+                                                    listaMestre.lista[0].id = response.body()!!.calendario.alarmes[0].id
+                                                    listaMestre.lista[0].horario = response.body()!!.calendario.alarmes[0].horario
+                                                    listaMestre.lista[0].id_medicamente = response.body()!!.calendario.alarmes[0].id_medicamento
+                                                    listaMestre.lista[0].paciente = response.body()!!.calendario.alarmes[0].paciente
+                                                    listaMestre.lista[0].id_status = response.body()!!.calendario.alarmes[0].id_status
+                                                    listaMestre.lista[0].id_paciente = response.body()!!.calendario.alarmes[0].id_paciente
+                                                    listaMestre.lista[0].intervalo = response.body()!!.calendario.alarmes[0].intervalo
+                                                    listaMestre.lista[0].horario = response.body()!!.calendario.alarmes[0].horario
+                                                    listaMestre.lista[0].status = response.body()!!.calendario.alarmes[0].status
+
+                                                    Log.i("lista", "lista mestre: $listaMestre")
+                                                    Log.i("lista", "lista filha: $listaAlarmes")
+                                                    Log.i("lista", "lista calendario: $lista")
+                                                    Log.i("lista", "lista entruda com valor: ${listaMestre.lista[0].id}")
+                                                    Log.i("lista", "lista entruda com valor: ${listaMestre.lista[0].medicamento}")
 
                                                     lista = response.body()!!.calendario
-                                                    localStorage.salvarValor(context, lista.alarmes, "lista_alarmes")
+                                                    localStorage.salvarValor(
+                                                        context,
+                                                        lista.alarmes.toString(),
+                                                        "lista_alarmes"
+                                                    )
+                                                    localStorage.salvarValor(
+                                                        context,
+                                                        lista.eventos_unicos.toString(),
+                                                        "lista_eventos_unitarios"
+                                                    )
                                                 }
 
                                                 Log.e("list-calendario", "onResponse: $lista")
                                             }
-                                            override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
+
+                                            override fun onFailure(
+                                                call: Call<CalendarioResponse>,
+                                                t: Throwable
+                                            ) {
                                                 Log.i("list-calendario", "onFailure: ${t.message}")
                                             }
 

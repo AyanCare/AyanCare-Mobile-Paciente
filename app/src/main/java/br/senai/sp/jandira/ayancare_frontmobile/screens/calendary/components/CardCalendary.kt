@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -32,6 +34,7 @@ fun CardCalendary(
     value: String,
     title: String,
     subtitle:String,
+    status: String,
     width: Int
 ) {
     Row (
@@ -91,9 +94,9 @@ fun CardCalendary(
                 horizontalAlignment = Alignment.End
             ){
                 Icon(
-                    imageVector = Icons.Default.CheckCircle,
+                    imageVector = if (status == "Não tomado") Icons.Default.CheckBox else Icons.Default.CheckCircle,
                     contentDescription = "",
-                    tint = Color(117, 246, 146),
+                    tint = if (status == "Não tomado") Color(255, 0, 0, 255) else Color(117, 246, 146),
                     modifier = Modifier
                         .size(26.dp)
                 )

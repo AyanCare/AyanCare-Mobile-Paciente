@@ -7,5 +7,6 @@ data class Alarme(
     val intervalo: Int,
     val horario: String,
     val id_medicamento: Int,
-    val medicamento: String
+    val medicamento: String,
+    val status: String
 )
