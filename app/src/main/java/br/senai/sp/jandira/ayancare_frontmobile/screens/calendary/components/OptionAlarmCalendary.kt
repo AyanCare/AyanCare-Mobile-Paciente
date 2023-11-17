@@ -34,6 +34,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeUnitarios
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmesResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.Alarme
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.AlarmeUnitario
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Alarmes
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.ViewModelMedicamentos
@@ -44,7 +45,8 @@ import retrofit2.Response
 
 @Composable
 fun OptionAlarmCalendary(
-    localStorage: Storage
+    localStorage: Storage,
+    alarmes: List<Alarmes>
 ) {
 
     val context = LocalContext.current
@@ -58,10 +60,9 @@ fun OptionAlarmCalendary(
 //    Log.i("dddd", "CalendaryScreen: $lista_alarme")
 //    val listaAlarmes = lista_alarme?.split(",")?.toList()
 
-    var listaAlarmes = ViewModelMestreMedicamentos().lista
+    var listaAlarmes = alarmes
 
-    Log.i("ddde", "CalendaryScreen: ${listaAlarmes}")
-    Log.i("ddde", "CalendaryScreen: ${listaAlarmes}")
+    Log.i("ddde", "CalendaryScreen: ${alarmes}")
     Log.i("Tag", "O tipo da variável é: ${listaAlarmes!!.javaClass}")
 
     if (listaAlarmes.isEmpty()){

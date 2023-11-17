@@ -12,13 +12,17 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Pacient
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.service.RemedyService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ResponsavelService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.testeHumor.service.TesteHumorService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.net.ssl.SSLServerSocketFactory
 
 object RetrofitFactory {
 
     //private const val BASE_URL = "http://10.107.144.13:8080"
-    private const val BASE_URL = "https://ayancare-api.cyclic.cloud"
+    //private const val BASE_URL = "https://ayancare-api.cyclic.cloud"
+    private const val BASE_URL = "http://10.107.144.13:8080"
     //private const val BASE_URL = "http://192.168.0.115:8080" //192.168.0.120
 
     fun getInstance(): Retrofit{

@@ -52,6 +52,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.TesteHu
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.CardMoodToday
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Exercise
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.components.Symptoms
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -67,6 +68,11 @@ fun HumorTestScreen(
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val data = LocalDate.now()
+
+    val array = PacienteRepository(context = context).findUsers()
+
+    val paciente = array[0]
+    var id = paciente.id.toLong()
 
     var descricaoState by remember {
         mutableStateOf("")
@@ -357,14 +363,14 @@ fun HumorTestScreen(
                         onClick = {
                             testeHumor(
                                 observacao = descricaoState,
-                                id_paciente = 44,
+                                id_paciente = id.toInt(),
                                 escolhas = selectedItems,
                                 data = data.toString()
                             )
                             Log.e("TAG", "HumorTestScreen: ${
                                 testeHumor(
                                     observacao = descricaoState,
-                                    id_paciente = 49,
+                                    id_paciente = id.toInt(),
                                     escolhas = selectedItems,
                                     data = data.toString()
                                 )

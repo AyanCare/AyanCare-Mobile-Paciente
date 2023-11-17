@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,20 +39,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Alarmes
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.Calendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionAlarmCalendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionEventCalendary
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.ViewModelMestreMedicamentos
 
 @Composable
 fun CalendaryScreen(
     navController: NavController,
     navRotasController: NavController,
-    localStorage: Storage
+    localStorage: Storage,
+    alarmeViewModel: ViewModelMestreMedicamentos
 ) {
     var selecionado by remember { mutableStateOf("evento") }
     val scrollState = rememberScrollState()
     var context = LocalContext.current
+    //var listAlarme: List<Alarmes> = listOf()
+
+    var listAlarme by remember {
+        mutableStateOf(listOf<Alarmes>())
+    }
 
     Surface (
         color = Color(248, 240, 236)
@@ -64,7 +73,10 @@ fun CalendaryScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Calendary(localStorage)
+            Calendary(localStorage, alarmeViewModel){
+                Log.e("IT", "$it")
+                listAlarme = it
+            }
             Spacer(modifier = Modifier.height(15.dp))
             Row (
                 horizontalArrangement = Arrangement.SpaceAround,
@@ -116,7 +128,7 @@ fun CalendaryScreen(
             } else if (selecionado == "alarme") {
                 Column {
                     Spacer(modifier = Modifier.height(15.dp))
-                    OptionAlarmCalendary(localStorage)
+                    OptionAlarmCalendary(localStorage, listAlarme)
                 }
             }
         }
