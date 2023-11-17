@@ -52,7 +52,8 @@ import java.util.Locale
 
 @Composable
 fun Calendary(
-    localStorage: Storage
+    localStorage: Storage,
+    onChaneList: (List<Alarmes>) -> Unit
 ) {
     var context = LocalContext.current
     var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
@@ -69,48 +70,48 @@ fun Calendary(
     var lista by remember {
         mutableStateOf(
             Calendario(
-            listOf(
-                EventosUnicos(
-                    0,
-                    0,
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                )
-            ),
-            listOf(
-                EventosSemanais(
-                    0,
-                    0,
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    ""
-                )
-            ),
-            listOf(
-                Alarmes(
-                    0,
-                    0,
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    0,
-                    ""
+                listOf(
+                    EventosUnicos(
+                        0,
+                        0,
+                        "",
+                        0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    )
+                ),
+                listOf(
+                    EventosSemanais(
+                        0,
+                        0,
+                        "",
+                        0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    )
+                ),
+                listOf(
+                    Alarmes(
+                        0,
+                        0,
+                        "",
+                        0,
+                        "",
+                        "",
+                        "",
+                        0,
+                        ""
+                    )
                 )
             )
-        )
         )
     }
 
@@ -253,13 +254,14 @@ fun Calendary(
                                                         Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
 
                                                         lista = response.body()!!.calendario
-                                                        localStorage.salvarValor(context, lista.alarmes, "lista_alarmes")
+
+                                                        onChaneList(response.body()!!.calendario.alarmes)
                                                     }
 
                                                     Log.e("list-calendario", "onResponse: $lista")
                                                 }
                                                 override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
-                                                    Log.i("list-calendario", "onFailure: ${t.message}")
+                                                    Log.i("list-calendario off", "onFailure: ${t.message}")
                                                 }
 
                                             })
@@ -303,7 +305,8 @@ fun Calendary(
                                                     Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
 
                                                     lista = response.body()!!.calendario
-                                                    localStorage.salvarValor(context, lista.alarmes, "lista_alarmes")
+
+                                                    onChaneList(response.body()!!.calendario.alarmes)
                                                 }
 
                                                 Log.e("list-calendario", "onResponse: $lista")
