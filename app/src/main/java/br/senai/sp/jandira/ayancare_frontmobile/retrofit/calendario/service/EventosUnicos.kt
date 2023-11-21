@@ -10,6 +10,8 @@ data class EventosUnicos(
     val descricao: String,
     val local: String,
     val dia: String,
+    val dia_unico: String,
+    val mes: String,
     val horario: String,
     val cor: String
 )

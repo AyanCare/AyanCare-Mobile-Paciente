@@ -8,6 +8,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cuidador.service.Cuidad
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.event.service.EventService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.genero.service.GeneroService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.medidas.service.MedidasService
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.notificacao.service.NotificacaoService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.PacienteService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.service.RemedyService
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.ResponsavelService
@@ -22,7 +23,7 @@ object RetrofitFactory {
 
     //private const val BASE_URL = "http://10.107.144.13:8080"
     //private const val BASE_URL = "https://ayancare-api.cyclic.cloud"
-    private const val BASE_URL = "http://10.107.144.13:8080"
+    private const val BASE_URL = "http://10.107.144.24:8080"
     //private const val BASE_URL = "http://192.168.0.115:8080" //192.168.0.120
 
     fun getInstance(): Retrofit{
@@ -84,6 +85,10 @@ object RetrofitFactory {
 
     fun getCalendario(): CalendarioService{
         return retrofitFactory.create(CalendarioService::class.java)
+    }
+
+    fun getNotificacao(): NotificacaoService{
+        return retrofitFactory.create(NotificacaoService::class.java)
     }
 
 }

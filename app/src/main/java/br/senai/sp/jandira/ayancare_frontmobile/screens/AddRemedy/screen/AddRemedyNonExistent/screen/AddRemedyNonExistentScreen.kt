@@ -99,7 +99,7 @@ fun AddRemedyNonExistentScreen(
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 OutlinedTextField(
-                    value = nomeState.toUpperCase() ,
+                    value = nomeState.uppercase() ,
                     onValueChange = {
                         nomeState = it
                     },
@@ -118,7 +118,7 @@ fun AddRemedyNonExistentScreen(
                     if (nomeState.isEmpty()){
                         Toast.makeText(context, "Nome inválido", Toast.LENGTH_LONG).show()
                     }else{
-                        localStorage.salvarValor(context, nomeState, "nome_medicamento")
+                        localStorage.salvarValor(context, nomeState.uppercase(), "nome_medicamento")
                         navController.navigate("form_medicine_screen")
                     }
                 },

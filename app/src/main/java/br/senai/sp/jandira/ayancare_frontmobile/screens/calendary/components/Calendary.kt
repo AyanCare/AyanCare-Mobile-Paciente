@@ -56,14 +56,12 @@ import java.util.Locale
 fun Calendary(
     localStorage: Storage,
     alarmeViewModel: ViewModelMestreMedicamentos,
-    onChaneList: (List<Alarmes>) -> Unit
+    onChaneList: (List<Alarmes>) -> Unit,
+    onChaneListEvent: (List<EventosUnicos>) -> Unit
 ) {
     var context = LocalContext.current
     var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
     val dateFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
-
-    var listaAlarmes = ""
-    var listaMestre = ""
 
     // Variáveis para rastrear a data selecionada
     var selectedYear by remember { mutableIntStateOf(selectedDate.get(Calendar.YEAR)) }
@@ -89,6 +87,8 @@ fun Calendary(
                     "",
                     "",
                     "",
+                    "",
+                    ""
                 )
             ),
             listOf(
@@ -246,7 +246,7 @@ fun Calendary(
 
 
                                             var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(
-                                                idPaciente = 73,
+                                                idPaciente = id.toInt(),
                                                 dia = "${selectedDate.get(Calendar.DAY_OF_MONTH)}/$selectedMonth/$selectedYear",
                                                 diaSemana = "$selectedDayOfWeek"
                                             )
@@ -304,7 +304,7 @@ fun Calendary(
                                         var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(
                                             dia = "${selectedDate.get(Calendar.DAY_OF_MONTH)}/$selectedMonth/$selectedYear",
                                             diaSemana = "$selectedDayOfWeek",
-                                            idPaciente = 73
+                                            idPaciente = id.toInt()
                                         )
 
                                         call.enqueue(object : Callback<CalendarioResponse> {
@@ -323,6 +323,7 @@ fun Calendary(
                                                     alarmeViewModel.lista = response.body()!!.calendario.alarmes
 
                                                     onChaneList(response.body()!!.calendario.alarmes)
+                                                    onChaneListEvent(response.body()!!.calendario.eventos_unicos)
                                                 }
 
                                                 Log.e("list-calendario", "onResponse: $lista")

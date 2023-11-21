@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,16 +31,19 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardNotification() {
+fun CardNotification(
+    descricao: String,
+    hora: String
+) {
     Card(
         onClick = { /*TODO*/ },
-        backgroundColor = Color(0xFFFF0000),
+        backgroundColor = Color(0xFF673AB7),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(80.dp)
                 .padding(5.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -48,7 +52,7 @@ fun CardNotification() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    imageVector = Icons.Default.Image,
+                    imageVector = Icons.Default.Alarm,
                     contentDescription = "",
                     modifier = Modifier.size(40.dp)
                 )
@@ -63,12 +67,13 @@ fun CardNotification() {
                         color = Color(0xFFFFFFFF)
                     )
                     Text(
-                        text = "Hora de tomar o remédio x.",
+                        text = "$descricao",
                         fontSize = 13.sp,
                         lineHeight = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFFFFFFFF)
+                        color = Color(0xFFFFFFFF),
+                        modifier = Modifier.width(300.dp)
                     )
                 }
             }
@@ -77,7 +82,7 @@ fun CardNotification() {
                 modifier = Modifier.fillMaxHeight()
             ) {
                 Text(
-                    text = "34m ago",
+                    text = "$hora",
                     fontSize = 13.sp,
                     lineHeight = 18.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),

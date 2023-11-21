@@ -183,7 +183,7 @@ fun FormMedicineScreen(
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = nome.toString(),
+                text = nome.toString().uppercase(),
                 fontSize = 20.sp,
                 fontFamily = FontFamily(Font(R.font.poppins)),
                 fontWeight = FontWeight(600),
@@ -205,7 +205,7 @@ fun FormMedicineScreen(
                         localStorage.salvarValor(context, isSelectState, "medida_medicamento")
 
                         medicamento(
-                            nome = "$nome",
+                            nome = "${nome!!.uppercase()}",
                             quantidade = 5,
                             data_validade = "2003-03-03",
                             estocado = 1,

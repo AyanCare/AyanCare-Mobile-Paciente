@@ -14,10 +14,6 @@ import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,19 +25,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Alarmes
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.event.EventResponse
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.event.service.Event
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosUnicos
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @Composable
 fun OptionEventCalendary(
-    localStorage: Storage
+    localStorage: Storage,
+    eventos: List<EventosUnicos>
 ) {
 
     val context = LocalContext.current
@@ -51,53 +42,10 @@ fun OptionEventCalendary(
     val paciente = array[0]
     var id = paciente.id.toLong()
 
-    var listEvents by remember {
-        mutableStateOf(
-            listOf(
-                Event(
-                    id = 0,
-                    paciente = "",
-                    cuidador = "",
-                    nome = "",
-                    descricao = "",
-                    local = "",
-                    horario = "",
-                    dia = "",
-                    dia_unico = "",
-                    mes = "",
-                    cor = ""
-                )
-            )
-        )
-    }
+    var listEvents = eventos
 
-//    val lista_eventos = localStorage.lerValor(context, "lista_eventos_unitarios")
-//    Log.i("dddd", "CalendaryScreen: $lista_eventos")
-
-
-    //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getEvent().getEventsByIdPaciente(id.toInt())
-
-    call.enqueue(object : Callback<EventResponse> {
-        override fun onResponse(
-            call: Call<EventResponse>,
-            response: Response<EventResponse>
-        ) {
-            Log.e("TAG", "onResponse: ${response.body()}")
-
-            if (response.body()!!.status == 404) {
-                Log.e("TAG", "a resposta está nula")
-                listEvents = emptyList()
-            } else {
-                listEvents = response.body()!!.evento
-            }
-
-            Log.e("TAG", "onResponse: $listEvents")
-        }
-        override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-            Log.i("ds3t", "onFailure: ${t.message}")
-        }
-    })
+    Log.i("ddde", "CalendaryScreen: ${eventos}")
+    Log.i("Tag", "O tipo da variável é: ${listEvents!!.javaClass}")
 
     if (listEvents.isEmpty()){
         Column (
