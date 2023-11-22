@@ -204,7 +204,10 @@ fun ModifyStockScreen(
                     OutlinedTextField(
                         value = quantidadeState,
                         onValueChange = {
-                            quantidadeState = it
+                            //quantidadeState = it
+                            if (it.length <= 5) {
+                                quantidadeState = it
+                            }
                         },
                         modifier = Modifier
                             .width(160.dp)
@@ -241,7 +244,10 @@ fun ModifyStockScreen(
                     OutlinedTextField(
                         value = limiteState,
                         onValueChange = {
-                            limiteState = it
+                            //limiteState = it
+                            if (it.length <= 5) {
+                                limiteState = it
+                            }
                         },
                         modifier = Modifier
                             .width(160.dp)

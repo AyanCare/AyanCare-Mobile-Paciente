@@ -48,6 +48,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextFieldValida
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.ModalSuccess
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.TextFieldTelefone
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -66,6 +67,9 @@ fun AddContactScreen(
     val paciente = array[0]
     var id = paciente.id.toLong()
 
+//    var estadoCpf by remember {
+//        mutableStateOf("")
+//    }
     var nomeState by remember {
         mutableStateOf("")
     }
@@ -224,6 +228,14 @@ fun AddContactScreen(
                 focusedBorderColor = Color(0xFF6650A4),
                 textColor = Color(0xFF64748B)
             )
+
+//            TextFieldTelefone(
+//                value = telefoneState.toString(), aoMudar = {
+//                    telefoneState = it
+//                    //localStorage.salvarValor(context, estadoCpf.value, "cpf")
+//                }, placeholder = "Digite o cpf",
+//                isError = false//estadoCpfError.value.isNotEmpty()
+//            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
