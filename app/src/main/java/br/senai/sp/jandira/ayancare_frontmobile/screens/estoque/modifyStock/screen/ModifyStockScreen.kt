@@ -1,5 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.estoque.modifyStock.screen
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,12 +23,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,15 +39,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.MedicamentoResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.Medicamento
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.Medicamentos
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.MedicamentoRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun ModifyStockScreen(
     navController: NavController,
-    navRotasController: NavController
+    navRotasController: NavController,
+    localStorage: Storage,
+    lifecycleScope: LifecycleCoroutineScope
 ) {
+
+    val context = LocalContext.current
+
+
+    val id_estoque = localStorage.lerValor(context, "id_estoque")
+    val nome_estoque = localStorage.lerValor(context, "nome_estoque")
 
     var quantidadeState by remember {
         mutableStateOf("")
@@ -52,6 +76,72 @@ fun ModifyStockScreen(
     var limiteState by remember {
         mutableStateOf("")
     }
+
+    Log.i("id_estoque", "ModifyStockScreen:$id_estoque ")
+
+    var listEstoque by remember {
+        mutableStateOf(
+                Medicamento(0, "", 0, "", 0, 0, 0, "")
+        )
+    }
+
+    //Cria uma chamada para o endpoint
+    var call = RetrofitFactory.getAlarme().getMedicamentosById(id_estoque!!.toInt())
+
+    call.enqueue(object : Callback<MedicamentoResponse> {
+        override fun onResponse(
+            call: Call<MedicamentoResponse>,
+            response: Response<MedicamentoResponse>
+        ) {
+            Log.i("teste de conexao", "onResponse: ${response.body()}")
+            if (response.body()!!.status == 404) {
+                Log.e("TAG", "a resposta está nula")
+                //listEstoque = emptyList()
+            } else {
+                listEstoque = response.body()!!.medicamento
+
+                quantidadeState = listEstoque.quantidade.toString()
+                limiteState = listEstoque.limite.toString()
+            }
+        }
+        override fun onFailure(call: Call<MedicamentoResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
+
+    fun updateEstoque(
+        quantidade: Int,
+        limite: Int,
+        id_medicamento: Int
+    ) {
+        val EstoqueRepository = MedicamentoRepository()
+        lifecycleScope.launch {
+
+            val response = EstoqueRepository.updateMedicamento(
+                quantidade,
+                limite,
+                id_medicamento
+            )
+
+            Log.e("response", "medicamneto: $response")
+
+            if (response.isSuccessful) {
+
+                Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
+
+                navRotasController.navigate("main_screen")
+
+            } else {
+
+                val errorBody = response.errorBody()?.string()
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o registro: $errorBody")
+                Toast.makeText(context, "Erro durante o registro", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
+
 
     Surface(
         color = Color(248, 240, 236)
@@ -81,7 +171,7 @@ fun ModifyStockScreen(
                 //verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Paracetamol",
+                    text = "$nome_estoque",
                     fontSize = 36.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(500),
@@ -112,7 +202,7 @@ fun ModifyStockScreen(
                         color = Color(0xFF000000)
                     )
                     OutlinedTextField(
-                        value = quantidadeState ,
+                        value = quantidadeState,
                         onValueChange = {
                             quantidadeState = it
                         },
@@ -149,7 +239,7 @@ fun ModifyStockScreen(
                         color = Color(0xFF000000)
                     )
                     OutlinedTextField(
-                        value = limiteState ,
+                        value = limiteState,
                         onValueChange = {
                             limiteState = it
                         },
@@ -169,7 +259,13 @@ fun ModifyStockScreen(
             ){
                 DefaultButton(
                     onClick = {
-                        navRotasController.popBackStack()
+                        Log.e("teste muryllo", "ModifyStockScreen: ${quantidadeState.toInt()}," +
+                                " ${limiteState.toInt()}, ${id_estoque.toInt()}", )
+                        updateEstoque(
+                            quantidadeState.toInt(),
+                            limiteState.toInt(),
+                            id_estoque.toInt()
+                        )
                     },
                     text = "Renovar Estoque"
                 )

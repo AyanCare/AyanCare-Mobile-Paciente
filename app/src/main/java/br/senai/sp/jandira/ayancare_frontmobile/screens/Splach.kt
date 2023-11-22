@@ -192,7 +192,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("modify_stock_screen"){
-                            ModifyStockScreen(navController = navController, navRotasController = navController)
+                            ModifyStockScreen(navController = navController, navRotasController = navController, localStorage = localStorage,  lifecycleScope = lifecycleScope)
                         }
 
                         composable("add_remedy_non_existent_screen"){

@@ -27,5 +27,21 @@ class MedicamentoRepository {
         }
         return apiService.createMedicamento(requestBody)
     }
+
+    suspend fun updateMedicamento(
+        quantidade: Int,
+        limite: Int,
+        id_medicamento: Int
+    ): Response<JsonObject> {
+        val requestBody = JsonObject().apply {
+            addProperty("quantidade", quantidade)
+            addProperty("limite", limite)
+            addProperty("id", id_medicamento)
+        }
+
+        return apiService.updateMedicamento(requestBody)
+    }
+
+
 }
 

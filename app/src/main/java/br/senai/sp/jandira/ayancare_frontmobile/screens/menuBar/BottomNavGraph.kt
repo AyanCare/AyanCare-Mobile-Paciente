@@ -27,7 +27,7 @@ fun BottomNavGraph(
         startDestination = BottomBarScreen.Home.route,
     ){
         composable(route = BottomBarScreen.Stock.route){
-            EstoqueScreen(navRotasController = navRotasController, navController = navController)
+            EstoqueScreen(navRotasController = navRotasController, navController = navController, localStorage = localStorage)
         }
         composable(route = BottomBarScreen.Cadendary.route){
             CalendaryScreen(navController = navController, navRotasController = navRotasController, localStorage = localStorage, alarmeViewModel )
