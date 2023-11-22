@@ -16,12 +16,12 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -37,7 +37,7 @@ fun CardNotification(
 ) {
     Card(
         onClick = { /*TODO*/ },
-        backgroundColor = Color(0xFF673AB7),
+        backgroundColor = Color(0xFFB49BE0),
         shape = RoundedCornerShape(16.dp)
     ) {
         Row(
@@ -54,7 +54,8 @@ fun CardNotification(
                 Image(
                     imageVector = Icons.Default.Alarm,
                     contentDescription = "",
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(40.dp),
+                    colorFilter = ColorFilter.tint(Color.White)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Column {
@@ -72,8 +73,8 @@ fun CardNotification(
                         lineHeight = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(400),
-                        color = Color(0xFFFFFFFF),
-                        modifier = Modifier.width(300.dp)
+                        color = Color(0x99FAFAFF),
+                        modifier = Modifier.width(250.dp)
                     )
                 }
             }

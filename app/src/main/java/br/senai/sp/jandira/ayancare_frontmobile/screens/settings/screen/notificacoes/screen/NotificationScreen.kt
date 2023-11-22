@@ -38,8 +38,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.notificacao.NotificacaoResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.notificacao.service.Notificacao
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.RemedyResponse
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.remedy.service.Remedy
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.notificacoes.components.CardNotification
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
@@ -77,7 +75,6 @@ fun NotificationScreen(
         }
 
     })
-
 
     Surface(
         color = Color(248, 240, 236)
