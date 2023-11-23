@@ -1,5 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.AddStock.screen
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,20 +40,64 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.MedicamentoRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddStockScreen(
-    navController: NavController
+    navController: NavController,
+    localStorage: Storage,
+    lifecycleScope: LifecycleCoroutineScope
 ) {
+
+    var context = LocalContext.current
+
+    var id_estoque = localStorage.lerValor(context, "id_medicamento")
+
     var quantidadeState by remember {
         mutableStateOf("")
     }
 
     var limiteState by remember {
         mutableStateOf("")
+    }
+
+    fun updateEstoque(
+        quantidade: Int,
+        limite: Int,
+        id_medicamento: Int
+    ) {
+        val EstoqueRepository = MedicamentoRepository()
+        lifecycleScope.launch {
+
+            val response = EstoqueRepository.updateMedicamento(
+                quantidade,
+                limite,
+                id_medicamento
+            )
+
+            Log.e("response", "medicamneto: $response")
+
+            if (response.isSuccessful) {
+
+                Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
+
+                navController.navigate("main_screen")
+
+            } else {
+
+                val errorBody = response.errorBody()?.string()
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o registro: $errorBody")
+                Toast.makeText(context, "Erro durante o registro", Toast.LENGTH_SHORT).show()
+
+            }
+        }
     }
 
     Surface(
@@ -173,6 +220,13 @@ fun AddStockScreen(
             ){
                 DefaultButton(
                     onClick = {
+                        Log.e("teste muryllo", "ModifyStockScreen: ${quantidadeState.toInt()}," +
+                                " ${limiteState.toInt()}, ${id_estoque!!.toInt()}")
+                        updateEstoque(
+                            quantidadeState.toInt(),
+                            limiteState.toInt(),
+                            id_estoque!!.toInt()
+                        )
                         //navController.navigate("main_screen")
                     },
                     text = "Proximo"

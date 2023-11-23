@@ -150,12 +150,29 @@ fun ViewEmergencyScreen(
 
                 Spacer(modifier = Modifier.height(30.dp))
 
-                DefaultButton(
-                    onClick = {
-                        navController.navigate("add_contact_screen")
-                    },
-                    text = "+ Adicionar um novo contato"
-                )
+                Column(
+                    modifier = Modifier
+                        .padding(start = 15.dp, end = 15.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            navController.navigate("add_contact_screen")
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(50.dp),
+                        colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
+                    ) {
+                        Text(
+                            text = "Adicionar um novo contato",
+                            fontSize = 18.sp,
+                            fontFamily = FontFamily(Font(R.font.poppins)),
+                            fontWeight = FontWeight(600),
+                            color = Color(0xFFFFFEFE),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -177,7 +194,7 @@ fun ViewEmergencyScreen(
                         lineHeight = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(500),
-                        color = Color(0xFF000000),
+                        color = Color(0xFFFFFFFF),
                         textAlign = TextAlign.Center
                     )
                 }
