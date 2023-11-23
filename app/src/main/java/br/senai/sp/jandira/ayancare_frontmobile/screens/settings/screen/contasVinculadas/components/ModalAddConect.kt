@@ -43,7 +43,9 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldNumber
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.ConectarResponse
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -52,6 +54,7 @@ import retrofit2.Response
 fun ModalAddConect(
     isDialogVisibleConect: Boolean,
     navController: NavController,
+    localStorage: Storage,
     nav: String
 ) {
     val context = LocalContext.current
@@ -64,6 +67,8 @@ fun ModalAddConect(
     var idState by remember {
         mutableStateOf("")
     }
+
+    var isDialogVisibleConects by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -137,8 +142,24 @@ fun ModalAddConect(
                                         Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
                                         navController.navigate("linked_accounts_screen")
                                     }else{
-                                        Log.e("TAG", "onResponse:${response} ", )
-                                        Toast.makeText(context, "Erro id inválido!!", Toast.LENGTH_SHORT).show()
+                                        Log.e("TAG", "onResponse:${response} ")
+                                        if (response.code() == 409){
+                                            val erro = response.errorBody()?.string()
+                                            val erroObject = JSONObject(erro)
+                                            val conexao = erroObject.getJSONObject("conexao")
+                                            val status = conexao.getInt("status")
+
+                                            Log.e("Luizão", "${conexao}")
+                                            Log.e("Luizão", "${status}")
+                                            if (status == 0){
+                                                Toast.makeText(context, "Essa conexao está desativada!!", Toast.LENGTH_SHORT).show()
+                                                isDialogVisibleConects = true
+                                            }else{
+                                                Toast.makeText(context, "Conexao já existente!!", Toast.LENGTH_SHORT).show()
+                                            }
+                                        }else{
+                                            Toast.makeText(context, "Erro id inválido!!", Toast.LENGTH_SHORT).show()
+                                        }
                                     }
 
                                 }
@@ -150,6 +171,14 @@ fun ModalAddConect(
                         },
                         text = "Salvar"
                     )
+                    if (isDialogVisibleConects) {
+                        ModalDeleteConect(
+                            isDialogVisibleConect = false,
+                            localStorage = localStorage,
+                            navController = navController,
+                            id_cuidador = id.toInt()
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(25.dp))
 

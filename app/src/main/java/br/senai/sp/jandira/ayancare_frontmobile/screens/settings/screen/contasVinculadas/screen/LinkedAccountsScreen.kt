@@ -165,7 +165,7 @@ fun LinkedAccountsScreen(
                     )
                 }
             }
-            FloatingActionButtonConectarContas(navController, lifecycleScope)
+            FloatingActionButtonConectarContas(navController, localStorage, lifecycleScope)
         }
     }else{
         Surface(
@@ -242,7 +242,7 @@ fun LinkedAccountsScreen(
                     }
                 }
             }
-            FloatingActionButtonConectarContas(navController, lifecycleScope)
+            FloatingActionButtonConectarContas(navController, localStorage, lifecycleScope)
         }
     }
 }
