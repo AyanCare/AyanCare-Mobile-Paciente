@@ -2,6 +2,7 @@ package br.senai.sp.jandira.ayancare_frontmobile.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -14,6 +15,8 @@ import androidx.compose.ui.unit.dp
 fun TextFieldNumber(
     valor: String,
     label: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     onValueChange: (String) -> Unit
 ){
     OutlinedTextField(
@@ -28,7 +31,8 @@ fun TextFieldNumber(
         },
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number
-        )
+        ),
+        keyboardActions = keyboardActions
 
     )
 }

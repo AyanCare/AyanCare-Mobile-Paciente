@@ -41,7 +41,8 @@ import retrofit2.Response
 fun ModalDeleteConect(
     isDialogVisibleConect: Boolean,
     navController: NavController,
-    localStorage: Storage
+    localStorage: Storage,
+    id_cuidador: Int
 ) {
 
     val context = LocalContext.current
@@ -50,7 +51,7 @@ fun ModalDeleteConect(
     val paciente = array[0]
     var id = paciente.id.toLong()
 
-    val id_cuidador = localStorage.lerValor(context, "id_cuidador_conexao")
+    //val id_cuidador = localStorage.lerValor(context, "id_cuidador_conexao")
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -92,7 +93,7 @@ fun ModalDeleteConect(
 
                                 Log.e("dsdsfa", "ModalDeleteConect: $id + $id_cuidador")
 
-                                var call = RetrofitFactory.getConectar().updateConect(id.toInt(), id_cuidador!!.toInt())
+                                var call = RetrofitFactory.getConectar().updateConect(id.toInt(), id_cuidador)
 
                                 call.enqueue(object : Callback<DesativarContaResponse> {
                                     override fun onResponse(

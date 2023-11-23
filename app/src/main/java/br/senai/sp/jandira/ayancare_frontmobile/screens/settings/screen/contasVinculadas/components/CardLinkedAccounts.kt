@@ -41,6 +41,7 @@ import coil.compose.AsyncImage
 fun CardLinkedAccounts(
     onUnlinkClick: () -> Unit,
     onProfileClick: () -> Unit,
+    onClick: () -> Unit,
     nome: String,
     id: Int,
     foto: String
@@ -50,7 +51,10 @@ fun CardLinkedAccounts(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { isExpanded = !isExpanded },
+            .clickable {
+                isExpanded = !isExpanded
+                onClick()
+                       },
         //elevation = 4.dp
     ) {
         Column(
@@ -96,13 +100,13 @@ fun CardLinkedAccounts(
                     ) {
                         if (isExpanded) {
                             Icon(
-                                imageVector = Icons.Default.ArrowDropDown,
+                                imageVector = Icons.Default.ArrowDropUp,
                                 contentDescription = "",
                                 modifier = Modifier.size(30.dp)
                             )
                         } else {
                             Icon(
-                                imageVector = Icons.Default.ArrowDropUp,
+                                imageVector = Icons.Default.ArrowDropDown,
                                 contentDescription = "",
                                 modifier = Modifier.size(30.dp)
                             )

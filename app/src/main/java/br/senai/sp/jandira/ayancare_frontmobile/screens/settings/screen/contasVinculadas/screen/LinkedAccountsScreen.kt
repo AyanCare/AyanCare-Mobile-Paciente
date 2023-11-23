@@ -215,6 +215,9 @@ fun LinkedAccountsScreen(
                     LazyColumn(){
                         items(listCuidadores){
                             CardLinkedAccounts(
+                                onClick = {
+                                    localStorage.salvarValor(context, it.id_cuidador.toString(), "id_cuidador_conexao")
+                                },
                                 onUnlinkClick = {
                                     isDialogVisibleConect = true
                                 },
@@ -233,7 +236,8 @@ fun LinkedAccountsScreen(
                         ModalDeleteConect(
                             isDialogVisibleConect = false,
                             localStorage = localStorage,
-                            navController = navController
+                            navController = navController,
+                            id_cuidador = listCuidadores[0].id_cuidador
                         )
                     }
                 }
