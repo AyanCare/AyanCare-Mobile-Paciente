@@ -103,16 +103,16 @@ fun EstoqueScreen(
                 color = Color(0xFF000000),
                 textAlign = TextAlign.Center
             )
-            Row (
-                modifier = Modifier.padding(start = 15.dp, end = 15.dp)
-            ){
-                DefaultTextField(
-                    valor = "",
-                    label = "Pesquisa",
-                    aoMudar = {},
-                    onValueChange = {}
-                )
-            }
+//            Row (
+//                modifier = Modifier.padding(start = 15.dp, end = 15.dp)
+//            ){
+//                DefaultTextField(
+//                    valor = "",
+//                    label = "Pesquisa",
+//                    aoMudar = {},
+//                    onValueChange = {}
+//                )
+//            }
 
             Spacer(modifier = Modifier.height(30.dp))
 

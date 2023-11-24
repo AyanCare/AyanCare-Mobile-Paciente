@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
-fun CardMedicine() {
+fun CardMedicine(
+    nome: String,
+    intervalo: Int
+) {
     Card(
         modifier = Modifier
             .shadow(
@@ -57,7 +60,7 @@ fun CardMedicine() {
                 verticalArrangement = Arrangement.SpaceAround
             ) {
                 Text(
-                    text = "Paracetamol",
+                    text = "$nome",
                     fontSize = 16.sp,
                     lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
@@ -65,7 +68,7 @@ fun CardMedicine() {
                     color = Color(0xFFFFFFFF)
                 )
                 Text(
-                    text = "A cada X horas",
+                    text = "A cada $intervalo horas",
                     fontSize = 12.sp,
                     fontFamily = FontFamily(Font(R.font.poppins)),
                     fontWeight = FontWeight(700),

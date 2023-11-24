@@ -31,12 +31,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +47,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -58,8 +62,11 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
+import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.TextFieldCpf
+import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.DateEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
+import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.DateEditProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.MedicalHistory
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddComorbidity
@@ -70,6 +77,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
     navController: NavController,
@@ -80,6 +88,17 @@ fun EditProfileScreen(
 
     var isDialogVisibleComorbidity by remember { mutableStateOf(false) }
 
+    val datePickerState = rememberDatePickerState()
+    val focusManager = LocalFocusManager.current
+
+    var selectedDate by remember { mutableStateOf("") }
+
+    var validateDate by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    val validateDateError = "Data está em branco"
+
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
@@ -87,6 +106,11 @@ fun EditProfileScreen(
 
     val paciente = array[0]
     var id = paciente.id.toLong()
+
+    var cpfState by remember { mutableStateOf("") }
+
+    var isEditing by remember { mutableStateOf(false) }
+    var editedCpf by remember { mutableStateOf("") }
 
 
     //Obter foto da galeria de imagens
@@ -126,6 +150,9 @@ fun EditProfileScreen(
         ) {
             listPaciente = response.body()!!.paciente
             Log.e("TAG", "onResponse: $listPaciente", )
+
+            selectedDate = listPaciente.data_nascimento
+            cpfState = listPaciente.cpf
         }
         override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
@@ -136,10 +163,7 @@ fun EditProfileScreen(
     var nome = listPaciente.nome
     var cpf = paciente.cpf
 
-    var cpfState by remember { mutableStateOf(cpf) } //desisto
 
-    var isEditing by remember { mutableStateOf(false) }
-    var editedCpf by remember { mutableStateOf(cpfState) }
 
     Log.e("CpfState2", "EditProfileScreen: $cpfState", )
 
@@ -230,28 +254,47 @@ fun EditProfileScreen(
                             .fillMaxSize()
                             .padding(16.dp)
                     ) {
-                        if (isEditing) {
-                            TextField(
-                                value = editedCpf,
-                                onValueChange = {
-                                    editedCpf = it
-                                },
-                                label = { Text("CPF") }
-                            )
-                        } else {
-                            TextField(
-                                value = cpfState,
-                                onValueChange = {
-                                    cpfState = it
-                                },
-                                label = { Text("CPF") }
-                            )
-                        }
+//                        if (isEditing) {
+//                            TextField(
+//                                value = editedCpf,
+//                                onValueChange = {
+//                                    editedCpf = it
+//                                },
+//                                label = { Text("CPF") }
+//                            )
+//                        } else {
+//                            TextField(
+//                                value = cpfState,
+//                                onValueChange = {
+//                                    cpfState = it
+//                                },
+//                                label = { Text("CPF") }
+//                            )
+//                        }
+                        TextFieldCpf(
+                            cpfState = cpfState,
+                            aoMudar = {
+                                      cpfState = it
+                            },
+                            placeholder = "CPF",
+                            isError = false
+                        )
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    //DateTextField()
+                    Log.i("data chegando", "EditProfileScreen: $selectedDate")
+                    DateEditProfile(
+                        context = context,
+                        selectedDate = selectedDate,
+                        onDateChange = {
+                            selectedDate = it
+                        },
+                        focusManager = focusManager,
+                        datePickerState = datePickerState,
+                        validateDate = validateDate,
+                        validateDateError = validateDateError
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
                 }

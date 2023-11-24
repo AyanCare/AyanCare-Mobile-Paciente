@@ -36,6 +36,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeUnitariosResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmesResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.MedicamentosResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.Alarme
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.AlarmeUnitario
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.service.Medicamentos
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
@@ -88,6 +94,95 @@ fun ProfileScreen(
             Log.i("ds3t", "onFailure: ${t.message}")
         }
 
+    })
+
+    var listAlarmeUnitario by remember {
+        mutableStateOf(
+            listOf(
+                AlarmeUnitario(
+                    id_alarme_unitario = 0,
+                    id_medicamento = 0,
+                    medicamento = "",
+                    foto = "",
+                    id_alarme = 0,
+                    data_criacao = "",
+                    intervalo = 0,
+                    horario_inicial = "",
+                    quantidade_retirada = 0,
+                    id_medida = 0,
+                    medida = "",
+                    medida_sigla = "",
+                    status = "",
+                    id_paciente = 0,
+                    paciente = ""
+                )
+            )
+        )
+    }
+
+    var listAlarme by remember {
+        mutableStateOf(
+            listOf(
+                Alarme(
+                    paciente = "",
+                    id = 0,
+                    dia = "",
+                    intervalo = 0,
+                    horario = "",
+                    id_medicamento = 0,
+                    medicamento = "",
+                    status = ""
+                )
+            )
+        )
+    }
+
+    //Cria uma chamada para o endpoint
+    var call1 = RetrofitFactory.getAlarme().getAlarmesUnitariosByIdPaciente(id.toInt())
+
+    call1.enqueue(object : Callback<AlarmeUnitariosResponse> {
+        override fun onResponse(
+            call: Call<AlarmeUnitariosResponse>,
+            response: Response<AlarmeUnitariosResponse>
+        ) {
+            Log.e("listAlarmeUnitario", "onResponse: ${response.body()}")
+
+            if (response.body()!!.status == 404) {
+                Log.e("listAlarmeUnitario", "a resposta está nula")
+                listAlarmeUnitario = emptyList()
+            } else {
+                listAlarmeUnitario = response.body()!!.alarme
+            }
+
+            Log.e("listAlarmeUnitario", "onResponse: $listAlarmeUnitario")
+        }
+        override fun onFailure(call: Call<AlarmeUnitariosResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+    })
+
+    //Cria uma chamada para o endpoint
+    var call2 = RetrofitFactory.getAlarme().getAlarmesByIdPaciente(id.toInt())
+
+    call2.enqueue(object : Callback<AlarmesResponse> {
+        override fun onResponse(
+            call: Call<AlarmesResponse>,
+            response: Response<AlarmesResponse>
+        ) {
+            Log.e("listAlarme", "onResponse: ${response.body()}")
+
+            if (response.body()!!.status == 404) {
+                Log.e("listAlarme", "a resposta está nula")
+                listAlarme = emptyList()
+            } else {
+                listAlarme = response.body()!!.alarme
+            }
+
+            Log.e("listAlarme", "onResponse: $listAlarme")
+        }
+        override fun onFailure(call: Call<AlarmesResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
     })
 
     Surface(
@@ -226,22 +321,34 @@ fun ProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    CardMedicine()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardMedicine()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardMedicine()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardMedicine()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardMedicine()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardMedicine()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardMedicine()
-                    Spacer(modifier = Modifier.height(10.dp))
-                    CardMedicine()
-                    Spacer(modifier = Modifier.height(10.dp))
+                    for (remedio in listAlarmeUnitario){
+                        CardMedicine(
+                            nome = "${remedio.medicamento}",
+                            intervalo = remedio.intervalo
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+                    for (remedio in listAlarme){
+                        CardMedicine(
+                            nome = "${remedio.medicamento}",
+                            intervalo = remedio.intervalo
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
+//                    CardMedicine()
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    CardMedicine()
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    CardMedicine()
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    CardMedicine()
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    CardMedicine()
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    CardMedicine()
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    CardMedicine()
+//                    Spacer(modifier = Modifier.height(10.dp))
                 }
             }
         }

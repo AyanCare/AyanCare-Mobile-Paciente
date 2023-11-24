@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,29 +21,26 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.MaskVisualTransformation
 import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.NumberDefaults.MASKCPF
 import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.NumberDefaults.MASKNUMBER
 
-object NumberDefaults {
-    const val MASKCPF = "###.###.###-##"
-    const val MASKNUMBER = "(##) #####-####"
-    const val INPUT_LENGTH = 11 // Equals to "#####-###".count { it == '#' }
-}
 @Composable
-fun TextFieldTelefone(
-    value: String,
+fun TextFieldCpf(
+    cpfState: String,
     aoMudar: (String) -> Unit,
     placeholder: String,
     isError: Boolean
 ) {
-    var cpf by remember(value) {
-        mutableStateOf(value)
+    var telefone by remember(cpfState) {
+        mutableStateOf(cpfState)
     }
 
-    androidx.compose.material.OutlinedTextField(
-        value = cpf,
+    telefone = cpfState
+
+    OutlinedTextField(
+        value = telefone,
         onValueChange = { newText ->
             if (newText.length <= 11) { // Limita o usuário a 11 caracteres
                 val unformattedText = newText.replace(Regex("[^\\d]"), "")
                 aoMudar(unformattedText)
-                cpf = unformattedText
+                telefone = unformattedText
             }
         },
         placeholder = {
@@ -65,6 +63,6 @@ fun TextFieldTelefone(
             focusedBorderColor = Color.Black,
             cursorColor = Color.Blue
         ),
-        visualTransformation = MaskVisualTransformation(MASKNUMBER)
+        visualTransformation = MaskVisualTransformation(MASKCPF)
     )
 }
