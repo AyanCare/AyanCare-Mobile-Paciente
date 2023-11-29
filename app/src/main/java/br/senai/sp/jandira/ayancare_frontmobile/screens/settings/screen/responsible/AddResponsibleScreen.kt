@@ -48,6 +48,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextFieldValida
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.ModalSuccess
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.ResponsibleRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.TextFieldTelefone
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -212,22 +213,32 @@ fun AddResponsibleScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            CustomTextFieldValidate(
+//            CustomTextFieldValidate(
+//                value = telefoneState,
+//                onValueChange = { telefoneState = it },
+//                label = "Telefone:",
+//                showError = !validateTelefone,
+//                errorMessage = validateTelefoneError,
+//                keyboardOptions = KeyboardOptions(
+//                    keyboardType = KeyboardType.Number,
+//                    imeAction = ImeAction.Next
+//                ),
+//                keyboardActions = KeyboardActions(
+//                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
+//                ),
+//                unfocusedBorderColor = Color(0xFF64748B),
+//                focusedBorderColor = Color(0xFF6650A4),
+//                textColor = Color(0xFF64748B)
+//            )
+
+            TextFieldTelefone(
                 value = telefoneState,
-                onValueChange = { telefoneState = it },
-                label = "Telefone:",
+                aoMudar = {
+                    telefoneState = it
+                },
+                label = "Digite o Telefone:",
                 showError = !validateTelefone,
-                errorMessage = validateTelefoneError,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-                unfocusedBorderColor = Color(0xFF64748B),
-                focusedBorderColor = Color(0xFF6650A4),
-                textColor = Color(0xFF64748B)
+                errorMessage = validateTelefoneError
             )
 
             Spacer(modifier = Modifier.height(20.dp))

@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Description
@@ -37,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
@@ -47,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
-import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service.Responsavel
@@ -107,7 +108,7 @@ fun ViewEmergencyScreen(
         ) {
             IconButton(
                 onClick = {
-                    navController.popBackStack()
+                    navController.navigate("main_screen")
                 },
                 modifier = Modifier.padding(start = 15.dp, top = 15.dp)
             ) {
@@ -140,7 +141,7 @@ fun ViewEmergencyScreen(
                     fontWeight = FontWeight(500),
                     color = Color(0xFFFFFFFF),
                     textAlign = TextAlign.Center,
-                    style = androidx.compose.material.MaterialTheme.typography.h4.copy(
+                    style = MaterialTheme.typography.h4.copy(
                         shadow = Shadow(
                             offset = Offset(10f, 10f),
                             blurRadius = 30f
@@ -164,7 +165,7 @@ fun ViewEmergencyScreen(
                         colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
                     ) {
                         Text(
-                            text = "Adicionar um novo contato",
+                            text = "+ Adicionar um novo contato",
                             fontSize = 18.sp,
                             fontFamily = FontFamily(Font(R.font.poppins)),
                             fontWeight = FontWeight(600),
@@ -186,11 +187,12 @@ fun ViewEmergencyScreen(
                         imageVector = Icons.Default.Description,
                         contentDescription = "",
                         modifier = Modifier
-                            .size(50.dp)
+                            .size(60.dp),
+                        colorFilter = ColorFilter.tint(Color.White)
                     )
                     Text(
-                        text = "Não existe nenhum responsável no momento",
-                        fontSize = 16.sp,
+                        text = "Não existe nenhum \ncontato no momento",
+                        fontSize = 20.sp,
                         lineHeight = 18.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(500),
@@ -198,7 +200,6 @@ fun ViewEmergencyScreen(
                         textAlign = TextAlign.Center
                     )
                 }
-
             }
         }
     } else {
@@ -207,7 +208,7 @@ fun ViewEmergencyScreen(
         ) {
             IconButton(
                 onClick = {
-                    navController.popBackStack()
+                    navController.navigate("main_screen")
                 },
                 modifier = Modifier.padding(start = 15.dp, top = 15.dp)
             ) {
@@ -240,7 +241,7 @@ fun ViewEmergencyScreen(
                     fontWeight = FontWeight(500),
                     color = Color(0xFFFFFFFF),
                     textAlign = TextAlign.Center,
-                    style = androidx.compose.material.MaterialTheme.typography.h4.copy(
+                    style = MaterialTheme.typography.h4.copy(
                         shadow = Shadow(
                             offset = Offset(10f, 10f),
                             blurRadius = 30f
@@ -264,7 +265,7 @@ fun ViewEmergencyScreen(
                         colors = ButtonDefaults.buttonColors(Color(0xFF35225F))
                     ) {
                         Text(
-                            text = "Adicionar um novo contato",
+                            text = "+ Adicionar um novo contato",
                             fontSize = 18.sp,
                             fontFamily = FontFamily(Font(R.font.poppins)),
                             fontWeight = FontWeight(600),
