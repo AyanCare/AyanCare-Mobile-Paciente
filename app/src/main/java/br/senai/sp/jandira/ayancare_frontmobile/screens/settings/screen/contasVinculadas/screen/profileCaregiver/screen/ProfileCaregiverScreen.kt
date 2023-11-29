@@ -110,7 +110,7 @@ fun ProfileCaregiverScreen(
             BoxProfile()
             IconButton(
                 onClick = {
-                    navController.navigate("setting_screen")
+                    navController.navigate("linked_accounts_screen")
                 }
             ) {
                 Icon(
@@ -127,7 +127,7 @@ fun ProfileCaregiverScreen(
                     .fillMaxSize()
             ) {
                 CircleProfile(
-                    painter = "painterResource(id = R.drawable.instrucao3)"
+                    painter = "${listCuidadores.foto}"
                 )
 
                 Text(
