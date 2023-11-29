@@ -28,4 +28,8 @@ interface UserService {
     @Headers("Content-Type: application/json")
     @POST("/v1/ayan/usuario/esqueciasenha")
     suspend fun requestPasswordReset(@Body requestBody: JsonObject): Response<JsonObject>
+
+    @Headers("Content-Type: application/json")
+    @POST("/v1/ayan/sugestao")
+    suspend fun postSuggestion(@Body body: JsonObject): Response<JsonObject>
 }

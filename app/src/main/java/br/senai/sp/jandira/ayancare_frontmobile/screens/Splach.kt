@@ -168,7 +168,7 @@ class SplashActivity : ComponentActivity() {
                         }
 
                         composable("sugestoes_screen"){
-                            SuggestionScreen(navController = navController, navRotasController = navController)
+                            SuggestionScreen(navController = navController, navRotasController = navController, lifecycleScope = lifecycleScope)
                         }
 
                         composable("humor_test_screen"){
