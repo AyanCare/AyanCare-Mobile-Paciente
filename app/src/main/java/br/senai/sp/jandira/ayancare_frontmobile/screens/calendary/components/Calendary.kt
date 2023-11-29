@@ -55,13 +55,9 @@ import java.util.Locale
 @Composable
 fun Calendary(
     localStorage: Storage,
-<<<<<<< HEAD
     alarmeViewModel: ViewModelMestreMedicamentos,
     onChaneList: (List<Alarmes>) -> Unit,
     onChaneListEvent: (List<EventosUnicos>) -> Unit
-=======
-    onChaneList: (List<Alarmes>) -> Unit
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
 ) {
     var context = LocalContext.current
     var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
@@ -78,49 +74,6 @@ fun Calendary(
     var lista by remember {
         mutableStateOf(
             Calendario(
-<<<<<<< HEAD
-            listOf(
-                EventosUnicos(
-                    0,
-                    0,
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
-                    ""
-                )
-            ),
-            listOf(
-                EventosSemanais(
-                    0,
-                    0,
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    ""
-                )
-            ),
-            listOf(
-                Alarmes(
-                    0,
-                    0,
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    0,
-                    ""
-=======
                 listOf(
                     EventosUnicos(
                         0,
@@ -134,6 +87,8 @@ fun Calendary(
                         "",
                         "",
                         "",
+                        "",
+                        ""
                     )
                 ),
                 listOf(
@@ -161,7 +116,6 @@ fun Calendary(
                         0,
                         ""
                     )
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
                 )
             )
         )
@@ -310,10 +264,7 @@ fun Calendary(
                                                         Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
 
                                                         lista = response.body()!!.calendario
-<<<<<<< HEAD
                                                         alarmeViewModel.lista = response.body()!!.calendario.alarmes
-=======
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
 
                                                         onChaneList(response.body()!!.calendario.alarmes)
                                                     }
@@ -369,15 +320,10 @@ fun Calendary(
                                                     Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
 
                                                     lista = response.body()!!.calendario
-<<<<<<< HEAD
                                                     alarmeViewModel.lista = response.body()!!.calendario.alarmes
 
                                                     onChaneList(response.body()!!.calendario.alarmes)
                                                     onChaneListEvent(response.body()!!.calendario.eventos_unicos)
-=======
-
-                                                    onChaneList(response.body()!!.calendario.alarmes)
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
                                                 }
 
                                                 Log.e("list-calendario", "onResponse: $lista")

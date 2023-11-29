@@ -40,10 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Alarmes
-<<<<<<< HEAD
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosUnicos
-=======
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.Calendary
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.OptionAlarmCalendary
@@ -55,10 +52,7 @@ fun CalendaryScreen(
     navController: NavController,
     navRotasController: NavController,
     localStorage: Storage,
-<<<<<<< HEAD
     alarmeViewModel: ViewModelMestreMedicamentos
-=======
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
 ) {
     var selecionado by remember { mutableStateOf("evento") }
     val scrollState = rememberScrollState()
@@ -72,8 +66,6 @@ fun CalendaryScreen(
         mutableStateOf(listOf<EventosUnicos>())
     }
 
-    var listAlarme: List<Alarmes> = listOf()
-
     Surface (
         color = Color(248, 240, 236)
     ) {
@@ -85,25 +77,18 @@ fun CalendaryScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-<<<<<<< HEAD
             Calendary(
                 localStorage = localStorage,
                 alarmeViewModel = alarmeViewModel,
                 onChaneList = {
-                Log.e("IT", "$it")
-                listAlarme = it
-            },
+                    Log.e("IT", "$it")
+                    listAlarme = it
+                },
                 onChaneListEvent = {
                     Log.e("IT", "$it")
                     listEventoUnico = it
                 }
             )
-=======
-            Calendary(localStorage){
-                Log.e("IT", "$it")
-                listAlarme = it
-            }
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
             Spacer(modifier = Modifier.height(15.dp))
             Row (
                 horizontalArrangement = Arrangement.SpaceAround,

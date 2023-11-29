@@ -14,6 +14,10 @@ import androidx.compose.material.icons.filled.DeveloperMode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
-<<<<<<< HEAD
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeUnitariosResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmesResponse
@@ -39,11 +42,6 @@ import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.ViewModelMestreMe
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-=======
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Alarmes
-import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
-import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
 
 @Composable
 fun OptionAlarmCalendary(
@@ -117,21 +115,6 @@ fun OptionAlarmCalendary(
             )
             Spacer(modifier = Modifier.height(10.dp))
 
-<<<<<<< HEAD
-                for (alarme in listaAlarmes) {
-                    val medication = alarme.medicamento
-                    val time = alarme.horario
-                    val status = alarme.status
-                    CardCalendary(
-                        value = time,
-                        title = "Alarme",
-                        subtitle = " x ${medication}", //${alarme.quantidade_retirada}${alarme.medida_sigla}
-                        status = status,
-                        width = 75
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                }
-=======
             for (alarme in listaAlarmes) {
                 val medication = alarme.medicamento
                 val time = alarme.horario
@@ -145,7 +128,6 @@ fun OptionAlarmCalendary(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }
->>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
 
         }
     }
