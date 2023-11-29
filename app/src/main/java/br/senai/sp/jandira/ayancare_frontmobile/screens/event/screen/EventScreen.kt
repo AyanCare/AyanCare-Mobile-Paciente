@@ -196,6 +196,14 @@ fun EventScreen(
                     if (checagem.toString() == "404") {
                         Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
                     } else {
+
+                        NotificationService().showNotification(
+                            context = context,
+                            title = "Evendo criado",
+                            description = "Seu Evento foi criado com sucesso com o paciente",
+                            Icon = R.drawable.calendario
+                        )
+
                         Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
 
                         navController.navigate("main_screen")
@@ -263,13 +271,6 @@ fun EventScreen(
                             selectedDate,
                             idPaciente = id.toInt(),
                             idCor = selectedColorId!!
-                        )
-
-                        NotificationService().showNotification(
-                            context = context,
-                            title = "Evendo criado",
-                            description = "Seu Evento foi criado com sucesso com o pasciente",
-                            Icon = R.drawable.calendario
                         )
 
                         Log.e("TAG", "EventScreen: $selectedDate")
