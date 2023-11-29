@@ -30,7 +30,11 @@ fun BottomNavGraph(
             EstoqueScreen(navRotasController = navRotasController, navController = navController, localStorage = localStorage)
         }
         composable(route = BottomBarScreen.Cadendary.route){
+<<<<<<< HEAD
             CalendaryScreen(navController = navController, navRotasController = navRotasController, localStorage = localStorage, alarmeViewModel )
+=======
+            CalendaryScreen(navController = navController, navRotasController = navRotasController, localStorage = localStorage)
+>>>>>>> 1300c399c816b8887fa9052e8c7ba2e265e401dc
         }
         composable(route = BottomBarScreen.Home.route){
             HomeScreen(navRotasController = navRotasController)
