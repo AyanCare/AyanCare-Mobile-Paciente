@@ -68,7 +68,12 @@ fun ModalAddConect(
         mutableStateOf("")
     }
 
+    var nomeState by remember {
+        mutableStateOf("")
+    }
+
     val id_cuidador = localStorage.lerValor(context, "id_cuidador_conexao")
+    val nome_cuidador = localStorage.lerValor(context, "nome_cuidador_conexao")
 
     var isDialogVisibleConects by remember { mutableStateOf(false) }
 
@@ -153,6 +158,8 @@ fun ModalAddConect(
                                             val conexao = erroObject.getJSONObject("conexao")
                                             val status = conexao.getInt("status")
 
+                                            nomeState = conexao.getString("cuidador")
+
                                             Log.e("Luizão", "${conexao}")
                                             Log.e("Luizão", "${status}")
                                             if (status == 0){
@@ -179,7 +186,9 @@ fun ModalAddConect(
                         ModalAtivarNovamente(
                             isDialogVisibleConect = false,
                             localStorage = localStorage,
-                            navController = navController
+                            navController = navController,
+                            id_cuidador = idState.toInt(),
+                            nome_cuidador = nomeState
                         )
                     }
 

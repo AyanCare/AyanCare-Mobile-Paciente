@@ -217,13 +217,16 @@ fun LinkedAccountsScreen(
                             CardLinkedAccounts(
                                 onClick = {
                                     localStorage.salvarValor(context, it.id_cuidador.toString(), "id_cuidador_conexao")
+                                    localStorage.salvarValor(context, it.cuidador, "nome_cuidador_conexao")
                                 },
                                 onUnlinkClick = {
                                     localStorage.salvarValor(context, it.id_cuidador.toString(), "id_cuidador_conexao")
+                                    localStorage.salvarValor(context, it.cuidador, "nome_cuidador_conexao")
                                     isDialogVisibleConect = true
                                 },
                                 onProfileClick = {
                                     localStorage.salvarValor(context, it.id_cuidador.toString(), "id_cuidador_conexao")
+                                    localStorage.salvarValor(context, it.cuidador, "nome_cuidador_conexao")
                                     navController.navigate("profile_caregiver_screen")
                                                  },
                                 nome = it.cuidador,

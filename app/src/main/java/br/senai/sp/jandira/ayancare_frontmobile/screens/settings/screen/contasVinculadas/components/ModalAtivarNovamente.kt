@@ -42,17 +42,24 @@ import retrofit2.Response
 fun ModalAtivarNovamente(
     isDialogVisibleConect: Boolean,
     navController: NavController,
-    localStorage: Storage
+    localStorage: Storage,
+    id_cuidador: Int,
+    nome_cuidador: String
 ) {
+
+    Log.e("id_cuidador", "ModalAtivarNovamente: $id_cuidador", )
+    Log.e("nome_cuidador", "ModalAtivarNovamente: $nome_cuidador", )
 
     val context = LocalContext.current
     val array = PacienteRepository(context = context).findUsers()
 
     val paciente = array[0]
     var id = paciente.id.toLong()
-    var nome_paciente = paciente.nome
+    //var nome_paciente = paciente.nome
 
-    val id_cuidador = localStorage.lerValor(context, "id_cuidador_conexao")
+    //val id_cuidador = localStorage.lerValor(context, "id_cuidador_conexao")
+    //val nome_cuidador = localStorage.lerValor(context, "nome_cuidador_conexao")
+
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -75,7 +82,7 @@ fun ModalAtivarNovamente(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Deseja ativar novamente sua conexão com o paciente $nome_paciente?",
+                        text = "Deseja ativar novamente sua conexão com o cuidador $nome_cuidador?",
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(600),
@@ -92,7 +99,7 @@ fun ModalAtivarNovamente(
                         Button(
                             onClick = {
 
-                                Log.e("dsdsfa", "ModalDeleteConect: $id + $id_cuidador")
+                                Log.e("ativarConta", "ModalAtivarNovamenteConect: $id + $id_cuidador")
 
                                 var call = RetrofitFactory.getConectar().updateConectAtivar(id.toInt(), id_cuidador!!.toInt())
 
@@ -101,10 +108,10 @@ fun ModalAtivarNovamente(
                                         call: Call<AtivarContaResponse>,
                                         response: Response<AtivarContaResponse>
                                     ) {
-                                        Log.e("deleteConta", "onResponse: ${response.body()}")
+                                        Log.e("ativarConta", "onResponse: ${response.body()}")
                                     }
                                     override fun onFailure(call: Call<AtivarContaResponse>, t: Throwable) {
-                                        Log.i("deleteConta", "onFailure: ${t.message}")
+                                        Log.i("ativarConta", "onFailure: ${t.message}")
                                     }
                                 })
                                 navController.navigate("linked_accounts_screen")
