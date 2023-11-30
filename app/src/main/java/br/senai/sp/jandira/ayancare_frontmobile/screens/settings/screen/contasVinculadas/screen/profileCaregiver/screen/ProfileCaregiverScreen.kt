@@ -38,10 +38,13 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cuidador.CuidadorResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.cuidador.service.Cuidador
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.notificacao.NotificacaoResponse
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.notificacao.service.Notificacao
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.CircleProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.settings.screen.contasVinculadas.screen.profileCaregiver.components.CardTask
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,10 +60,37 @@ fun ProfileCaregiverScreen(
 
     val scrollState = rememberScrollState()
 
-    var id = localStorage.lerValor(context, "id_cuidador_conexao")
+    var id_cuidador = localStorage.lerValor(context, "id_cuidador_conexao")
     val token = localStorage.lerValor(context, "token_paciente")
 
-    Log.e("TAG", "ProfileCaregiverScreen: $id")
+    Log.e("TAG", "ProfileCaregiverScreen: $id_cuidador")
+
+
+    var listNotificacoes by remember {
+        mutableStateOf<List<Notificacao>>(emptyList())
+    }
+
+    val array = PacienteRepository(context = context).findUsers()
+    val paciente = array[0]
+    var id = paciente.id.toLong()
+
+    //Cria uma chamada para o endpoint
+    var call1 = RetrofitFactory.getNotificacao().getNotificacaobyIdPacienteIdCuidador(id.toInt(), id_cuidador!!.toInt())
+
+    call1.enqueue(object : Callback<NotificacaoResponse> {
+        override fun onResponse(
+            call: Call<NotificacaoResponse>,
+            response: Response<NotificacaoResponse>
+        ) {
+            Log.e("TAG", "onResponse:${response.body()} ")
+            listNotificacoes = response.body()!!.notificacao
+            Log.e("TAG", "onResponse:$listNotificacoes")
+        }
+        override fun onFailure(call: Call<NotificacaoResponse>, t: Throwable) {
+            Log.i("ds3t", "onFailure: ${t.message}")
+        }
+
+    })
 
     var listCuidadores by remember {
         mutableStateOf(
@@ -83,7 +113,7 @@ fun ProfileCaregiverScreen(
     }
 
     //Cria uma chamada para o endpoint
-    var call = RetrofitFactory.getCuidador().getCuidadorByID(token = token.toString(), id = id)
+    var call = RetrofitFactory.getCuidador().getCuidadorByID(token = token.toString(), id = id_cuidador)
 
     call.enqueue(object : Callback<CuidadorResponse> {
         override fun onResponse(
@@ -96,7 +126,6 @@ fun ProfileCaregiverScreen(
         override fun onFailure(call: Call<CuidadorResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
-
     })
 
     Surface(
@@ -175,25 +204,14 @@ fun ProfileCaregiverScreen(
                     color = Color(0xFF35225F)
                 )
                 Spacer(modifier = Modifier.height(15.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
-                Spacer(modifier = Modifier.height(10.dp))
-                CardTask()
+                for (notificacao in listNotificacoes){
+                    CardTask(
+                        nome = notificacao.nome,
+                        dia = notificacao.data_criacao,
+                        hora = notificacao.hora_criacao
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
             }
         }
     }

@@ -30,6 +30,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.AtivarContaResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.DesativarContaResponse
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
@@ -38,7 +39,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun ModalDeleteConect(
+fun ModalAtivarNovamente(
     isDialogVisibleConect: Boolean,
     navController: NavController,
     localStorage: Storage
@@ -49,6 +50,7 @@ fun ModalDeleteConect(
 
     val paciente = array[0]
     var id = paciente.id.toLong()
+    var nome_paciente = paciente.nome
 
     val id_cuidador = localStorage.lerValor(context, "id_cuidador_conexao")
 
@@ -73,7 +75,7 @@ fun ModalDeleteConect(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Tem certeza que deseja desvincular?\nVocê não terá mais acesso aos dados dessa pessoa.",
+                        text = "Deseja ativar novamente sua conexão com o paciente $nome_paciente?",
                         fontSize = 16.sp,
                         fontFamily = FontFamily(Font(R.font.poppins)),
                         fontWeight = FontWeight(600),
@@ -92,16 +94,16 @@ fun ModalDeleteConect(
 
                                 Log.e("dsdsfa", "ModalDeleteConect: $id + $id_cuidador")
 
-                                var call = RetrofitFactory.getConectar().updateConectDesativar(id.toInt(), id_cuidador!!.toInt())
+                                var call = RetrofitFactory.getConectar().updateConectAtivar(id.toInt(), id_cuidador!!.toInt())
 
-                                call.enqueue(object : Callback<DesativarContaResponse> {
+                                call.enqueue(object : Callback<AtivarContaResponse> {
                                     override fun onResponse(
-                                        call: Call<DesativarContaResponse>,
-                                        response: Response<DesativarContaResponse>
+                                        call: Call<AtivarContaResponse>,
+                                        response: Response<AtivarContaResponse>
                                     ) {
                                         Log.e("deleteConta", "onResponse: ${response.body()}")
                                     }
-                                    override fun onFailure(call: Call<DesativarContaResponse>, t: Throwable) {
+                                    override fun onFailure(call: Call<AtivarContaResponse>, t: Throwable) {
                                         Log.i("deleteConta", "onFailure: ${t.message}")
                                     }
                                 })

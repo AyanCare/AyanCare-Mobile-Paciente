@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.service
 
 
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.AtivarContaResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.ConectarResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.conectar.DesativarContaResponse
 import retrofit2.http.GET
@@ -18,6 +19,9 @@ interface ConectarService {
     fun createConect(@Query("idPaciente") idPaciente: Int, @Query("idCuidador") idCuidador: Int): retrofit2.Call<ConectarResponse>
 
     @PUT("/v1/ayan/conexao/desativar")
-    fun updateConect(@Query("idPaciente") idPaciente: Int, @Query("idCuidador") idCuidador: Int): retrofit2.Call<DesativarContaResponse>
+    fun updateConectDesativar(@Query("idPaciente") idPaciente: Int, @Query("idCuidador") idCuidador: Int): retrofit2.Call<DesativarContaResponse>
+
+    @PUT("/v1/ayan/conexao/ativar")
+    fun updateConectAtivar(@Query("idPaciente") idPaciente: Int, @Query("idCuidador") idCuidador: Int): retrofit2.Call<AtivarContaResponse>
 
 }

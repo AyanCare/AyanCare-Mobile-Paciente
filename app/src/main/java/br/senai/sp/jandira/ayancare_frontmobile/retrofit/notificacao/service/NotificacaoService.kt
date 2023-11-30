@@ -9,4 +9,7 @@ interface NotificacaoService {
     @GET("/v1/ayan/notificacoes")
     fun getNotificacaobyIdPaciente(@Query("idPaciente") idPaciente: Int): retrofit2.Call<NotificacaoResponse>
 
+    @GET("/v1/ayan/notificacoes")
+    fun getNotificacaobyIdPacienteIdCuidador(@Query("idPaciente") idPaciente: Int, @Query("idCuidador") idCuidador: Int): retrofit2.Call<NotificacaoResponse>
+
 }

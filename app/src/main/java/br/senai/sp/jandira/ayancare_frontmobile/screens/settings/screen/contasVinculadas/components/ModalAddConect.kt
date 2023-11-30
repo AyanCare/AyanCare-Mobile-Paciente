@@ -68,7 +68,11 @@ fun ModalAddConect(
         mutableStateOf("")
     }
 
+    val id_cuidador = localStorage.lerValor(context, "id_cuidador_conexao")
+
     var isDialogVisibleConects by remember { mutableStateOf(false) }
+
+    var isDialogVisibleAtivarNovamente by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -131,7 +135,7 @@ fun ModalAddConect(
                             //Cria uma chamada para o endpoint
                             var call = RetrofitFactory.getConectar().createConect(id.toInt(), idState.toInt())
 
-                            Log.e("TAG", "ModalAddConect: $id + $idState")
+                            Log.e("add_conect", "ModalAddConect: $id + $idState")
 
                             call.enqueue(object : Callback<ConectarResponse> {
                                 override fun onResponse(
@@ -142,7 +146,7 @@ fun ModalAddConect(
                                         Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
                                         navController.navigate("linked_accounts_screen")
                                     }else{
-                                        Log.e("TAG", "onResponse:${response} ")
+                                        Log.e("add_conect", "onResponse:${response} ")
                                         if (response.code() == 409){
                                             val erro = response.errorBody()?.string()
                                             val erroObject = JSONObject(erro)
@@ -153,7 +157,7 @@ fun ModalAddConect(
                                             Log.e("Luizão", "${status}")
                                             if (status == 0){
                                                 Toast.makeText(context, "Essa conexao está desativada!!", Toast.LENGTH_SHORT).show()
-                                                isDialogVisibleConects = true
+                                                isDialogVisibleAtivarNovamente = true
                                             }else{
                                                 Toast.makeText(context, "Conexao já existente!!", Toast.LENGTH_SHORT).show()
                                             }
@@ -164,19 +168,18 @@ fun ModalAddConect(
 
                                 }
                                 override fun onFailure(call: Call<ConectarResponse>, t: Throwable) {
-                                    Log.i("ds3t", "onFailure: ${t.message}")
+                                    Log.i("add_conect", "onFailure: ${t.message}")
                                 }
 
                             })
                         },
                         text = "Salvar"
                     )
-                    if (isDialogVisibleConects) {
-                        ModalDeleteConect(
+                    if (isDialogVisibleAtivarNovamente) {
+                        ModalAtivarNovamente(
                             isDialogVisibleConect = false,
                             localStorage = localStorage,
-                            navController = navController,
-                            id_cuidador = id.toInt()
+                            navController = navController
                         )
                     }
 

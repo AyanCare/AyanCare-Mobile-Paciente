@@ -219,6 +219,7 @@ fun LinkedAccountsScreen(
                                     localStorage.salvarValor(context, it.id_cuidador.toString(), "id_cuidador_conexao")
                                 },
                                 onUnlinkClick = {
+                                    localStorage.salvarValor(context, it.id_cuidador.toString(), "id_cuidador_conexao")
                                     isDialogVisibleConect = true
                                 },
                                 onProfileClick = {
@@ -231,13 +232,13 @@ fun LinkedAccountsScreen(
                             )
                             Spacer(modifier = Modifier.height(10.dp))
                         }
+
                     }
                     if (isDialogVisibleConect) {
                         ModalDeleteConect(
                             isDialogVisibleConect = false,
                             localStorage = localStorage,
-                            navController = navController,
-                            id_cuidador = listCuidadores[0].id_cuidador
+                            navController = navController
                         )
                     }
                 }

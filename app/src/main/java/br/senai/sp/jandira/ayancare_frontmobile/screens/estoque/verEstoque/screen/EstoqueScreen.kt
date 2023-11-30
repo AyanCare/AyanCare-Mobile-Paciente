@@ -116,21 +116,27 @@ fun EstoqueScreen(
 
             Spacer(modifier = Modifier.height(30.dp))
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-            ) {
-                items(listEstoque) {
-                    CardEstoque(
-                        nome_remedio = "${it.nome}",
-                        quantidade = it.quantidade,
-                        onClick = {
-                            localStorage.salvarValor(context, it.nome, "nome_estoque")
-                            localStorage.salvarValor(context, it.id_medicamento.toString(), "id_estoque")
-                            navRotasController.navigate("modify_stock_screen")
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
+            if (listEstoque.isEmpty()){
+                Column {
+                    Text(text = "nenhum rémedio estocado no momento")
+                }
+            }else{
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    items(listEstoque) {
+                        CardEstoque(
+                            nome_remedio = "${it.nome}",
+                            quantidade = it.quantidade,
+                            onClick = {
+                                localStorage.salvarValor(context, it.nome, "nome_estoque")
+                                localStorage.salvarValor(context, it.id_medicamento.toString(), "id_estoque")
+                                navRotasController.navigate("modify_stock_screen")
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
                 }
             }
         }
