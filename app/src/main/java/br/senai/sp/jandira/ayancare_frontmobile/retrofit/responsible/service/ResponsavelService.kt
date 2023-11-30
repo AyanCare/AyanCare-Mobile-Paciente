@@ -1,5 +1,6 @@
 package br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.service
 
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ContatoResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ResponsavelResponse
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -34,5 +35,8 @@ interface ResponsavelService {
 
     @DELETE("/v1/ayan/contato/{id}")
     fun deleteResponsible(@Path("id") id: Int): Call<ResponsavelResponse>
+
+    @DELETE("/v1/ayan/contato/{id}")
+    fun deleteContact(@Path("id") id: Int): Call<ContatoResponse>
 
 }

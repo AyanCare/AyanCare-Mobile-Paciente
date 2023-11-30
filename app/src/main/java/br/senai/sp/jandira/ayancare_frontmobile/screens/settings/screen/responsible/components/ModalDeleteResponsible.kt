@@ -92,12 +92,12 @@ fun ModalDeleteResponsable(
                                         response: Response<ResponsavelResponse>
                                     ) {
                                         Log.e("deleteResponsible", "onResponse: ${response.body()}")
+                                        navController.navigate("responsible_screen")
                                     }
                                     override fun onFailure(call: Call<ResponsavelResponse>, t: Throwable) {
                                         Log.i("deleteResponsible", "onFailure: ${t.message}")
                                     }
                                 })
-                                navController.navigate("responsible_screen")
                             },
                             modifier = Modifier
                                 .width(90.dp)
