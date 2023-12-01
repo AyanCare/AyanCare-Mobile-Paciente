@@ -32,7 +32,7 @@ class AlarmeRepository {
             addProperty("quantidade", quantidade)
             addProperty("id_alarme_medicamento", id_alarme_medicamento)
         }
-        return apiService.createAlarme(requestBody)
+        return apiService.createAlarmeUnitario(requestBody)
     }
 
     suspend fun updateAlarmeUnitario(

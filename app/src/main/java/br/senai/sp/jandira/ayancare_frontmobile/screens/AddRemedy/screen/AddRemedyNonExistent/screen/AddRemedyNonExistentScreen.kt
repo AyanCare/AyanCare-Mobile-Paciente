@@ -35,19 +35,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.MedicationViewModel
 
 @Composable
 fun AddRemedyNonExistentScreen(
     navController: NavController,
-    localStorage: Storage
+    localStorage: Storage,
+    medicationViewModel: MedicationViewModel
 ) {
     var context = LocalContext.current
 
@@ -119,6 +119,7 @@ fun AddRemedyNonExistentScreen(
                         Toast.makeText(context, "Nome inválido", Toast.LENGTH_LONG).show()
                     }else{
                         localStorage.salvarValor(context, nomeState.uppercase(), "nome_medicamento")
+                        medicationViewModel.setMedicationName(nomeState.uppercase())
                         navController.navigate("form_medicine_screen")
                     }
                 },

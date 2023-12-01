@@ -49,6 +49,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
@@ -80,6 +81,38 @@ fun MedicationFrequencyScreen(
     val medida = localStorage.lerValor(context, "medida_medicamento")
     val id_medicamento = localStorage.lerValor(context, "id_medicamento")
 
+    fun alarmeUnitario(
+        quantidade: Int,
+        id_alarme_medicamento: Int
+    ){
+        val medicamentoRepository = AlarmeRepository()
+        lifecycleScope.launch {
+
+            val response = medicamentoRepository.registerAlarmeUnitario(
+                quantidade,
+                id_alarme_medicamento
+            )
+
+            if (response.isSuccessful) {
+                Log.e(MainActivity::class.java.simpleName, "alarmeUnitario bem-sucedido")
+                Log.e("alarmeUnitario", "alarmeUnitario: ${response.body()}")
+                val checagem = response.body()?.get("status")
+
+                if (checagem.toString() == "404") {
+                    Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
+                    //navController.navigate("add_stock_screen")
+                }
+            } else {
+                val errorBody = response.errorBody()?.string()
+
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o alarmeUnitario: $errorBody")
+                Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     fun alarme(
         dia: String,
         intervalo: Int,
@@ -101,11 +134,47 @@ fun MedicationFrequencyScreen(
                 Log.e("alarme", "alarme: ${response.body()}")
                 val checagem = response.body()?.get("status")
 
+                val jsonString = response.body().toString()
+                val jsonObject = JSONObject(jsonString)
+                val alarmeObject = jsonObject.getJSONObject("alarme")
+                val id = alarmeObject.getInt("id")
+
+                Log.i("id", "alarme: $id")
+
+
                 if (checagem.toString() == "404") {
                     Toast.makeText(context, "algo está invalido", Toast.LENGTH_LONG).show()
                 } else {
+
+                    val id_intervalo = localStorage.lerValor(context, "id_intervalo")
+                    Log.i("id_intervalo", "alarme: $id_intervalo")
+
+                    val hora = selectedTime.get(Calendar.HOUR_OF_DAY)
+                    val minutos = selectedTime.get(Calendar.MINUTE)
+                    Log.i("hora", "hora: $hora")
+                    Log.i("minutos", "minutos: $minutos")
+
+                    val alarme = AlarmeTbl(
+                        dia = data.toString(),
+                        horario = formatTime(selectedTime),
+                        intervalo = id_intervalo!!.toInt(),
+                        selectedHour = hora,
+                        selectedMinute = minutos
+                    )
+
+                    Log.e("Alarme", "MedicationFrequencyScreen: $alarme", )
+
+                    Log.i("id do retorno do alarme", "alarme: $id")
+                    alarmeUnitario(
+                        quantidade = 1,
+                        id_alarme_medicamento = id
+                    )
+
+                    val alarmeId = alarmeRepository(context).saveAlarm(alarme)
+
+
                     Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
-                    //navController.navigate("add_stock_screen")
+                    navController.navigate("add_stock_screen")
                 }
             } else {
                 val errorBody = response.errorBody()?.string()
@@ -115,6 +184,8 @@ fun MedicationFrequencyScreen(
             }
         }
     }
+
+
 
     Surface(
         color = Color(248, 240, 236)
@@ -214,19 +285,7 @@ fun MedicationFrequencyScreen(
                         id_medicamento = id_medicamento!!.toInt()
                     )
 
-                    val alarme = AlarmeTbl(
-                        dia = data.toString(),
-                        horario = formatTime(selectedTime),
-                        intervalo = id_intervalo.toInt(),
-                        selectedHour = hora,
-                        selectedMinute = minutos
-                    )
-
-                    Log.e("TAG", "MedicationFrequencyScreen: $alarme", )
-
-                    val alarmeId = alarmeRepository(context).saveAlarm(alarme)
-
-                    navController.navigate("add_stock_screen")
+                    //navController.navigate("add_stock_screen")
                 },
                 text = "Proximo"
             )

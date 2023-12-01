@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.MedicationViewModel
 
 class Alarme : BroadcastReceiver() {
     companion object {
@@ -20,13 +21,15 @@ class Alarme : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
 
         try {
+            val nomeMedicamento = MedicationViewModel().getMedicationName() ?: ""
+
 
             // Iniciar a reprodução de som
             mediaPlayer = MediaPlayer.create(context, R.raw.lofi_study_112191)
             mediaPlayer?.isLooping = true
             mediaPlayer?.start()
 
-            showNotification(context, "AyanCare", "Agua")
+            showNotification(context, "AyanCare", "Hora de tomar o remédio: $nomeMedicamento")
 
         } catch (e: Exception) {
             Log.d("Receive Exception", e.printStackTrace().toString())

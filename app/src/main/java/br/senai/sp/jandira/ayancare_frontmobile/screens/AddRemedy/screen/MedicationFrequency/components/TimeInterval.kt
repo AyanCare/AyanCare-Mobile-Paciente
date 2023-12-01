@@ -116,7 +116,9 @@ fun configureRepeatingNotification(context: Context, selectedTime: Calendar, tim
     val intent = Intent(context, Alarme::class.java)
     val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
+
     val startTime = selectedTime.timeInMillis
+
 
     // Calcula o intervalo em que a notificação será repetida (a cada 2 minutos)
     val intervalMillis = time * 60 * 1000

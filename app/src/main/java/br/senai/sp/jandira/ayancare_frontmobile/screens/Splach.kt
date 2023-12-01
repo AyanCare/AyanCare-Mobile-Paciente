@@ -47,6 +47,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.telasInstrucoes.telaInst
 import br.senai.sp.jandira.ayancare_frontmobile.screens.testeHumor.screen.HumorTestScreen
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import br.senai.sp.jandira.ayancare_frontmobile.ui.theme.AyanCareFrontMobileTheme
+import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.MedicationViewModel
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.ViewModelMestreMedicamentos
 
 class SplashActivity : ComponentActivity() {
@@ -195,10 +196,10 @@ class SplashActivity : ComponentActivity() {
                             ModifyStockScreen(navController = navController, navRotasController = navController, localStorage = localStorage,  lifecycleScope = lifecycleScope)
                         }
 
-                        composable("add_remedy_non_existent_screen"){
-                            AddRemedyNonExistentScreen(navController = navController,  localStorage = localStorage)
+                        composable("add_remedy_non_existent_screen") {
+                            val medicationViewModel: MedicationViewModel = viewModel()
+                            AddRemedyNonExistentScreen(navController = navController, localStorage = localStorage, medicationViewModel = medicationViewModel)
                         }
-
                         composable("event_screen"){
                             EventScreen(navController = navController, lifecycleScope = lifecycleScope)
                         }

@@ -31,6 +31,10 @@ interface AlarmeService {
     @POST("/v1/ayan/alarme")
     suspend fun createAlarme(@Body body: JsonObject): Response<JsonObject>
 
+    @Headers("Content-Type: application/json")
+    @POST("/v1/ayan/alarme/unitario")
+    suspend fun createAlarmeUnitario(@Body body: JsonObject): Response<JsonObject>
+
 
 
 
