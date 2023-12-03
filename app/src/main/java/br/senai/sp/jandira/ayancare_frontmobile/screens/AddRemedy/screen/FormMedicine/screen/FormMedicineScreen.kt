@@ -126,6 +126,7 @@ fun FormMedicineScreen(
                 val medicamentoObject = jsonObject.getJSONObject("medicamento")
 
                 val id = medicamentoObject.getInt("id_medicamento")
+                Log.i("id_medicamento_form", "medicamento: $id ")
 
                 localStorage.salvarValor(context, id.toString(), "id_medicamento")
 

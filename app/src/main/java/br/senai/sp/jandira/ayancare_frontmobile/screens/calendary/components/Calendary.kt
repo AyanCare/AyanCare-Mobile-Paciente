@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +50,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
@@ -124,6 +127,65 @@ fun Calendary(
     val array = PacienteRepository(context = context).findUsers()
     val paciente = array[0]
     var id = paciente.id.toLong()
+
+    LaunchedEffect(true){
+        val dataLocal: LocalDate = LocalDate.now()
+
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val dataFormatada: String = dataLocal.format(formatter)
+
+        Log.i("TAG", "Calendary:$id ")
+        Log.i("TAG", "Calendary:$dataFormatada ")
+        Log.i("TAG", "Calendary:$selectedDayOfWeek ")
+
+        var call = RetrofitFactory
+            .getCalendario()
+            .getCalendarioByIDPacienteDia_DiaSemana(
+                idPaciente = id.toInt(),
+                dia = dataFormatada,
+                diaSemana = SimpleDateFormat(
+                    "E",
+                    ptBrLocale
+                ).format(selectedDate.time)
+            )
+
+        call.enqueue(object : Callback<CalendarioResponse> {
+            override fun onResponse(
+                call: Call<CalendarioResponse>,
+                response: Response<CalendarioResponse>
+            ) {
+                Log.e("TAG", "onResponse: ${response.body()}")
+
+                if (response.body()!!.status == 404) {
+                    Log.e("TAG", "a resposta está nula")
+                } else {
+                    Log.e(
+                        "Teste Luiz",
+                        "onResponse: ${response.body()!!.calendario}"
+                    )
+
+                    lista = response.body()!!.calendario
+                    alarmeViewModel.lista =
+                        response.body()!!.calendario.alarmes
+
+                    onChaneList(response.body()!!.calendario.alarmes)
+                }
+
+                Log.e("list-calendario", "onResponse: $lista")
+            }
+
+            override fun onFailure(
+                call: Call<CalendarioResponse>,
+                t: Throwable
+            ) {
+                Log.i(
+                    "list-calendario off",
+                    "onFailure: ${t.message}"
+                )
+            }
+
+        })
+    }
 
     Column(
         modifier = Modifier
@@ -245,11 +307,13 @@ fun Calendary(
                                                 ).format(selectedDate.time)
 
 
-                                            var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(
-                                                idPaciente = id.toInt(),
-                                                dia = "${selectedDate.get(Calendar.DAY_OF_MONTH)}/$selectedMonth/$selectedYear",
-                                                diaSemana = "$selectedDayOfWeek"
-                                            )
+                                            var call = RetrofitFactory
+                                                .getCalendario()
+                                                .getCalendarioByIDPacienteDia_DiaSemana(
+                                                    idPaciente = id.toInt(),
+                                                    dia = "${selectedDate.get(Calendar.DAY_OF_MONTH)}/$selectedMonth/$selectedYear",
+                                                    diaSemana = "$selectedDayOfWeek"
+                                                )
 
                                             call.enqueue(object : Callback<CalendarioResponse> {
                                                 override fun onResponse(
@@ -261,18 +325,29 @@ fun Calendary(
                                                     if (response.body()!!.status == 404) {
                                                         Log.e("TAG", "a resposta está nula")
                                                     } else {
-                                                        Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
+                                                        Log.e(
+                                                            "Teste Luiz",
+                                                            "onResponse: ${response.body()!!.calendario}"
+                                                        )
 
                                                         lista = response.body()!!.calendario
-                                                        alarmeViewModel.lista = response.body()!!.calendario.alarmes
+                                                        alarmeViewModel.lista =
+                                                            response.body()!!.calendario.alarmes
 
                                                         onChaneList(response.body()!!.calendario.alarmes)
                                                     }
 
                                                     Log.e("list-calendario", "onResponse: $lista")
                                                 }
-                                                override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
-                                                    Log.i("list-calendario off", "onFailure: ${t.message}")
+
+                                                override fun onFailure(
+                                                    call: Call<CalendarioResponse>,
+                                                    t: Throwable
+                                                ) {
+                                                    Log.i(
+                                                        "list-calendario off",
+                                                        "onFailure: ${t.message}"
+                                                    )
                                                 }
 
                                             })
@@ -301,11 +376,13 @@ fun Calendary(
                                             ).format(selectedDate.time)
 
 
-                                        var call = RetrofitFactory.getCalendario().getCalendarioByIDPacienteDia_DiaSemana(
-                                            dia = "${selectedDate.get(Calendar.DAY_OF_MONTH)}/$selectedMonth/$selectedYear",
-                                            diaSemana = "$selectedDayOfWeek",
-                                            idPaciente = id.toInt()
-                                        )
+                                        var call = RetrofitFactory
+                                            .getCalendario()
+                                            .getCalendarioByIDPacienteDia_DiaSemana(
+                                                dia = "${selectedDate.get(Calendar.DAY_OF_MONTH)}/$selectedMonth/$selectedYear",
+                                                diaSemana = "$selectedDayOfWeek",
+                                                idPaciente = id.toInt()
+                                            )
 
                                         call.enqueue(object : Callback<CalendarioResponse> {
                                             override fun onResponse(
@@ -317,10 +394,14 @@ fun Calendary(
                                                 if (response.body()!!.status == 404) {
                                                     Log.e("TAG", "a resposta está nula")
                                                 } else {
-                                                    Log.e("Teste Luiz", "onResponse: ${response.body()!!.calendario}")
+                                                    Log.e(
+                                                        "Teste Luiz",
+                                                        "onResponse: ${response.body()!!.calendario}"
+                                                    )
 
                                                     lista = response.body()!!.calendario
-                                                    alarmeViewModel.lista = response.body()!!.calendario.alarmes
+                                                    alarmeViewModel.lista =
+                                                        response.body()!!.calendario.alarmes
 
                                                     onChaneList(response.body()!!.calendario.alarmes)
                                                     onChaneListEvent(response.body()!!.calendario.eventos_unicos)
@@ -328,7 +409,11 @@ fun Calendary(
 
                                                 Log.e("list-calendario", "onResponse: $lista")
                                             }
-                                            override fun onFailure(call: Call<CalendarioResponse>, t: Throwable) {
+
+                                            override fun onFailure(
+                                                call: Call<CalendarioResponse>,
+                                                t: Throwable
+                                            ) {
                                                 Log.i("list-calendario", "onFailure: ${t.message}")
                                             }
 

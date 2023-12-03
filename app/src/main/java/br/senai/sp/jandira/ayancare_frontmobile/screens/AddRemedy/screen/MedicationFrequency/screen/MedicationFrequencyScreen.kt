@@ -47,6 +47,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.Medicat
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureRepeatingNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -80,6 +81,7 @@ fun MedicationFrequencyScreen(
     val nome = localStorage.lerValor(context, "nome_medicamento")
     val medida = localStorage.lerValor(context, "medida_medicamento")
     val id_medicamento = localStorage.lerValor(context, "id_medicamento")
+    Log.i("id_medicamento_medication", "medicamento: $id_medicamento ")
 
     fun alarmeUnitario(
         quantidade: Int,
@@ -122,6 +124,8 @@ fun MedicationFrequencyScreen(
         val medicamentoRepository = AlarmeRepository()
         lifecycleScope.launch {
 
+            Log.e("Luizão Maldoso", "$dia + $intervalo + $horario + $id_medicamento")
+
             val response = medicamentoRepository.registerAlarme(
                 dia,
                 intervalo,
@@ -154,15 +158,9 @@ fun MedicationFrequencyScreen(
                     Log.i("hora", "hora: $hora")
                     Log.i("minutos", "minutos: $minutos")
 
-                    val alarme = AlarmeTbl(
-                        dia = data.toString(),
-                        horario = formatTime(selectedTime),
-                        intervalo = id_intervalo!!.toInt(),
-                        selectedHour = hora,
-                        selectedMinute = minutos
-                    )
 
-                    Log.e("Alarme", "MedicationFrequencyScreen: $alarme", )
+
+
 
                     Log.i("id do retorno do alarme", "alarme: $id")
                     alarmeUnitario(
@@ -170,7 +168,6 @@ fun MedicationFrequencyScreen(
                         id_alarme_medicamento = id
                     )
 
-                    val alarmeId = alarmeRepository(context).saveAlarm(alarme)
 
 
                     Toast.makeText(context, "Sucesso!!", Toast.LENGTH_SHORT).show()
@@ -179,6 +176,7 @@ fun MedicationFrequencyScreen(
             } else {
                 val errorBody = response.errorBody()?.string()
 
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o alarme: ${errorBody.toString()}")
                 Log.e(MainActivity::class.java.simpleName, "Erro durante o alarme: $errorBody")
                 Toast.makeText(context, "algo está invalido", Toast.LENGTH_SHORT).show()
             }
@@ -260,6 +258,8 @@ fun MedicationFrequencyScreen(
                 )
                 localStorage.salvarValor(context, isSelectState, "jeito_medicamento")
                 Log.e("tag", "MedicationFrequencyScreen: $isSelectState")
+                Log.e("tag", "MedicationFrequencyScreen: $selectedTime")
+
             }
         }
         Column(
@@ -277,11 +277,29 @@ fun MedicationFrequencyScreen(
                     configureRepeatingNotification(context, selectedTime, id_intervalo!!.toInt())
                     val hora = selectedTime.get(Calendar.HOUR_OF_DAY)
                     val minutos = selectedTime.get(Calendar.MINUTE)
+                    Log.e("tag", "MedicationFrequencyScreen: ${formatTime(selectedTime)}")
+                    Log.e("tag", "MedicationFrequencyScreen: $hora")
+                    Log.e("tag", "MedicationFrequencyScreen: $minutos")
+
+                    val alarme = AlarmeTbl(
+                        dia = data.toString(),
+                        horario = formatTime(selectedTime),
+                        intervalo = id_intervalo!!.toInt(),
+                        selectedHour = hora,
+                        selectedMinute = minutos
+                    )
+
+                    Log.e("Alarme", "MedicationFrequencyScreen: $alarme", )
+
+                    val alarmeId = alarmeRepository(context).saveAlarm(alarme)
+
+                    val array = alarmeRepository(context = context).findAlarm(alarmeId)
+                    val alarmes = array[0]
 
                     alarme(
-                        dia = data.toString(),
-                        intervalo = id_intervalo.toInt(),
-                        horario = "$hora:$minutos",
+                        dia = alarme.dia,
+                        intervalo = alarme.intervalo,
+                        horario = alarme.horario,
                         id_medicamento = id_medicamento!!.toInt()
                     )
 
