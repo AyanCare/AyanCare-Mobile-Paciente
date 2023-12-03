@@ -13,19 +13,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.IconButton
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -44,11 +42,13 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.components.CustomTextFieldNumber
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.MedicamentoRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddStockScreen(
     navController: NavController,
@@ -68,37 +68,96 @@ fun AddStockScreen(
         mutableStateOf("")
     }
 
+    //VALIDAÇÕES
+    var validateQuantidade by rememberSaveable {
+        mutableStateOf(true)
+    }
+    var validateLimite by rememberSaveable {
+        mutableStateOf(true)
+    }
+
+    val validateQuantidadeError = "Quantidade está em branco"
+    val validateLimiteError = "Limite está em branco"
+
+    fun validateData(): Boolean {
+        val quantidadeText = quantidadeState.trim()
+        val limiteText = limiteState.trim()
+
+        validateQuantidade = quantidadeText.isNotEmpty() && quantidadeText.all { it.isDigit() }
+        validateLimite = limiteText.isNotEmpty() && limiteText.all { it.isDigit() }
+
+        return validateQuantidade && validateLimite
+    }
+
+
+//    fun updateEstoque(
+//        quantidade: Int,
+//        limite: Int,
+//        id_medicamento: Int
+//    ) {
+//        if (validateData()){
+//            val EstoqueRepository = MedicamentoRepository()
+//            lifecycleScope.launch {
+//
+//                val response = EstoqueRepository.updateMedicamento(
+//                    quantidade,
+//                    limite,
+//                    id_medicamento
+//                )
+//
+//                Log.e("response", "medicamneto: $response")
+//
+//                if (response.isSuccessful) {
+//
+//                    Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
+//
+//                    navController.navigate("main_screen")
+//
+//                } else {
+//
+//                    val errorBody = response.errorBody()?.string()
+//                    Log.e(MainActivity::class.java.simpleName, "Erro durante o registro: $errorBody")
+//                    Toast.makeText(context, "Erro durante o registro", Toast.LENGTH_SHORT).show()
+//
+//                }
+//            }
+//        }else{
+//            Toast.makeText(context, "Por favor, reolhe suas caixas de texto", Toast.LENGTH_SHORT).show()
+//        }
+//
+//    }
+
     fun updateEstoque(
         quantidade: Int,
         limite: Int,
         id_medicamento: Int
     ) {
-        val EstoqueRepository = MedicamentoRepository()
-        lifecycleScope.launch {
+        if (validateData()) {
+            val EstoqueRepository = MedicamentoRepository()
+            lifecycleScope.launch {
+                val response = EstoqueRepository.updateMedicamento(
+                    quantidade,
+                    limite,
+                    id_medicamento
+                )
 
-            val response = EstoqueRepository.updateMedicamento(
-                quantidade,
-                limite,
-                id_medicamento
-            )
+                Log.e("response", "medicamento: $response")
 
-            Log.e("response", "medicamneto: $response")
-
-            if (response.isSuccessful) {
-
-                Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
-
-                navController.navigate("main_screen")
-
-            } else {
-
-                val errorBody = response.errorBody()?.string()
-                Log.e(MainActivity::class.java.simpleName, "Erro durante o registro: $errorBody")
-                Toast.makeText(context, "Erro durante o registro", Toast.LENGTH_SHORT).show()
-
+                if (response.isSuccessful) {
+                    Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
+                    navController.navigate("main_screen")
+                } else {
+                    val errorBody = response.errorBody()?.string()
+                    Log.e(MainActivity::class.java.simpleName, "Erro durante o registro: $errorBody")
+                    Toast.makeText(context, "Erro durante o registro", Toast.LENGTH_SHORT).show()
+                }
             }
+        } else {
+            Toast.makeText(context, "Por favor, preencha todas as caixas de texto corretamente", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
     Surface(
         color = Color(248, 240, 236)
@@ -164,17 +223,14 @@ fun AddStockScreen(
                         fontWeight = FontWeight(600),
                         color = Color(0xFF000000)
                     )
-                    OutlinedTextField(
-                        value = quantidadeState ,
-                        onValueChange = {
-                                        quantidadeState = it
+                    CustomTextFieldNumber(
+                        value = quantidadeState,
+                        aoMudar = {
+                            quantidadeState = it
                         },
-                        modifier = Modifier
-                            .width(160.dp)
-                            .height(50.dp),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number
-                        )
+                        label = "",
+                        showError = !validateQuantidade,
+                        errorMessage = validateQuantidadeError
                     )
 
                 }
@@ -201,17 +257,14 @@ fun AddStockScreen(
                         fontWeight = FontWeight(600),
                         color = Color(0xFF000000)
                     )
-                    OutlinedTextField(
-                        value = limiteState ,
-                        onValueChange = {
-                                        limiteState = it
+                    CustomTextFieldNumber(
+                        value = limiteState,
+                        aoMudar = {
+                            limiteState = it
                         },
-                        modifier = Modifier
-                            .width(160.dp)
-                            .height(50.dp),
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number
-                        )
+                        label = "",
+                        showError = !validateLimite,
+                        errorMessage = validateLimiteError
                     )
                 }
             }
@@ -220,14 +273,11 @@ fun AddStockScreen(
             ){
                 DefaultButton(
                     onClick = {
-                        Log.e("teste muryllo", "ModifyStockScreen: ${quantidadeState.toInt()}," +
-                                " ${limiteState.toInt()}, ${id_estoque!!.toInt()}")
                         updateEstoque(
                             quantidadeState.toInt(),
                             limiteState.toInt(),
                             id_estoque!!.toInt()
                         )
-                        //navController.navigate("main_screen")
                     },
                     text = "Proximo"
                 )

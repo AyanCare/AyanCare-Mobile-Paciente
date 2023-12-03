@@ -211,24 +211,6 @@ fun AddContactScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-//            CustomTextFieldValidate(
-//                value = telefoneState,
-//                onValueChange = { telefoneState = it },
-//                label = "Telefone:",
-//                showError = !validateTelefone,
-//                errorMessage = validateTelefoneError,
-//                keyboardOptions = KeyboardOptions(
-//                    keyboardType = KeyboardType.Number,
-//                    imeAction = ImeAction.Next
-//                ),
-//                keyboardActions = KeyboardActions(
-//                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-//                ),
-//                unfocusedBorderColor = Color(0xFF64748B),
-//                focusedBorderColor = Color(0xFF6650A4),
-//                textColor = Color(0xFF64748B)
-//            )
-
             TextFieldTelefone(
                 value = telefoneState,
                 aoMudar = {
