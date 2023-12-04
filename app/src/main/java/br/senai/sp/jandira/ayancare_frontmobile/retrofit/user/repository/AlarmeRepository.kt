@@ -26,11 +26,13 @@ class AlarmeRepository {
 
     suspend fun registerAlarmeUnitario(
         quantidade: Int,
-        id_alarme_medicamento: Int
+        id_alarme_medicamento: Int,
+        horario: String
     ): Response<JsonObject> {
         val requestBody = JsonObject().apply {
             addProperty("quantidade", quantidade)
             addProperty("id_alarme_medicamento", id_alarme_medicamento)
+            addProperty("horario", horario)
         }
         return apiService.createAlarmeUnitario(requestBody)
     }

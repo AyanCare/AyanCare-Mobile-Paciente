@@ -43,11 +43,9 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.AlarmeRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.SelectOptionMedicationFrequency
-import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.components.configureRepeatingNotification
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.criacaoTabela.AlarmeTbl
-import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.alarmeRepository
 import kotlinx.coroutines.launch
 import org.json.JSONObject
@@ -85,14 +83,16 @@ fun MedicationFrequencyScreen(
 
     fun alarmeUnitario(
         quantidade: Int,
-        id_alarme_medicamento: Int
+        id_alarme_medicamento: Int,
+        horario: String
     ){
         val medicamentoRepository = AlarmeRepository()
         lifecycleScope.launch {
 
             val response = medicamentoRepository.registerAlarmeUnitario(
                 quantidade,
-                id_alarme_medicamento
+                id_alarme_medicamento,
+                horario
             )
 
             if (response.isSuccessful) {
@@ -165,7 +165,8 @@ fun MedicationFrequencyScreen(
                     Log.i("id do retorno do alarme", "alarme: $id")
                     alarmeUnitario(
                         quantidade = 1,
-                        id_alarme_medicamento = id
+                        id_alarme_medicamento = id,
+                        horario = "$hora:$minutos"
                     )
 
 

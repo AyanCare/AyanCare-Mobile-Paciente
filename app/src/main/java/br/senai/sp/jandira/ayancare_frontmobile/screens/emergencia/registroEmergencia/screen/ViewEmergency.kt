@@ -361,6 +361,10 @@ fun CustomSwitchWithLabel(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
+            .clickable {
+                isSwitchOn = !isSwitchOn
+                onSwitchChange(isSwitchOn)
+            }
     ) {
         Row(
             modifier = Modifier
