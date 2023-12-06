@@ -32,8 +32,7 @@ fun CustomTextFieldNumber(
     aoMudar: (String) -> Unit,
     label: String,
     showError: Boolean,
-    errorMessage: String = "",
-    isPasswordField: Boolean = false
+    errorMessage: String = ""
 ) {
     var number by remember(value) {
         mutableStateOf(value)
@@ -61,7 +60,7 @@ fun CustomTextFieldNumber(
             .background(Color(255, 255, 255, 1), shape = RoundedCornerShape(4.dp)),
         isError = showError,
         trailingIcon = {
-            if (showError && !isPasswordField)
+            if (showError)
                 Icon(
                     imageVector = Icons.Filled.Error,
                     contentDescription = "Icone de Erro",

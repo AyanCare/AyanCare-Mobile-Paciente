@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,11 +79,24 @@ fun AddStockScreen(
 
     val validateQuantidadeError = "Quantidade está em branco"
     val validateLimiteError = "Limite está em branco"
+    val validateQuantidadeLimite = "O estoque atual não pode ser maior que o limite"
 
     fun validateData(): Boolean {
         val quantidadeText = quantidadeState.trim()
         val limiteText = limiteState.trim()
 
+        // Verifica se a quantidade é maior ou igual ao limite
+        if (quantidadeText.isNotEmpty() && limiteText.isNotEmpty()) {
+            val quantidade = quantidadeText.toInt()
+            val limite = limiteText.toInt()
+
+            if (quantidade > limite) {
+                Toast.makeText(context, "A quantidade deve ser menor que o limite", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        // Restante da validação
         validateQuantidade = quantidadeText.isNotEmpty() && quantidadeText.all { it.isDigit() }
         validateLimite = limiteText.isNotEmpty() && limiteText.all { it.isDigit() }
 
@@ -297,4 +311,6 @@ fun AddStockScreen(
             }
         }
     }
+
 }
+

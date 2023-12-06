@@ -54,7 +54,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DateTextField
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
-import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldNumber
+import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldNumberCPF
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.CadastroRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
@@ -254,7 +254,7 @@ fun FinalizarCadastroScreen(
                     }
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    TextFieldNumber(
+                    TextFieldNumberCPF(
                         valor = cpfState,
                         label = "CPF",
                         onValueChange = { cpfState = it }

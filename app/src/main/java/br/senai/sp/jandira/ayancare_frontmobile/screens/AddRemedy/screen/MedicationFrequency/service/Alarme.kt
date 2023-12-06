@@ -21,7 +21,7 @@ class Alarme : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
 
         try {
-            val nomeMedicamento = MedicationViewModel().getMedicationName() ?: ""
+            val nomeMedicamento = MedicationViewModel().getMedicationName() ?: "A"
 
 
             // Iniciar a reprodução de som
