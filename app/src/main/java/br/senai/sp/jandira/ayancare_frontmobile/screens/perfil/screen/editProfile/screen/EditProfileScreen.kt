@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,8 +24,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -33,7 +37,6 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +46,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -53,17 +57,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
-import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.TextFieldCpf
-import br.senai.sp.jandira.ayancare_frontmobile.screens.event.components.DateEvent
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.DateEditProfile
@@ -71,6 +75,7 @@ import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfil
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddComorbidity
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import retrofit2.Call
@@ -107,11 +112,17 @@ fun EditProfileScreen(
     val paciente = array[0]
     var id = paciente.id.toLong()
 
-    var cpfState by remember { mutableStateOf("") }
 
-    var isEditing by remember { mutableStateOf(false) }
-    var editedCpf by remember { mutableStateOf("") }
+    var nomeState by remember {
+        mutableStateOf("")
+    }
+    var cpfState by remember {
+        mutableStateOf("")
+    }
 
+    var imagemState by remember {
+        mutableStateOf("")
+    }
 
     //Obter foto da galeria de imagens
     //variavel que vai guardar a uri
@@ -152,7 +163,12 @@ fun EditProfileScreen(
             Log.e("TAG", "onResponse: $listPaciente", )
 
             selectedDate = listPaciente.data_nascimento
+
+            nomeState = listPaciente.nome
             cpfState = listPaciente.cpf
+
+            imagemState = listPaciente.foto
+
         }
         override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
@@ -217,11 +233,25 @@ fun EditProfileScreen(
                                 )
                             )
                         ) {
-                            Image(
-                                painter = painter,
-                                contentDescription = "imagem do usuário",
-                                //colorFilter = ColorFilter.tint(colorResource(id = R.color.pink_login)),
-                                modifier = Modifier.fillMaxSize(),
+//                            Image(
+//                                painter = painter,
+//                                contentDescription = "imagem do usuário",
+//                                //colorFilter = ColorFilter.tint(colorResource(id = R.color.pink_login)),
+//                                modifier = Modifier.fillMaxSize(),
+//                                contentScale = ContentScale.Crop
+//                            )
+
+                            AsyncImage(
+                                model = "$imagemState",
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .border(
+                                        BorderStroke(4.dp, Color.White),
+                                        CircleShape
+                                    )
+                                    .padding(4.dp)
+                                    .clip(CircleShape),
                                 contentScale = ContentScale.Crop
                             )
                         }
@@ -240,11 +270,27 @@ fun EditProfileScreen(
                         )
                     }
 
-                    DefaultTextField(
-                        valor = nome,
-                        label = "Nome Completo",
-                        onValueChange = { nome = it},
-                        aoMudar = {}
+//                    DefaultTextField(
+//                        valor = nome,
+//                        label = "Nome Completo",
+//                        onValueChange = { nome = it},
+//                        aoMudar = {}
+//                    )
+                    OutlinedTextField(
+                        value = nomeState,
+                        onValueChange = {
+                            //nomeState = it
+                            if (it.length <= 50) {
+                                nomeState = it
+                            }
+                                        },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(4.dp),
+                        label = {
+                            Text(
+                                text = "Nome Completo"
+                            )
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -252,32 +298,28 @@ fun EditProfileScreen(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(16.dp)
                     ) {
-//                        if (isEditing) {
-//                            TextField(
-//                                value = editedCpf,
-//                                onValueChange = {
-//                                    editedCpf = it
-//                                },
-//                                label = { Text("CPF") }
-//                            )
-//                        } else {
-//                            TextField(
-//                                value = cpfState,
-//                                onValueChange = {
-//                                    cpfState = it
-//                                },
-//                                label = { Text("CPF") }
-//                            )
-//                        }
-                        TextFieldCpf(
-                            cpfState = cpfState,
-                            aoMudar = {
-                                      cpfState = it
+//                        TextFieldCpf(
+//                            cpfState = cpfState,
+//                            aoMudar = {
+//                                      cpfState = it
+//                            },
+//                            placeholder = "CPF",
+//                            isError = false
+//                        )
+                        OutlinedTextField(
+                            value = cpfState,
+                            onValueChange = {
+                                //quantidadeState = it
+                                if (it.length <= 11) {
+                                    cpfState = it
+                                }
                             },
-                            placeholder = "CPF",
-                            isError = false
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Number
+                            )
                         )
                     }
 
@@ -404,39 +446,53 @@ fun EditProfileScreen(
 
                 Spacer(modifier = Modifier.height(30.dp))
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 10.dp),
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = "Histórico Médico",
-                        fontSize = 16.sp,
-                        fontFamily = FontFamily(Font(R.font.poppins)),
-                        fontWeight = FontWeight(500),
-                        color = Color(0xFF35225F)
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    DefaultButton(
+                        onClick = {
+
+                        },
+                        text = "Salvar"
                     )
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.AddCircle,
-                            contentDescription = "",
-                            tint = Color(0xFF35225F),
-                            modifier = Modifier
-                                .size(40.dp)
-                        )
-                    }
                 }
-                MedicalHistory()
-                Spacer(modifier = Modifier.width(14.dp))
-                MedicalHistory()
-                Spacer(modifier = Modifier.width(14.dp))
-                MedicalHistory()
-                Spacer(modifier = Modifier.width(14.dp))
-                MedicalHistory()
+
+
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(end = 10.dp),
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    horizontalArrangement = Arrangement.SpaceBetween
+//                ) {
+//                    Text(
+//                        text = "Histórico Médico",
+//                        fontSize = 16.sp,
+//                        fontFamily = FontFamily(Font(R.font.poppins)),
+//                        fontWeight = FontWeight(500),
+//                        color = Color(0xFF35225F)
+//                    )
+//                    IconButton(
+//                        onClick = {}
+//                    ) {
+//                        Icon(
+//                            imageVector = Icons.Default.AddCircle,
+//                            contentDescription = "",
+//                            tint = Color(0xFF35225F),
+//                            modifier = Modifier
+//                                .size(40.dp)
+//                        )
+//                    }
+//                }
+//                MedicalHistory()
+//                Spacer(modifier = Modifier.width(14.dp))
+//                MedicalHistory()
+//                Spacer(modifier = Modifier.width(14.dp))
+//                MedicalHistory()
+//                Spacer(modifier = Modifier.width(14.dp))
+//                MedicalHistory()
 
             }
 

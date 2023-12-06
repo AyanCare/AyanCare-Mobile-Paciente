@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.menuBar
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -30,7 +31,7 @@ fun BottomNavGraph(
             EstoqueScreen(navRotasController = navRotasController, navController = navController, localStorage = localStorage)
         }
         composable(route = BottomBarScreen.Cadendary.route){
-            CalendaryScreen(navController = navController, navRotasController = navRotasController, localStorage = localStorage, alarmeViewModel )
+            CalendaryScreen(navController = navController, navRotasController = navRotasController, localStorage = localStorage, alarmeViewModel)
         }
         composable(route = BottomBarScreen.Home.route){
             HomeScreen(navRotasController = navRotasController)

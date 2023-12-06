@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.LifecycleCoroutineScope
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeUnitariosResponse
@@ -46,10 +47,13 @@ import retrofit2.Response
 @Composable
 fun OptionAlarmCalendary(
     localStorage: Storage,
-    alarmes: List<Alarmes>
+    alarmes: List<Alarmes>,
+    //lifecycleScope: LifecycleCoroutineScope
 ) {
 
     val context = LocalContext.current
+
+    var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     val array = PacienteRepository(context = context).findUsers()
 
@@ -119,13 +123,36 @@ fun OptionAlarmCalendary(
                 val medication = alarme.medicamento
                 val time = alarme.horario
                 val status = alarme.status
+                val quantidade = alarme.quantidade
+                val medida = alarme.medida
+                val medida_sigla = alarme.medida
+
+                val subtitle = if (medida_sigla == null) {
+                    "${quantidade} ${medida} x ${medication}"
+                } else {
+                    "${quantidade} ${medida_sigla} x ${medication}"
+                }
+
                 CardCalendary(
                     value = time,
                     title = "Alarme",
-                    subtitle = " x ${medication}", //${alarme.quantidade_retirada}${alarme.medida_sigla}
+                    subtitle = subtitle,
                     status = status,
-                    width = 75
+                    width = 75,
+                    onClick = {
+                        Log.i("TAG", "OptionAlarmCalendary: cliquei")
+                        isBottomSheetVisible = true
+                    }
                 )
+                if (isBottomSheetVisible) {
+                    TomeiouNao(
+                        isOpen = isBottomSheetVisible,
+                        //navController,
+                        //localStorage,
+                        //lifecycleScope,
+                        id = alarme.id
+                    )
+                }
                 Spacer(modifier = Modifier.height(10.dp))
             }
 

@@ -43,7 +43,7 @@ class AlarmeRepository {
         val requestBody = JsonObject().apply {
             addProperty("id_status_alarme", id_status_alarme)
         }
-        return apiService.createAlarme(requestBody)
+        return apiService.updateMedicamento(requestBody)
     }
 
 }

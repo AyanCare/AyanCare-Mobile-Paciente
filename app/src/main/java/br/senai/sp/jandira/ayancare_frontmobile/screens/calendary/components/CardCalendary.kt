@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,7 +35,8 @@ fun CardCalendary(
     title: String,
     subtitle:String,
     status: String,
-    width: Int
+    width: Int,
+    onClick: () -> Unit
 ) {
     Row (
         modifier = Modifier
@@ -42,7 +44,10 @@ fun CardCalendary(
             .background(
                 Color(0xFF35225F),
                 shape = RoundedCornerShape(4.dp)
-            ),
+            )
+            .clickable {
+                       onClick()
+            },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ){
