@@ -1,8 +1,15 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.screen
 
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -67,22 +74,17 @@ import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
-import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.DoencaResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
-import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ContatoResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.CadastroRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.MaskVisualTransformation
 import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.NumberDefaults
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
-import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.toAmericanDateFormat
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
-import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfileEdit
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.DateEditProfile
-import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.MedicalHistory
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddComorbidity
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.deleteUserSQLite
@@ -91,10 +93,13 @@ import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteReposi
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import com.google.firebase.Firebase
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -105,8 +110,11 @@ import java.util.TimeZone
 fun EditProfileScreen(
     navController: NavController,
     navRotasController: NavController,
-    lifecycleScope: LifecycleCoroutineScope
+    lifecycleScope: LifecycleCoroutineScope,
+
 ) {
+
+    val context = LocalContext.current
     var isDialogVisibleChronicDiseases by remember { mutableStateOf(false) }
 
     var isDialogVisibleComorbidity by remember { mutableStateOf(false) }
@@ -121,19 +129,61 @@ fun EditProfileScreen(
         mutableStateOf(true)
     }
 
+
+
+
+
+
+
+
+
+
     val validateDateError = "Data está em branco"
 
-    val context = LocalContext.current
     val scrollState = rememberScrollState()
 
     val array = PacienteRepository(context = context).findUsers()
 
     val paciente = array[0]
     var id = paciente.id.toLong()
+    var foto = paciente.foto
     var email = paciente.email
     var token = paciente.token
     var genero = paciente.genero
     selectedDrop = genero
+
+    //FireBase
+    val isUploading = remember { mutableStateOf(false) }
+    val img: Bitmap =
+        BitmapFactory.decodeResource(Resources.getSystem(), android.R.drawable.alert_dark_frame)
+    val bitmap = remember {
+        mutableStateOf(img)
+    }
+
+    var imagemState by remember {
+        mutableStateOf<Uri?>(null)
+    }
+
+
+    val launcherImage = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) {
+        if (Build.VERSION.SDK_INT < 28) {
+            bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+
+        } else {
+            val source = it?.let { it1 ->
+                ImageDecoder.createSource(context.contentResolver, it1)
+            }
+            bitmap.value = source?.let { it1 -> ImageDecoder.decodeBitmap(it1) }!!
+        }
+
+        imagemState = it
+
+    }
+
+
+
 
 
     var nomeState by remember {
@@ -151,9 +201,7 @@ fun EditProfileScreen(
 
 
 
-    var imagemState by remember {
-        mutableStateOf("")
-    }
+
 
     //Obter foto da galeria de imagens
     //variavel que vai guardar a uri
@@ -161,11 +209,11 @@ fun EditProfileScreen(
         mutableStateOf<Uri?>(null)
     }
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ){
-        photoUri = it
-    }
+//    val launcher = rememberLauncherForActivityResult(
+//        contract = ActivityResultContracts.GetContent()
+//    ){
+//        photoUri = it
+//    }
 
     var painter = rememberAsyncImagePainter(
         ImageRequest.Builder(LocalContext.current).data(photoUri).build()
@@ -200,8 +248,9 @@ fun EditProfileScreen(
             cpfState2 = listPaciente.cpf
             selectedDate = listPaciente.data_nascimento
             senha = listPaciente.senha
+            //imagemState = listPaciente.foto
 
-            imagemState = listPaciente.foto
+            Log.i("chegueiii", "onResponse: ${listPaciente.foto}")
 
         }
         override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
@@ -256,7 +305,7 @@ fun EditProfileScreen(
 
                 Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
 
-                navController.popBackStack()
+                navRotasController.navigate("main_screen")
 
             } else {
 
@@ -327,7 +376,11 @@ fun EditProfileScreen(
 //                            )
 
                             AsyncImage(
-                                model = "$imagemState",
+                                model = if(imagemState != null){
+                                            imagemState
+                                            }else{
+                                                 listPaciente.foto
+                                                 },
                                 contentDescription = "",
                                 modifier = Modifier
                                     .size(100.dp)
@@ -350,7 +403,8 @@ fun EditProfileScreen(
                                 .offset(x = 3.dp, y = 3.dp)
                                 .size(30.dp)
                                 .clickable {
-                                    launcher.launch("image/*")
+
+                                    launcherImage.launch("image/*")
                                 },
                         )
                     }
@@ -601,19 +655,56 @@ fun EditProfileScreen(
                             Log.e("TAG", "EditProfileScreen: $email", )
                             Log.e("TAG", "EditProfileScreen: $senha", )
                             Log.e("TAG", "EditProfileScreen: $cpfState2", )
+                            Log.i("joaoooo", "EditProfileScreen:  $imagemState")
 
-                            atualizarDados(
-                                token = token.toString(),
-                                id = id.toInt(),
-                                nome = nomeState.toString(),
-                                data_nascimento = selectedDate.toAmericanDateFormat1(),
-                                email = email.toString(),
-                                senha = senha.toString(),
-                                foto = "imageURL", // Use a imageURL
-                                cpf = cpfState2,
-                                id_endereco_paciente = 1,
-                                genero = selectedDrop
-                            )
+                            if (id != null) {
+                                isUploading.value = true
+                                bitmap.value?.let { bitmap ->
+                                    br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.UploadingImageToFireBase(
+                                        bitmap,
+                                        context as ComponentActivity
+                                    ) { imageURL ->
+                                        if (imageURL != null) {
+                                            // Aqui, imageURL contém a URL da imagem após o upload bem-sucedido
+//                                        Toast.makeText(
+//                                            context,
+//                                            "Upload Bem-Sucedido. URL: $imageURL",
+//                                            Toast.LENGTH_SHORT
+//                                        ).show()
+                                            Toast.makeText(
+                                                context,
+                                                "Upload Bem-Sucedido.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            // Continue com a função finalizarCadastro, passando a imageURL se necessário
+                                            atualizarDados(
+                                                token = token.toString(),
+                                                id = id.toInt(),
+                                                nome = nomeState.toString(),
+                                                data_nascimento = selectedDate.toAmericanDateFormat1(),
+                                                email = email.toString(),
+                                                senha = senha.toString(),
+                                                foto = imageURL, // Use a imageURL
+                                                cpf = cpfState2,
+                                                id_endereco_paciente = 1,
+                                                genero = selectedDrop
+                                            )
+                                        } else {
+                                            Toast.makeText(
+                                                context,
+                                                "Falha ao fazer o upload",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+                                }
+                            }
+
+
+
+
+
+
                         },
                         text = "Salvar"
                     )
@@ -670,4 +761,42 @@ fun String.toAmericanDateFormat1(
         timeZone = TimeZone.getTimeZone("GMT")
     }
     return formatter.format(date)
+}
+
+
+
+//Função de Upload
+fun UploadingImageToFireBase(
+    bitmap: Bitmap,
+    context: ComponentActivity,
+    callback: (String?) -> Unit
+) {
+
+    val storageRef = Firebase.storage.reference
+    val imageRef = storageRef.child("images/${bitmap}")
+
+    val baos = ByteArrayOutputStream()
+    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+
+    val imageData = baos.toByteArray()
+
+    imageRef.putBytes(imageData)
+        .addOnSuccessListener { taskSnapshot ->
+            // Upload bem-sucedido
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                // Aqui você obtém a URL da imagem após o upload
+                val imageURL = uri.toString()
+                callback(imageURL)
+            }.addOnFailureListener { e ->
+                // Tratar erro ao obter a URL
+                callback(null)
+                Log.e("FirebaseStorage", "Erro ao obter a URL da imagem: $e")
+            }
+        }
+        .addOnFailureListener { e ->
+            // Tratar erro ao fazer o upload
+            callback(null)
+            // Você pode imprimir uma mensagem de erro ou registrar o erro para depuração
+            Log.e("FirebaseStorage", "Erro ao fazer upload da imagem: $e")
+        }
 }

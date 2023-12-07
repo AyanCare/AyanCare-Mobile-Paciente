@@ -273,7 +273,11 @@ fun MedicationFrequencyScreen(
             DefaultButton(
                 onClick = {
 
-                    val id_intervalo = localStorage.lerValor(context, "id_intervalo")
+                    var id_intervalo = localStorage.lerValor(context, "id_intervalo")
+
+                    if (id_intervalo == null){
+                        id_intervalo = "1"
+                    }
 
                     configureRepeatingNotification(context, selectedTime, id_intervalo!!.toInt())
                     val hora = selectedTime.get(Calendar.HOUR_OF_DAY)

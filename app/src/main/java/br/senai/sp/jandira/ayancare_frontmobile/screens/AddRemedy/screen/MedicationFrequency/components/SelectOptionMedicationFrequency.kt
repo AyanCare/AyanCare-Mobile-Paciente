@@ -149,7 +149,7 @@ fun SelectOptionMedicationFrequency(
             )
         }
         if (selectedValue == options[1]) {
-            if (1 + 1 <= additionalRows) {
+            if (1 <= additionalRows) {
                 repeat(additionalRows) {
                     AddNewRow(
                         localStorage
@@ -206,6 +206,8 @@ fun AddNewRow(
 ) {
     var isRowVisible by remember { mutableStateOf(true) }
 
+    var number by rememberSaveable { mutableStateOf("") }
+
     if (isRowVisible) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -238,9 +240,9 @@ fun AddNewRow(
                 )
                 Spacer(modifier = Modifier.width(60.dp))
                 TextFieldNumber(
-                    valor = "number",
-                    label = "",
-                    onValueChange = {}
+                    valor = number,
+                    label = "Quantidade",
+                    onValueChange = { number = it }
                 )
             }
         }
