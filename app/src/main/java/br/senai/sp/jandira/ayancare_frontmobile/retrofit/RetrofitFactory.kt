@@ -24,8 +24,8 @@ object RetrofitFactory {
     //private const val BASE_URL = "http://10.107.144.13:8080"
     //private const val BASE_URL = "https://ayancare-api.cyclic.cloud"
     //private const val BASE_URL = "http://10.107.144.20:8080"
-    //private const val BASE_URL = "http://192.168.0.119:8080" //192.168.0.120
-    private const val BASE_URL = "https://ayan-backend.azurewebsites.net/"
+    private const val BASE_URL = "http://192.168.0.119:8080" //192.168.0.120
+    //private const val BASE_URL = "https://ayan-backend.azurewebsites.net/"
 
 
     fun getInstance(): Retrofit{

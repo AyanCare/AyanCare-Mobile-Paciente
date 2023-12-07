@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
 
 @Composable
-fun ProcessingProfile(
+fun ProcessingProfileEdit(
     text: String,
     width: Int,
     onValueChange: () -> Unit
@@ -38,19 +38,16 @@ fun ProcessingProfile(
         modifier = Modifier
             .padding(0.dp)
             .width(width.dp)
-            .height(50.dp)
-            .clickable {
-                       onValueChange()
-            },
+            .height(50.dp),
         shape = RoundedCornerShape(size = 16.dp),
         backgroundColor = Color(0xFF35225F)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 5.dp, end = 5.dp),
+                .padding(start = 10.dp, end = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceBetween
         )
         {
             Text(
@@ -62,6 +59,17 @@ fun ProcessingProfile(
                 color = Color(0xFFFFFFFF),
                 textAlign = TextAlign.Center
             )
+            IconButton(
+                onClick = {
+                    onValueChange()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "",
+                    tint = Color.White
+                )
+            }
         }
         Spacer(modifier = Modifier.size(10.dp))
     }

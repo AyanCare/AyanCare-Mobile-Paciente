@@ -167,7 +167,10 @@ fun AddDiseaseScreen(
                         }
                         ProcessingProfile(
                             text = text,
-                            width = 160
+                            width = 160,
+                            onValueChange = {
+
+                            }
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -220,7 +223,10 @@ fun AddDiseaseScreen(
                         }
                         ProcessingProfile(
                             text = text,
-                            width = 150
+                            width = 150,
+                            onValueChange = {
+
+                            }
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }

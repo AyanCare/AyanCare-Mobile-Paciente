@@ -1,7 +1,5 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.login.screen
 
-import android.Manifest
-import android.os.Build
 import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
@@ -18,7 +16,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AlternateEmail
 import androidx.compose.material.icons.filled.Password
-import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,13 +50,11 @@ import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.LoginRe
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.deleteUserSQLite
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.rememberPermissionState
+//import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
-@OptIn(ExperimentalPermissionsApi::class)
+//@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LoginScreen(
     navController: NavController,
@@ -183,10 +178,10 @@ fun LoginScreen(
         }
     }
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        val permissionState: PermissionState = rememberPermissionState(
-            permission = Manifest.permission.POST_NOTIFICATIONS
-        )
+//    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//        val permissionState: PermissionState = rememberPermissionState(
+//            permission = Manifest.permission.POST_NOTIFICATIONS
+//        )
 
         Surface(
             color = Color(248, 240, 236)
@@ -293,7 +288,7 @@ fun LoginScreen(
                     DefaultButton(
                         text = "Entrar",
                         onClick = {
-                            permissionState.launchPermissionRequest()
+                            //permissionState.launchPermissionRequest()
                             login(
                                 emailState,
                                 passwordState
@@ -336,17 +331,17 @@ fun LoginScreen(
                 }
             }
         }
-    }else{
-        val permissionState: PermissionState = rememberPermissionState(
-            permission = Manifest.permission.POST_NOTIFICATIONS
-        )
-
-        Text(text = "Aceite as notificções")
-
-        Button(onClick = {
-            permissionState.launchPermissionRequest()
-        }){
-
-        }
-    }
+//    }else{
+//        val permissionState: PermissionState = rememberPermissionState(
+//            permission = Manifest.permission.POST_NOTIFICATIONS
+//        )
+//
+//        Text(text = "Aceite as notificções")
+//
+//        Button(onClick = {
+//            permissionState.launchPermissionRequest()
+//        }){
+//
+//        }
+//    }
 }

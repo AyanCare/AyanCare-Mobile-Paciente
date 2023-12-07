@@ -2,6 +2,7 @@ package br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfi
 
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -57,30 +58,45 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
+import br.senai.sp.jandira.ayancare_frontmobile.MainActivity
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.CadastroRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.MaskVisualTransformation
+import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.NumberDefaults
+import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
+import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.screen.toAmericanDateFormat
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.BoxProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfile
+import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.components.ProcessingProfileEdit
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.DateEditProfile
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.MedicalHistory
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddChronicDiseases
 import br.senai.sp.jandira.ayancare_frontmobile.screens.perfil.screen.editProfile.components.ModalAddComorbidity
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.deleteUserSQLite
+import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,6 +113,7 @@ fun EditProfileScreen(
     val focusManager = LocalFocusManager.current
 
     var selectedDate by remember { mutableStateOf("") }
+    var selectedDrop by remember { mutableStateOf("") }
 
     var validateDate by rememberSaveable {
         mutableStateOf(true)
@@ -111,6 +128,10 @@ fun EditProfileScreen(
 
     val paciente = array[0]
     var id = paciente.id.toLong()
+    var email = paciente.email
+    var token = paciente.token
+    var genero = paciente.genero
+    selectedDrop = genero
 
 
     var nomeState by remember {
@@ -119,6 +140,14 @@ fun EditProfileScreen(
     var cpfState by remember {
         mutableStateOf("")
     }
+    var cpfState2 by remember {
+        mutableStateOf("")
+    }
+    var senha by remember {
+        mutableStateOf("")
+    }
+
+
 
     var imagemState by remember {
         mutableStateOf("")
@@ -166,6 +195,9 @@ fun EditProfileScreen(
 
             nomeState = listPaciente.nome
             cpfState = listPaciente.cpf
+            cpfState2 = listPaciente.cpf
+            selectedDate = listPaciente.data_nascimento
+            senha = listPaciente.senha
 
             imagemState = listPaciente.foto
 
@@ -173,15 +205,66 @@ fun EditProfileScreen(
         override fun onFailure(call: Call<PacienteResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
         }
-
     })
 
-    var nome = listPaciente.nome
-    var cpf = paciente.cpf
+    fun atualizarDados(
+        token: String,
+        id: Int,
+        nome: String,
+        data_nascimento: String,
+        email: String,
+        senha: String,
+        foto: String,
+        cpf: String,
+        id_endereco_paciente: Int,
+        genero: String
+    ) {
+        val userRepository = CadastroRepository()
+        lifecycleScope.launch {
 
+            val response = userRepository.updateUser(
+                token,
+                id,
+                nome,
+                data_nascimento,
+                email,
+                senha,
+                foto,
+                cpf,
+                id_endereco_paciente,
+                genero
+            )
 
+            Log.e("response", "finalizarCadastro: $response")
 
-    Log.e("CpfState2", "EditProfileScreen: $cpfState", )
+            if (response.isSuccessful) {
+                deleteUserSQLite(context, id)
+
+                saveLogin(
+                    context = context,
+                    id = id.toLong(),
+                    nome = nome,
+                    token = token!!,
+                    email = email,
+                    foto = foto,
+                    dataNascimento = selectedDate,
+                    genero = selectedDrop,
+                    tipo = "Paciente"
+                )
+
+                Log.d(MainActivity::class.java.simpleName, "Registro bem-sucedido")
+
+                navController.popBackStack()
+
+            } else {
+
+                val errorBody = response.errorBody()?.string()
+                Log.e(MainActivity::class.java.simpleName, "Erro durante o registro: $errorBody")
+                Toast.makeText(context, "Erro durante o registro", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
 
     Surface(
         color = Color(248, 240, 236)
@@ -307,19 +390,35 @@ fun EditProfileScreen(
 //                            placeholder = "CPF",
 //                            isError = false
 //                        )
+//                        OutlinedTextField(
+//                            value = cpfState,
+//                            onValueChange = {
+//                                //quantidadeState = it
+//                                if (it.length <= 11) {
+//                                    cpfState = it
+//                                }
+//                            },
+//                            modifier = Modifier
+//                                .fillMaxWidth(),
+//                            keyboardOptions = KeyboardOptions.Default.copy(
+//                                keyboardType = KeyboardType.Number
+//                            )
+//                        )
                         OutlinedTextField(
-                            value = cpfState,
+                            value = cpfState2,
                             onValueChange = {
                                 //quantidadeState = it
                                 if (it.length <= 11) {
-                                    cpfState = it
+                                    cpfState2 = it
                                 }
                             },
                             modifier = Modifier
                                 .fillMaxWidth(),
                             keyboardOptions = KeyboardOptions.Default.copy(
-                                keyboardType = KeyboardType.Number
-                            )
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Next
+                            ),
+                            visualTransformation = MaskVisualTransformation(NumberDefaults.MASKCPF)
                         )
                     }
 
@@ -335,10 +434,17 @@ fun EditProfileScreen(
                         focusManager = focusManager,
                         datePickerState = datePickerState,
                         validateDate = validateDate,
-                        validateDateError = validateDateError
+                        validateDateError = validateDateError,
+                        label = "$selectedDate"
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
+
+                    DropdownGender(
+                        context = context,
+                        gender = selectedDrop,
+                        onValueChange = { selectedDrop = it }
+                    )
                 }
 
                 Row(
@@ -383,9 +489,10 @@ fun EditProfileScreen(
                         } else {
                             "${it.nome}"
                         }
-                        ProcessingProfile(
+                        ProcessingProfileEdit(
                             text = text,
-                            width = 160
+                            width = 160,
+                            onValueChange = {}
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -436,9 +543,10 @@ fun EditProfileScreen(
                         } else {
                             "${it.nome}"
                         }
-                        ProcessingProfile(
+                        ProcessingProfileEdit(
                             text = text,
-                            width = 150
+                            width = 150,
+                            onValueChange = {}
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -454,6 +562,26 @@ fun EditProfileScreen(
                     DefaultButton(
                         onClick = {
 
+                            Log.e("TAG", "EditProfileScreen: $token", )
+                            Log.e("TAG", "EditProfileScreen: $id", )
+                            Log.e("TAG", "EditProfileScreen: $nomeState", )
+                            Log.e("TAG", "EditProfileScreen: $selectedDate", )
+                            Log.e("TAG", "EditProfileScreen: $email", )
+                            Log.e("TAG", "EditProfileScreen: $senha", )
+                            Log.e("TAG", "EditProfileScreen: $cpfState2", )
+
+                            atualizarDados(
+                                token = token.toString(),
+                                id = id.toInt(),
+                                nome = nomeState.toString(),
+                                data_nascimento = selectedDate.toAmericanDateFormat1(),
+                                email = email.toString(),
+                                senha = senha.toString(),
+                                foto = "imageURL", // Use a imageURL
+                                cpf = cpfState2,
+                                id_endereco_paciente = 1,
+                                genero = selectedDrop
+                            )
                         },
                         text = "Salvar"
                     )
@@ -498,4 +626,16 @@ fun EditProfileScreen(
 
         }
     }
+}
+
+fun String.toAmericanDateFormat1(
+    pattern: String = "yyyy-MM-dd"
+): String {
+    val date = Date(this)
+    val formatter = SimpleDateFormat(
+        pattern, Locale("pt-br")
+    ).apply {
+        timeZone = TimeZone.getTimeZone("GMT")
+    }
+    return formatter.format(date)
 }

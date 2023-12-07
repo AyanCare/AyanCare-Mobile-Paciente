@@ -277,7 +277,8 @@ fun ProfileScreen(
 
                         ProcessingProfile(
                             text = text,
-                            width = 200
+                            width = 200,
+                            onValueChange = {}
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -306,7 +307,8 @@ fun ProfileScreen(
 
                         ProcessingProfile(
                             text = text,
-                            width = 200
+                            width = 200,
+                            onValueChange = {}
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }

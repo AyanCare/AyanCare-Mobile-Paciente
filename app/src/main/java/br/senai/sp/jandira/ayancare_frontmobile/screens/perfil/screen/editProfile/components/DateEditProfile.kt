@@ -44,7 +44,8 @@ fun DateEditProfile(
     focusManager: FocusManager,
     datePickerState: DatePickerState,
     validateDate: Boolean,
-    validateDateError: String
+    validateDateError: String,
+    label: String
 ) {
     var showDatePickerDialog by remember { mutableStateOf(false) }
     var editedDate by remember { mutableStateOf(selectedDate) }
@@ -86,7 +87,7 @@ fun DateEditProfile(
             }
             .background(Color.White),
         label = {
-            Text("Data")
+            Text("$label")
         },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
