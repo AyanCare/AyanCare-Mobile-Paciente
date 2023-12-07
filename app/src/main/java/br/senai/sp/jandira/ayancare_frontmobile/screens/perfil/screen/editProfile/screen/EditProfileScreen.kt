@@ -69,8 +69,10 @@ import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultTextField
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.DoencaResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.PacienteResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.patient.service.Paciente
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.responsible.ContatoResponse
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.CadastroRepository
 import br.senai.sp.jandira.ayancare_frontmobile.screens.MaskVisualTransformation
 import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.NumberDefaults
@@ -491,8 +493,23 @@ fun EditProfileScreen(
                         }
                         ProcessingProfileEdit(
                             text = text,
-                            width = 160,
-                            onValueChange = {}
+                            width = 200,
+                            onValueChange = {
+                                var call = RetrofitFactory.getPatient().deleteChronicDiseases(it.id)
+
+                                call.enqueue(object : Callback<DoencaResponse> {
+                                    override fun onResponse(
+                                        call: Call<DoencaResponse>,
+                                        response: Response<DoencaResponse>
+                                    ) {
+                                        Log.e("deleteDoenca", "onResponse: ${response.body()}")
+                                        navController.navigate("edit_profile_screen")
+                                    }
+                                    override fun onFailure(call: Call<DoencaResponse>, t: Throwable) {
+                                        Log.i("deleteDoenca", "onFailure: ${t.message}")
+                                    }
+                                })
+                            }
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -545,8 +562,23 @@ fun EditProfileScreen(
                         }
                         ProcessingProfileEdit(
                             text = text,
-                            width = 150,
-                            onValueChange = {}
+                            width = 200,
+                            onValueChange = {
+                                var call = RetrofitFactory.getPatient().deleteComorbidity(it.id)
+
+                                call.enqueue(object : Callback<DoencaResponse> {
+                                    override fun onResponse(
+                                        call: Call<DoencaResponse>,
+                                        response: Response<DoencaResponse>
+                                    ) {
+                                        Log.e("deleteDoenca", "onResponse: ${response.body()}")
+                                        navController.navigate("edit_profile_screen")
+                                    }
+                                    override fun onFailure(call: Call<DoencaResponse>, t: Throwable) {
+                                        Log.i("deleteDoenca", "onFailure: ${t.message}")
+                                    }
+                                })
+                            }
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }

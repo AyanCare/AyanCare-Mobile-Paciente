@@ -67,8 +67,13 @@ fun NotificationScreen(
             response: Response<NotificacaoResponse>
         ) {
             Log.e("TAG", "onResponse:${response.body()} ")
-            listNotificacoes = response.body()!!.notificacao
-            Log.e("TAG", "onResponse:$listNotificacoes")
+            if (response.body()!!.status == 404) {
+                Log.e("listAlarmeUnitario", "a resposta está nula")
+                listNotificacoes = emptyList()
+            } else {
+                listNotificacoes = response.body()!!.notificacao
+                Log.e("TAG", "onResponse:$listNotificacoes")
+            }
         }
         override fun onFailure(call: Call<NotificacaoResponse>, t: Throwable) {
             Log.i("ds3t", "onFailure: ${t.message}")
@@ -76,51 +81,110 @@ fun NotificationScreen(
 
     })
 
-    Surface(
-        color = Color(248, 240, 236)
-    ) {
-        Column(
-            //verticalArrangement = Arrangement.SpaceBetween,
-            //horizontalAlignment = Alignment.Start,
-            modifier = Modifier
-                .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
-                .fillMaxSize()
+    if (listNotificacoes.isEmpty()){
+        Surface(
+            color = Color(248, 240, 236)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
+            Column(
+                //verticalArrangement = Arrangement.SpaceBetween,
+                //horizontalAlignment = Alignment.Start,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
+                    .fillMaxSize()
             ) {
-                IconButton(
-                    onClick = {
-                        navController.popBackStack()
-                    }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBackIosNew,
-                        contentDescription = ""
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBackIosNew,
+                            contentDescription = ""
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(80.dp))
+                    Text(
+                        text = "Notificações",
+                        fontSize = 18.sp,
+                        lineHeight = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF090A0A),
+                        textAlign = TextAlign.Center
                     )
                 }
-                Spacer(modifier = Modifier.width(80.dp))
-                Text(
-                    text = "Notificações",
-                    fontSize = 18.sp,
-                    lineHeight = 18.sp,
-                    fontFamily = FontFamily(Font(R.font.poppins)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF090A0A),
-                    textAlign = TextAlign.Center
-                )
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            LazyColumn{
-                items(listNotificacoes) {
-                    CardNotification(
-                        descricao = it.descricao,
-                        hora = it.hora_criacao
+                Spacer(modifier = Modifier.height(10.dp))
+                Column (
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Não existe notificações",
+                        fontSize = 20.sp,
+                        lineHeight = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF090A0A),
+                        textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+        }
+    }else {
+        Surface(
+            color = Color(248, 240, 236)
+        ) {
+            Column(
+                //verticalArrangement = Arrangement.SpaceBetween,
+                //horizontalAlignment = Alignment.Start,
+                modifier = Modifier
+                    .padding(top = 20.dp, start = 15.dp, end = 15.dp, bottom = 40.dp)
+                    .fillMaxSize()
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    IconButton(
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBackIosNew,
+                            contentDescription = ""
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(80.dp))
+                    Text(
+                        text = "Notificações",
+                        fontSize = 18.sp,
+                        lineHeight = 18.sp,
+                        fontFamily = FontFamily(Font(R.font.poppins)),
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF090A0A),
+                        textAlign = TextAlign.Center
+                    )
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                LazyColumn {
+                    items(listNotificacoes) {
+                        CardNotification(
+                            descricao = it.descricao,
+                            hora = it.hora_criacao
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
                 }
             }
         }

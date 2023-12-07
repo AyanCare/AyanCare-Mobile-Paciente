@@ -19,12 +19,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,6 +48,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,8 +62,10 @@ import br.senai.sp.jandira.ayancare_frontmobile.components.DefaultButton
 import br.senai.sp.jandira.ayancare_frontmobile.components.TextFieldNumberCPF
 import br.senai.sp.jandira.ayancare_frontmobile.components.Wave
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.user.repository.CadastroRepository
+import br.senai.sp.jandira.ayancare_frontmobile.screens.MaskVisualTransformation
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.cadastro.components.ProgressBar
+import br.senai.sp.jandira.ayancare_frontmobile.screens.emergencia.adicionarContato.components.NumberDefaults
 import br.senai.sp.jandira.ayancare_frontmobile.screens.finalizarCadastro.components.DropdownGender
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.funcaoQueChamaSqlLite.saveLogin
 import com.google.firebase.Firebase
@@ -254,10 +261,26 @@ fun FinalizarCadastroScreen(
                     }
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    TextFieldNumberCPF(
-                        valor = cpfState,
-                        label = "CPF",
-                        onValueChange = { cpfState = it }
+//                    TextFieldNumberCPF(
+//                        valor = cpfState,
+//                        label = "CPF",
+//                        onValueChange = { cpfState = it }
+//                    )
+                    OutlinedTextField(
+                        value = cpfState,
+                        onValueChange = {
+                            //quantidadeState = it
+                            if (it.length <= 11) {
+                                cpfState = it
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Next
+                        ),
+                        visualTransformation = MaskVisualTransformation(NumberDefaults.MASKCPF)
                     )
 
                     Spacer(modifier = Modifier.height(25.dp))

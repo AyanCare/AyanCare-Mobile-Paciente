@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.RetrofitFactory
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.alarmes.AlarmeUnitariosResponse
@@ -48,7 +49,8 @@ import retrofit2.Response
 fun OptionAlarmCalendary(
     localStorage: Storage,
     alarmes: List<Alarmes>,
-    //lifecycleScope: LifecycleCoroutineScope
+    //lifecycleScope: LifecycleCoroutineScope,
+    navController: NavController
 ) {
 
     val context = LocalContext.current
@@ -150,7 +152,8 @@ fun OptionAlarmCalendary(
                         //navController,
                         //localStorage,
                         //lifecycleScope,
-                        id = alarme.id
+                        id = alarme.id,
+                        navController = navController
                     )
                 }
                 Spacer(modifier = Modifier.height(10.dp))

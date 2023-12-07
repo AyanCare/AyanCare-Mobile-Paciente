@@ -141,7 +141,7 @@ fun CalendaryScreen(
             } else if (selecionado == "alarme") {
                 Column {
                     Spacer(modifier = Modifier.height(15.dp))
-                    OptionAlarmCalendary(localStorage, listAlarme)
+                    OptionAlarmCalendary(localStorage, listAlarme, navController)
                 }
             }
         }
