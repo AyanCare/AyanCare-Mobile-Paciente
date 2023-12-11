@@ -56,7 +56,7 @@ fun CustomTextFieldNumber(
         modifier = Modifier
             .padding(bottom = 10.dp)
             .width(160.dp)
-            .height(50.dp)
+            .height(70.dp)
             .background(Color(255, 255, 255, 1), shape = RoundedCornerShape(4.dp)),
         isError = showError,
         trailingIcon = {

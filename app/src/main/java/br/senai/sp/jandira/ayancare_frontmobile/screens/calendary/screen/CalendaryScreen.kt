@@ -41,6 +41,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import br.senai.sp.jandira.ayancare_frontmobile.R
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.Alarmes
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosSemanais
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosUnicos
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.screens.calendary.components.Calendary
@@ -67,6 +68,10 @@ fun CalendaryScreen(
         mutableStateOf(listOf<EventosUnicos>())
     }
 
+    var listEventoSemanal by remember {
+        mutableStateOf(listOf<EventosSemanais>())
+    }
+
     Surface (
         color = Color(248, 240, 236)
     ) {
@@ -88,6 +93,10 @@ fun CalendaryScreen(
                 onChaneListEvent = {
                     Log.e("IT", "$it")
                     listEventoUnico = it
+                },
+                onChaneListEventSemanais = {
+                    Log.e("IT", "$it")
+                    listEventoSemanal = it
                 }
             )
             Spacer(modifier = Modifier.height(15.dp))
@@ -136,7 +145,7 @@ fun CalendaryScreen(
             if (selecionado == "evento") {
                 Column (){
                     Spacer(modifier = Modifier.height(15.dp))
-                    OptionEventCalendary(localStorage, listEventoUnico)
+                    OptionEventCalendary(localStorage, listEventoUnico, listEventoSemanal)
                 }
             } else if (selecionado == "alarme") {
                 Column {

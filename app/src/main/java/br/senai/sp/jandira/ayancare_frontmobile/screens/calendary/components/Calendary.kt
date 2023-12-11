@@ -60,7 +60,8 @@ fun Calendary(
     localStorage: Storage,
     alarmeViewModel: ViewModelMestreMedicamentos,
     onChaneList: (List<Alarmes>) -> Unit,
-    onChaneListEvent: (List<EventosUnicos>) -> Unit
+    onChaneListEvent: (List<EventosUnicos>) -> Unit,
+    onChaneListEventSemanais: (List<EventosSemanais>) -> Unit
 ) {
     var context = LocalContext.current
     var selectedDate by remember { mutableStateOf(Calendar.getInstance()) }
@@ -408,6 +409,7 @@ fun Calendary(
 
                                                     onChaneList(response.body()!!.calendario.alarmes)
                                                     onChaneListEvent(response.body()!!.calendario.eventos_unicos)
+                                                    onChaneListEventSemanais(response.body()!!.calendario.eventos_semanais)
                                                 }
 
                                                 Log.e("list-calendario", "onResponse: $lista")

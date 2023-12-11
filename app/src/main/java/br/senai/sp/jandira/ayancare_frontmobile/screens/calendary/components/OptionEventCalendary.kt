@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosSemanais
 import br.senai.sp.jandira.ayancare_frontmobile.retrofit.calendario.service.EventosUnicos
 import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteRepository
@@ -32,7 +33,8 @@ import br.senai.sp.jandira.ayancare_frontmobile.sqlite.repository.PacienteReposi
 @Composable
 fun OptionEventCalendary(
     localStorage: Storage,
-    eventos: List<EventosUnicos>
+    eventos: List<EventosUnicos>,
+    eventosSemanais: List<EventosSemanais>
 ) {
 
     val context = LocalContext.current
@@ -43,11 +45,13 @@ fun OptionEventCalendary(
     var id = paciente.id.toLong()
 
     var listEvents = eventos
+    var listEventsSemanais = eventosSemanais
 
     Log.i("ddde", "CalendaryScreen: ${eventos}")
+    Log.i("ddde", "CalendaryScreen: ${eventosSemanais}")
     Log.i("Tag", "O tipo da variável é: ${listEvents!!.javaClass}")
 
-    if (listEvents.isEmpty()){
+    if (listEvents.isEmpty() || listEventsSemanais.isEmpty()){
         Column (
             modifier = Modifier
                 .height(300.dp)
@@ -103,9 +107,18 @@ fun OptionEventCalendary(
                     subtitle = event.nome,
                     status = "",
                     width = 60,
-                    onClick = {
-
-                    }
+                    onClick = {}
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+            for (event in listEventsSemanais) {
+                CardCalendary(
+                    value = event.nome,
+                    title = "${event.descricao}",
+                    subtitle = "#${event.id_cuidador}, ${event.cuidador}",
+                    status = "",
+                    width = 60,
+                    onClick = {}
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }

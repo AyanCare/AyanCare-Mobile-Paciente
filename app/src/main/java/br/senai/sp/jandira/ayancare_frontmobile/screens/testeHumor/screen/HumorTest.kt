@@ -367,14 +367,6 @@ fun HumorTestScreen(
                                 escolhas = selectedItems,
                                 data = data.toString()
                             )
-                            Log.e("TAG", "HumorTestScreen: ${
-                                testeHumor(
-                                    observacao = descricaoState,
-                                    id_paciente = id.toInt(),
-                                    escolhas = selectedItems,
-                                    data = data.toString()
-                                )
-                            }", )
                         },
                         text = "Enviar"
                     )
