@@ -1,6 +1,7 @@
 package br.senai.sp.jandira.ayancare_frontmobile.screens.AddRemedy.screen.MedicationFrequency.service
 
 import android.app.AlarmManager
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -14,10 +15,13 @@ class CancelSoundReceiver : BroadcastReceiver() {
         if (Alarme.mediaPlayer?.isPlaying == true) {
             // Pare a reprodução e libere os recursos do MediaPlayer
             Alarme.mediaPlayer?.stop()
-            Alarme.mediaPlayer?.release()
             Alarme.mediaPlayer = null
         }
 
+        // Cancelar a notificação
+        val notificationManager =
+            context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(1)
     }
 }
 
