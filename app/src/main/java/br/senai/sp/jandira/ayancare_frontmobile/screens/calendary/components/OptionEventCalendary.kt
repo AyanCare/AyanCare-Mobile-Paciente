@@ -45,13 +45,13 @@ fun OptionEventCalendary(
     var id = paciente.id.toLong()
 
     var listEvents = eventos
-    var listEventsSemanais = eventosSemanais
+    //var listEventsSemanais = eventosSemanais
 
     Log.i("ddde", "CalendaryScreen: ${eventos}")
     Log.i("ddde", "CalendaryScreen: ${eventosSemanais}")
     Log.i("Tag", "O tipo da variável é: ${listEvents!!.javaClass}")
 
-    if (listEvents.isEmpty() || listEventsSemanais.isEmpty()){
+    if (listEvents.isEmpty()){
         Column (
             modifier = Modifier
                 .height(300.dp)
@@ -111,17 +111,17 @@ fun OptionEventCalendary(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }
-            for (event in listEventsSemanais) {
-                CardCalendary(
-                    value = event.nome,
-                    title = "${event.descricao}",
-                    subtitle = "#${event.id_cuidador}, ${event.cuidador}",
-                    status = "",
-                    width = 60,
-                    onClick = {}
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-            }
+//            for (event in listEventsSemanais) {
+//                CardCalendary(
+//                    value = event.nome,
+//                    title = "${event.descricao}",
+//                    subtitle = "#${event.id_cuidador}, ${event.cuidador}",
+//                    status = "",
+//                    width = 60,
+//                    onClick = {}
+//                )
+//                Spacer(modifier = Modifier.height(10.dp))
+//            }
         }
     }
 }
