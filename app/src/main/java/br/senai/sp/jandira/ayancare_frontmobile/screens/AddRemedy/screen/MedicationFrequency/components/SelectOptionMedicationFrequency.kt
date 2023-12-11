@@ -152,7 +152,8 @@ fun SelectOptionMedicationFrequency(
             if (1 <= additionalRows) {
                 repeat(additionalRows) {
                     AddNewRow(
-                        localStorage
+                        localStorage,
+                        selectedTime
                     )
                 }
             }
@@ -203,6 +204,7 @@ fun SelectOptionMedicationFrequency(
 @Composable
 fun AddNewRow(
     localStorage: Storage,
+    selectedTime: Calendar
 ) {
     var isRowVisible by remember { mutableStateOf(true) }
 
@@ -236,7 +238,8 @@ fun AddNewRow(
                 horizontalArrangement = Arrangement.Center
             ) {
                 TimeMedication(
-                    width = 150
+                    width = 150,
+                    selectedTime
                 )
                 Spacer(modifier = Modifier.width(60.dp))
                 TextFieldNumber(

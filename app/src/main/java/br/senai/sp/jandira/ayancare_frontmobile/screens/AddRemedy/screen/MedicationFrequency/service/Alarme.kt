@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import br.senai.sp.jandira.ayancare_frontmobile.R
+import br.senai.sp.jandira.ayancare_frontmobile.screens.Storage
 import br.senai.sp.jandira.ayancare_frontmobile.viewModel.user.MedicationViewModel
 
 class Alarme : BroadcastReceiver() {
@@ -19,18 +20,16 @@ class Alarme : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent?) {
-
         try {
-            val nomeMedicamento = MedicationViewModel().getMedicationName() ?: "A"
-
+            val localStorage = Storage()
+            val nome = localStorage.lerValor(context, "nome_medicamento")
 
             // Iniciar a reprodução de som
             mediaPlayer = MediaPlayer.create(context, R.raw.lofi_study_112191)
-            mediaPlayer?.isLooping = true
+            mediaPlayer?.isLooping = false
             mediaPlayer?.start()
 
-            showNotification(context, "AyanCare", "Hora de tomar o remédio: $nomeMedicamento")
-
+            showNotification(context, "AyanCare", "Hora de tomar o remédio: $nome")
         } catch (e: Exception) {
             Log.d("Receive Exception", e.printStackTrace().toString())
         }
@@ -72,14 +71,13 @@ class Alarme : BroadcastReceiver() {
             .setContentText(description)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSmallIcon(R.drawable.logo)
-            .addAction(0, "Mais 5 minutos", delayPendingIntent)
-            .addAction(0, "cancelar", cancelSoundPendingIntent)
+            .addAction(R.drawable.baseline_alarm_24, "Adiar por 5 minutos", delayPendingIntent)
+            .addAction(R.drawable.baseline_arrow_back_ios_new_24, "Cancelar alarme", cancelSoundPendingIntent)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
         manager.notify(1, builder.build())
     }
-
 }
 
 

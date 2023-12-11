@@ -35,11 +35,12 @@ import java.util.Calendar
 @Composable
 fun TimeMedication(
     width: Int,
+    selectedTime: Calendar
 ) {
     val context = LocalContext.current
-    var selectedTime = remember { mutableStateOf(Calendar.getInstance()) }
+    //var selectedTime = remember { mutableStateOf(Calendar.getInstance()) }
     var showTimePicker by remember { mutableStateOf(false) }
-    val currentTime = selectedTime.value
+    val currentTime = selectedTime
     val hourOfDay = currentTime.get(Calendar.HOUR_OF_DAY)
     val minute = currentTime.get(Calendar.MINUTE)
 
@@ -77,13 +78,13 @@ fun TimeMedication(
 
         if (showTimePicker) {
             val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, min ->
-                selectedTime.value.set(Calendar.HOUR_OF_DAY, hour)
-                selectedTime.value.set(Calendar.MINUTE, min)
+                selectedTime.set(Calendar.HOUR_OF_DAY, hour)
+                selectedTime.set(Calendar.MINUTE, min)
                 showTimePicker = false
 
                 val alarme = AlarmeTbl(
                     dia = "Segunda",
-                    horario = formatTime(selectedTime.value)
+                    horario = formatTime(selectedTime)
                 )
 
                 val  alarmeId = alarmeRepository(context).saveAlarm(alarme)
@@ -93,14 +94,15 @@ fun TimeMedication(
 
                 // Comparar o horário atual com o horário selecionado.
                 val currentCalendar = Calendar.getInstance()
-                if (selectedTime.value.after(currentCalendar)) {
+                if (selectedTime.after(currentCalendar)) {
                     // O horário selecionado é no futuro.
                     // Calcular o atraso até o horário selecionado.
-                    val delayMillis = selectedTime.value.timeInMillis - currentCalendar.timeInMillis
+                    val delayMillis = selectedTime.timeInMillis - currentCalendar.timeInMillis
 
                     // Usar um Handler para agendar a notificação após o atraso.
                     Handler(Looper.getMainLooper()).postDelayed({
-                        configureNotification(context)
+                        val selectedTimeInMillis = selectedTime.timeInMillis
+                        configureNotification(context, selectedTimeInMillis)
                     }, delayMillis)
                 }
             }
@@ -124,13 +126,12 @@ private fun formatTime(calendar: Calendar): String {
     return sdf.format(calendar.time)
 }
 
-fun configureNotification(context: Context) {
-    val timeSec = System.currentTimeMillis()
+fun configureNotification(context: Context, timeInMillis: Long) {
     val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(context, Alarme::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context,0,intent, PendingIntent.FLAG_IMMUTABLE)
-    alarmManager.set(AlarmManager.RTC_WAKEUP,timeSec,pendingIntent)
+    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
-    Log.d("Alarme", "$alarmManager")
 
+    // Configurar o AlarmManager para tocar no tempo escolhido pelo usuário
+    alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
 }
